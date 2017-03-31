@@ -27,6 +27,5 @@ Under "relativity-integration-test-helpers\Source\Relativity.Test.Helpers\" you 
 • Relativity.API.dll
 • Relativity.dll
 • Relativity.Services.DataContracts.dll
-• Relativity.Services.dll
 • Relativity.Services.ServiceProxy.dll
 
