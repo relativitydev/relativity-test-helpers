@@ -53,93 +53,37 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FreeImageNET">
-      <HintPath>..\Packages\FreeImageNET.dll</HintPath>
-    </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\Packages\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>..\Packages\itextsharp.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.Config">
-      <HintPath>..\Packages\kCura.Config.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.Data">
-      <HintPath>..\Packages\kCura.Data.dll</HintPath>
-    </Reference>
     <Reference Include="kCura.Data.RowDataGateway">
-      <HintPath>..\Packages\kCura.Data.RowDataGateway.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.ImageValidator">
-      <HintPath>..\Packages\kCura.ImageValidator.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.Injection">
-      <HintPath>..\Packages\kCura.Injection.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.OI.FileID">
-      <HintPath>..\Packages\kCura.OI.FileID.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\Agents\Client\kCura.Data.RowDataGateway.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.Client">
-      <HintPath>..\Packages\kCura.Relativity.Client.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\Services API\Client\kCura.Relativity.Client.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.DataReaderClient">
-      <HintPath>..\Packages\kCura.Relativity.DataReaderClient.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.DataReaderClient.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.ImportAPI">
-      <HintPath>..\Packages\kCura.Relativity.ImportAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.Utility">
-      <HintPath>..\Packages\kCura.Utility.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.Windows.Forms">
-      <HintPath>..\Packages\kCura.Windows.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.Windows.Process">
-      <HintPath>..\Packages\kCura.Windows.Process.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.WinEDDS">
-      <HintPath>..\Packages\kCura.WinEDDS.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.WinEDDS.ImportExtension">
-      <HintPath>..\Packages\kCura.WinEDDS.ImportExtension.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Packages\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PresentationFramework.AeroLite" />
-    <Reference Include="Relativity">
-      <HintPath>..\Packages\Relativity.dll</HintPath>
-    </Reference>
     <Reference Include="Relativity.API">
-      <HintPath>..\Packages\Relativity.API.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.Services">
-      <HintPath>..\Packages\Relativity.Services.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\Relativity API\Lib\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.DataContracts">
-      <HintPath>..\Packages\Relativity.Services.DataContracts.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\Services API\Client\Relativity.Services.DataContracts.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.Interfaces">
-      <HintPath>..\Packages\Relativity.Services.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.Services.Interfaces.Private">
-      <HintPath>..\Packages\Relativity.Services.Interfaces.Private.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\Services API\Client\Relativity.Services.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.ServiceProxy">
-      <HintPath>..\Packages\Relativity.Services.ServiceProxy.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity.Toggles">
-      <HintPath>..\Packages\Relativity.Toggles.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\kCura Corporation\Relativity SDK\Services API\Client\Relativity.Services.ServiceProxy.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">

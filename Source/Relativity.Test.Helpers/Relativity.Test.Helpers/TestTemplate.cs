@@ -1,5 +1,4 @@
 ﻿using System;
-using System.util;
 using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
