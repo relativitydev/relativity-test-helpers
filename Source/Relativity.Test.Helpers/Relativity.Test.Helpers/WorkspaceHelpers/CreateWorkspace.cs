@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
+using kCura.Vendor.Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 
 namespace Relativity.Test.Helpers.WorkspaceHelpers
@@ -23,12 +24,13 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 			using (var client = svcMgr.GetProxy<IRSAPIClient>(userName, password))
 			{
 				client.APIOptions.WorkspaceID = -1;
-				return await Create(client, workspaceName, templeteName);
+				//return await Create(client, workspaceName, templeteName);
+				return await Task.Run(() => Create(client, workspaceName, templeteName));
 			}
 		}
 
 
-		public static async Task<Int32> Create(IRSAPIClient proxy, string workspaceName, string templateName)
+		public static Int32 Create(IRSAPIClient proxy, string workspaceName, string templateName)
 		{
 			try
 			{
@@ -36,8 +38,13 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 
 				//Set the workspace ID
 				proxy.APIOptions.WorkspaceID = -1;
+
+				if (templateName == "")
+				{
+					throw new SystemException("Template name is blank in your configuration setting. Please add a template name to create a workspace");
+				}
 				var resultSet = GetArtifactIdOfTemplate(proxy, templateName);
-				
+
 				if (resultSet.Success)
 				{
 					//Save the artifact ID of the template workspace
@@ -86,7 +93,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 								iteration++;
 							}
 
-							workspaceID = (int) info.OperationArtifactIDs.FirstOrDefault();
+							workspaceID = (int)info.OperationArtifactIDs.FirstOrDefault();
 
 							Console.WriteLine("Workspace Created with Artiafact ID :" + workspaceID);
 
@@ -113,7 +120,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 			{
 				throw new System.Exception("Create Workspace failed", ex);
 			}
-			}
+		}
 
 		private static QueryResultSet<Workspace> GetArtifactIdOfTemplate(IRSAPIClient proxy, string templateName)
 		{

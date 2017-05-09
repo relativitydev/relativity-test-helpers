@@ -96,6 +96,9 @@
   <ItemGroup>
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
+    <Compile Include="GroupHelpers\CreateGroup.cs" />
+    <Compile Include="GroupHelpers\DeleteGroup.cs" />
+    <Compile Include="GroupHelpers\GroupHelpers.cs" />
     <Compile Include="Interface\IHelper.cs" />
     <Compile Include="Interface\IServicesMgr.cs" />
     <Compile Include="ArtifactHelpers\Folders.cs" />
@@ -106,14 +109,13 @@
     <Compile Include="TestTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlHelpers\SQLHelper.cs" />
+    <Compile Include="UserHelpers\CreateUser.cs" />
+    <Compile Include="UserHelpers\DeleteUser.cs" />
     <Compile Include="WorkspaceHelpers\CreateWorkspace.cs" />
     <Compile Include="WorkspaceHelpers\DeleteWorkspace.cs" />
     <Compile Include="WorkspaceHelpers\WorkspaceHelpers.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GroupHelpers\" />
-    <Folder Include="UserHelpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="FreeImage.dll" />
     <Content Include="sccfi.dll">
