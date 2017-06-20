@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
@@ -18,7 +19,7 @@ namespace Relativity.Test.Helpers
 	/// 
 	/// </summary>
 
-	[TestFixture, Description("Fixture description here")]
+	[TestFixture, NUnit.Framework.Description("Fixture description here")]
 	public class TestTemplate
 	{
 
@@ -113,7 +114,7 @@ namespace Relativity.Test.Helpers
 
 		#region region Golden Flow
 
-		[Test, Description("Test description here")]
+		[Test, NUnit.Framework.Description("Test description here")]
 		public void Integration_Test_Golden_Flow_Valid()
 		{
 			//Example for Arrange, Act, Assert
