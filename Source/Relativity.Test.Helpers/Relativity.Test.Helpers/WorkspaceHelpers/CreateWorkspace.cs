@@ -19,13 +19,13 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 	public class CreateWorkspace
 	{
 
-		public async static Task<Int32> CreateWorkspaceAsync(string workspaceName, string templeteName, IServicesMgr svcMgr, string userName, string password)
+		public async static Task<Int32> CreateWorkspaceAsync(string workspaceName, string templateName, IServicesMgr svcMgr, string userName, string password)
 		{
 			using (var client = svcMgr.GetProxy<IRSAPIClient>(userName, password))
 			{
 				client.APIOptions.WorkspaceID = -1;
-				//return await Create(client, workspaceName, templeteName);
-				return await Task.Run(() => Create(client, workspaceName, templeteName));
+			
+				return await Task.Run(() => Create(client, workspaceName, templateName));
 			}
 		}
 
@@ -39,7 +39,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 				//Set the workspace ID
 				proxy.APIOptions.WorkspaceID = -1;
 
-				if (templateName == "")
+				if (templateName == string.Empty)
 				{
 					throw new SystemException("Template name is blank in your configuration setting. Please add a template name to create a workspace");
 				}
@@ -59,11 +59,13 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 					workspaceDTO.Name = workspaceName;
 
 					//Get the server id or use the configuration value
-					//NOTE: We're using the server ID from the template workspace. This may not be correct and may need to be updatedServerID is hard-coded since we don't have a way to get the server ID
+					//NOTE: We're using the server ID from the template workspace. This may not be correct and may need to be updatedServerID is hard-coded since we don't have a way to get the server ID.
 					int? serverID = resultSet.Results.FirstOrDefault().Artifact.ServerID;
+
 					if (ConfigurationManager.AppSettings.AllKeys.Contains("ServerID"))
 					{
 						int serverIDConfigValue = Convert.ToInt32(ConfigurationManager.AppSettings["ServerID"]);
+
 						if (serverIDConfigValue != serverID)
 						{
 							serverID = serverIDConfigValue;
@@ -76,13 +78,17 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 					{
 						//Create the workspace
 						result = proxy.Repositories.Workspace.CreateAsync(templateArtifactID, workspaceDTO);
+
 						if (result.Success)
 						{
 							//Manually check the results and return the workspace ID synchronously
 							kCura.Relativity.Client.ProcessInformation info = proxy.GetProcessState(proxy.APIOptions, result.ProcessID);
+
 							int iteration = 0;
+
 							while (info.State != ProcessStateValue.Completed)
 							{
+								//Workspace creation takes some time  so threa.sleep ensures we wait until the workspaces is created and then get the artifact id of the new workspace
 								System.Threading.Thread.Sleep(10000);
 								info = proxy.GetProcessState(proxy.APIOptions, result.ProcessID);
 
@@ -96,8 +102,6 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 							workspaceID = (int)info.OperationArtifactIDs.FirstOrDefault();
 
 							Console.WriteLine("Workspace Created with Artiafact ID :" + workspaceID);
-
-							//DataHelper.DeleteData[Constants.WORKSPACE_ID_LIST].Add(workspaceID);
 
 							return workspaceID;
 						}
@@ -128,16 +132,20 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 			{
 				//Query for the starter template
 				Query<Workspace> query = new Query<Workspace>();
+
 				query.Condition = new kCura.Relativity.Client.TextCondition(FieldFieldNames.Name, TextConditionEnum.EqualTo, templateName);
 
-				query.Fields = kCura.Relativity.Client.DTOs.FieldValue.AllFields;
-				kCura.Relativity.Client.DTOs.QueryResultSet<kCura.Relativity.Client.DTOs.Workspace> resultSet = proxy.Repositories.Workspace.Query(query, 0);
+				query.Fields = FieldValue.AllFields;
+
+				QueryResultSet<Workspace> resultSet = proxy.Repositories.Workspace.Query(query, 0);
+
 				return resultSet;
 
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
+
 				throw;
 			}
 		}

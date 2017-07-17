@@ -43,7 +43,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			var sqlParams = new List<SqlParameter>
 			{
-				new SqlParameter("@fieldArtifactTypeID", SqlDbType.NVarChar) {Value = fieldArtifactTypeID}
+				new SqlParameter("fieldArtifactTypeID", SqlDbType.NVarChar) {Value = fieldArtifactTypeID}
 			};
 
 			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
