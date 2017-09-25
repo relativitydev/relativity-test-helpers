@@ -2,7 +2,7 @@
 using Relativity.Services.ServiceProxy;
 using Relativity.API;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
-using Relativity.Test.Helpers.Extension;
+using Relativity.Test.Helpers.Extensions;
 
 namespace Relativity.Test.Helpers.ServiceFactory
 {
@@ -30,6 +30,9 @@ namespace Relativity.Test.Helpers.ServiceFactory
 
         public T CreateProxy<T>(ExecutionIdentity ident) where T : IDisposable
         {
+            //Could do something here with the different Security contexts.  I.E.  If ExecutionIdentity.System then use SharedTestHelpers.ConfigurationHelper.SYSTEM_USER_NAME and SharedTestHelpers.ConfigurationHelper.SYSTEM_PASSWORD
+            //          and if ExecutionIdentity.CurrentUser then SharedTestHelpers.ConfigurationHelper.STANDARD_USER_NAME, etc
+
             //Create the ServiceFactory with the given credentials and urls
             ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(_username, _password));
             Relativity.Services.ServiceProxy.ServiceFactory serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);

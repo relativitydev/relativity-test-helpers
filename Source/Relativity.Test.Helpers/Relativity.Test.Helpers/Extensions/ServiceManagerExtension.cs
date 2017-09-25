@@ -18,6 +18,7 @@ namespace Relativity.Test.Helpers.Extensions
             //Create proxy
             T proxy = serviceFactory.CreateProxy<T>();
             return proxy;
+            
         }
 
 
