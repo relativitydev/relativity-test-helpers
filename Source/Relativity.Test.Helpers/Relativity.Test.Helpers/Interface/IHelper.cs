@@ -2,10 +2,11 @@
 
 namespace Relativity.Test.Helpers.Interface
 {
-	public interface IHelper
+	public interface IHelper : Relativity.API.IHelper
 	{
-		IServicesMgr GetServicesManager();
-		IDBContext GetDBContext(int CaseID);
+        //IServicesMgr GetServicesManager();
+        //IDBContext GetDBContext(int CaseID);
+       
 
-	}
+    }
 }

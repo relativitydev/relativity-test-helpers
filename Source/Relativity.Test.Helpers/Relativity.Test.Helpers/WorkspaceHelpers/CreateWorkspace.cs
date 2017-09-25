@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using kCura.Vendor.Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
+using IServicesMgr = Relativity.API.IServicesMgr;
+using Relativity.Test.Helpers.Extension;
 
 namespace Relativity.Test.Helpers.WorkspaceHelpers
 {

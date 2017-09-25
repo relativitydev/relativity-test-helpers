@@ -7,6 +7,7 @@ using kCura.Relativity.Client;
 using Relativity.Services.Security;
 using Relativity.Services.Security.Models;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using Relativity.Test.Helpers.Extension;
 
 namespace Relativity.Test.Helpers.Authentication
 {
@@ -171,9 +172,9 @@ namespace Relativity.Test.Helpers.Authentication
 
 		private static ILoginProfileManager LoginProfileManager()
 		{
-			var helper = new TestHelper();
-			ILoginProfileManager loginmanager = helper.GetServicesManager().GetProxy<ILoginProfileManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			return loginmanager;
-		}
-	}
+            var helper = new TestHelper();
+            ILoginProfileManager loginmanager = helper.GetServicesManager().GetProxy<ILoginProfileManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+            return loginmanager;
+        }
+    }
 }
