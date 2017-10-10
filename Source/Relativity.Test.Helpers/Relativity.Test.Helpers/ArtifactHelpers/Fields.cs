@@ -34,6 +34,22 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			return artifactTypeId;
 		}
 
+		public static Int32 GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
+		{
+			string sqlquery = String.Format(@"select count(*) from [EDDSDBO].[ExtendedField] where ArtifactID = @fieldArtifactId");
+
+			var sqlParams = new List<SqlParameter>
+			{
+				new SqlParameter("@fieldArtifactId", SqlDbType.NVarChar) {Value = fieldArtifactId}
+			};
+
+			int fieldCount = workspaceDbContext.ExecuteSqlStatementAsScalar<Int32>(sqlquery, sqlParams);
+
+			return fieldCount;
+		}
+
+
+
 		public static Int32 CreateField_FixedLengthText(IRSAPIClient client, Int32 workspaceID)
 		{
 			Int32 fieldID = 0;
@@ -84,7 +100,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 			else
 			{
-				Console.WriteLine("Field was not created");
+				throw new Exception("Field was not created");
 				return fieldID;
 			}
 		}
