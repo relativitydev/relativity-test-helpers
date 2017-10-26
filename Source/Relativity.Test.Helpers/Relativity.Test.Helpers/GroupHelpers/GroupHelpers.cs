@@ -8,6 +8,8 @@ namespace Relativity.Test.Helpers.GroupHelpers
 {
 	public static class GroupHelpers
 	{
+		public static object DeleteGroup { get; internal set; }
+
 		public static bool AddGroupToWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
 		{
 			bool success = false;

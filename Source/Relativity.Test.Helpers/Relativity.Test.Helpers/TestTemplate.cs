@@ -57,6 +57,7 @@ namespace Relativity.Test.Helpers
             servicesManager = helper.GetServicesManager();
             _eddsDbContext = helper.GetDBContext(-1);
 
+// implement_IHelper
             //create client
             _client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
@@ -65,6 +66,7 @@ namespace Relativity.Test.Helpers
 
             //Create new group
             Relativity.Test.Helpers.GroupHelpers.CreateGroup.Create_Group(_client, _groupName);
+
 
             //Create workspace
             _workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
@@ -99,6 +101,7 @@ namespace Relativity.Test.Helpers
 
         #region TestfixtureTeardown
 
+
         [TestFixtureTearDown]
         public void Execute_TestFixtureTeardown()
         {
@@ -111,6 +114,7 @@ namespace Relativity.Test.Helpers
             //Delete Group
             GroupHelpers.DeleteGroup.Delete_Group(_client, _groupArtifactId);
         }
+
 
         #endregion
 
