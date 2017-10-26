@@ -8,6 +8,8 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
+using System.IO;
+using System.Reflection;
 
 namespace Relativity.Test.Helpers
 {
@@ -72,13 +74,19 @@ namespace Relativity.Test.Helpers
             _workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
             dbContext = helper.GetDBContext(_workspaceId);
             _client.APIOptions.WorkspaceID = _workspaceId;
-            _rootFolderArtifactID = Folders.GetRootFolderArtifactID(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-
+            var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var nativeFilePath = "";
+            var nativeName = @"\\\\FakeFilePath\Natives\SampleTextFile.txt"; ;
+            if (executableLocation != null)
+            {
+                nativeFilePath = Path.Combine(executableLocation, nativeName);
+            }
             //Create Documents with a given folder name
-            ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, true, _foldername, dbContext);
+            Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
             //Create Documents with a given folder artifact id
-            ImportAPIHelper.ImportAPIHelper.CreateDocumentsWithFolderArtifactID(_workspaceId, _rootFolderArtifactID, dbContext);
+            var folderName = Relativity.Test.Helpers.ArtifactHelpers.Folders.GetFolderName(_rootFolderArtifactID, dbContext);
+            Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
             //Create Fixed Length field
             _fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_FixedLengthText(_client, _workspaceId);
