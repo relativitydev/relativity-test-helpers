@@ -3,7 +3,7 @@ using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
-using Relativity.Test.Helpers.Extensions;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.WorkspaceHelpers
 {

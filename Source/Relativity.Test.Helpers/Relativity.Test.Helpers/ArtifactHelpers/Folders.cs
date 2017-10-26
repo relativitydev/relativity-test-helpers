@@ -6,7 +6,7 @@ using kCura.Vendor.Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Relativity.API;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
-using Relativity.Test.Helpers.Extensions;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {

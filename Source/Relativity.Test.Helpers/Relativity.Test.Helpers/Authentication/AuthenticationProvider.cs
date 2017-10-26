@@ -7,7 +7,7 @@ using kCura.Relativity.Client;
 using Relativity.Services.Security;
 using Relativity.Services.Security.Models;
 using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.Extensions;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.Authentication
 {

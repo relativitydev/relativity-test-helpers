@@ -2,7 +2,7 @@
 using Relativity.Services.ServiceProxy;
 using Relativity.API;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
-using Relativity.Test.Helpers.Extensions;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.ServiceFactory
 {
@@ -47,12 +47,6 @@ namespace Relativity.Test.Helpers.ServiceFactory
             return servicesUrl;
         }
 
-        //public Uri GetKeplerUrl()
-        //{
-        //    // Get Kepler URL
-        //    Uri keplerUri = new Uri(string.Format("{0}://{1}/relativity.rest/api", SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE, SharedTestHelpers.ConfigurationHelper.REST_SERVER_ADDRESS));
-        //    return keplerUri;
-        //}
 
         public Uri GetServicesURL()
         {

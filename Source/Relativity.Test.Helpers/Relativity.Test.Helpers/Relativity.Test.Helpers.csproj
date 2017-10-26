@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Relativity.Test.Helpers</RootNamespace>
     <AssemblyName>Relativity.Test.Helpers</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -100,14 +100,13 @@
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
     <Compile Include="Authentication\AuthenticationProvider.cs" />
-    <Compile Include="Extensions\ServiceManagerExtension.cs" />
-    <Compile Include="Extensions\URLHelperExtension.cs" />
     <Compile Include="GroupHelpers\CreateGroup.cs" />
     <Compile Include="GroupHelpers\DeleteGroup.cs" />
     <Compile Include="GroupHelpers\GroupHelpers.cs" />
     <Compile Include="Interface\IHelper.cs" />
     <Compile Include="Interface\IServicesMgr.cs" />
     <Compile Include="ArtifactHelpers\Folders.cs" />
+    <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />
     <Compile Include="SharedTestHelpers\ConfigurationHelpers.cs" />
