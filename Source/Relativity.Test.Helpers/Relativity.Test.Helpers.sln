@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Test.Helpers", "Relativity.Test.Helpers\Relativity.Test.Helpers.csproj", "{500FCC47-7792-47E0-8308-FF7632C65CC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Test.Helpers.Example.NUnit", "Relativity.Test.Helpers.Example.NUnit\Relativity.Test.Helpers.Example.NUnit.csproj", "{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,19 @@ Global
 		{500FCC47-7792-47E0-8308-FF7632C65CC9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{500FCC47-7792-47E0-8308-FF7632C65CC9}.Release|x64.ActiveCfg = Release|x64
 		{500FCC47-7792-47E0-8308-FF7632C65CC9}.Release|x64.Build.0 = Release|x64
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Debug|x64.Build.0 = Debug|Any CPU
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Release|x64.ActiveCfg = Release|Any CPU
+		{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B19ECB98-3620-4487-A036-CE7938D94C1A}
 	EndGlobalSection
 EndGlobal

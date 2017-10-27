@@ -66,10 +66,6 @@
     <Reference Include="kCura.Relativity.ImportAPI">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Relativity.API">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Relativity API\Lib\Relativity.API.dll</HintPath>
     </Reference>
@@ -113,7 +109,6 @@
     <Compile Include="SharedTestHelpers\ConfigurationHelpers.cs" />
     <Compile Include="ImportAPIHelper\ImportAPIHelper.cs" />
     <Compile Include="TestHelper.cs" />
-    <Compile Include="TestTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlHelpers\SQLHelper.cs" />
     <Compile Include="UserHelpers\CreateUser.cs" />
@@ -143,7 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
