@@ -103,6 +103,7 @@
     <Compile Include="GroupHelpers\CreateGroup.cs" />
     <Compile Include="GroupHelpers\DeleteGroup.cs" />
     <Compile Include="GroupHelpers\GroupHelpers.cs" />
+    <Compile Include="ImportAPIHelper\ImportDocument.cs" />
     <Compile Include="Interface\IHelper.cs" />
     <Compile Include="Interface\IServicesMgr.cs" />
     <Compile Include="ArtifactHelpers\Folders.cs" />
