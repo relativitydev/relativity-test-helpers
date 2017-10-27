@@ -42,7 +42,6 @@ namespace Relativity.Test.Helpers
 
 		public IUrlHelper GetUrlHelper()
 		{
-            //throw new NotImplementedException();
             return new URLHelper();
 		}
 
