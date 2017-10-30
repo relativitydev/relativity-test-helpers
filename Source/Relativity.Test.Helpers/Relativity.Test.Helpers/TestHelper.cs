@@ -9,10 +9,34 @@ namespace Relativity.Test.Helpers
 {
 	public class TestHelper : IHelper
 	{
-        public void Dispose()
+        private readonly string _username;
+        private readonly string _password;
+
+        [Obsolete("Please use the TestHelper.System static method instead")]
+        public TestHelper()
         {
-            throw new NotImplementedException();
+            _username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
+            _password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
         }
+
+        private TestHelper(string username, string password)
+        {
+            _username = username;
+            _password = password;
+        }
+
+        public static IHelper ForUser(string username, string password)
+        {
+            return new TestHelper(username, password); 
+        }
+
+        public static IHelper System()
+        {
+            var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
+            var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
+            return ForUser(username, password);
+        }
+
 
         public IDBContext GetDBContext(int caseID)
 		{
@@ -37,7 +61,7 @@ namespace Relativity.Test.Helpers
 
 		public IServicesMgr GetServicesManager()
 		{
-			return new ServicesManager();
+			return new ServicesManager(_username, _password);
 		}
 
 		public IUrlHelper GetUrlHelper()
@@ -55,11 +79,8 @@ namespace Relativity.Test.Helpers
             throw new NotImplementedException();
         }
 
-        API.IServicesMgr IHelper.GetServicesManager()
+        public void Dispose()
         {
-            Relativity.Test.Helpers.ServiceFactory.ServicesManager mgr = new ServicesManager();
-            return mgr;
-
         }
     }
 
