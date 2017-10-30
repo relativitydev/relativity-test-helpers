@@ -1,15 +1,14 @@
 ﻿using System;
 using Relativity.Services.ServiceProxy;
 using Relativity.API;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.ServiceFactory
 {
     public class ServicesManager : IServicesMgr
     {
-        string _username = string.Empty;
-        string _password = string.Empty;
+        private readonly string  _username;
+        private readonly string  _password;
 
         public ServicesManager(string username, string password)
         {
@@ -22,7 +21,7 @@ namespace Relativity.Test.Helpers.ServiceFactory
             Credentials creds = null;
             if (ident == ExecutionIdentity.CurrentUser)
             {
-                creds = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(_username, _password);
+                creds = new UsernamePasswordCredentials(_username, _password);
             }
             else if (ident == ExecutionIdentity.System)
             {
@@ -36,10 +35,8 @@ namespace Relativity.Test.Helpers.ServiceFactory
                 throw new NotSupportedException($"{ident} is not supported in the Test Service Mangager.");
             }
 
-            //Create the ServiceFactory with the given credentials and urls
-            ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), creds);
-            Relativity.Services.ServiceProxy.ServiceFactory serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
-            //Create proxy
+            var serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), creds);
+            var serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
             T proxy = serviceFactory.CreateProxy<T>();
             return proxy;
         }
