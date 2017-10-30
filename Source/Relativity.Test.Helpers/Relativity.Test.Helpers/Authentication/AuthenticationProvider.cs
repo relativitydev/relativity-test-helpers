@@ -172,7 +172,7 @@ namespace Relativity.Test.Helpers.Authentication
 
 		private static ILoginProfileManager LoginProfileManager()
 		{
-            var helper = new TestHelper();
+            var helper = TestHelper.System();
             ILoginProfileManager loginmanager = helper.GetServicesManager().CreateProxy<ILoginProfileManager>(API.ExecutionIdentity.System);
             return loginmanager;
         }
