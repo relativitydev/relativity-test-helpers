@@ -101,7 +101,6 @@
     <Compile Include="GroupHelpers\GroupHelpers.cs" />
     <Compile Include="ImportAPIHelper\ImportDocument.cs" />
     <Compile Include="ArtifactHelpers\Folders.cs" />
-    <Compile Include="Permissions\AddPermission.cs" />
     <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />
