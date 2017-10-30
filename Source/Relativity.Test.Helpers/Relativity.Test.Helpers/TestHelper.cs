@@ -2,6 +2,7 @@
 using Relativity.API;
 using Relativity.Test.Helpers.ServiceFactory;
 using kCura.Relativity.Client;
+using System.Data.SqlClient;
 // IHelper = Relativity.Test.Helpers.Interface.IHelper;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 
@@ -22,7 +23,10 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			throw new NotImplementedException();
+            var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
+            var context = GetDBContext(workspaceID);
+            var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactID));
+            return result;
 		}
 
 		public ILogFactory GetLoggerFactory()
@@ -59,7 +63,6 @@ namespace Relativity.Test.Helpers
         {
             Relativity.Test.Helpers.ServiceFactory.ServicesManager mgr = new ServicesManager();
             return mgr;
-
         }
     }
 
