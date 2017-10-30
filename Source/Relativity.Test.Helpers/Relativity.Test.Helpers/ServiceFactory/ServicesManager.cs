@@ -19,9 +19,6 @@ namespace Relativity.Test.Helpers.ServiceFactory
 
         public T CreateProxy<T>(ExecutionIdentity ident) where T : IDisposable
         {
-            //Could do something here with the different Security contexts.  I.E.  If ExecutionIdentity.System then use SharedTestHelpers.ConfigurationHelper.SYSTEM_USER_NAME and SharedTestHelpers.ConfigurationHelper.SYSTEM_PASSWORD
-            //          and if ExecutionIdentity.CurrentUser then SharedTestHelpers.ConfigurationHelper.STANDARD_USER_NAME, etc
-
             Credentials creds = null;
             if (ident == ExecutionIdentity.CurrentUser)
             {
