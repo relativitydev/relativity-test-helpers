@@ -1,10 +1,7 @@
 ﻿using System;
 using Relativity.API;
 using Relativity.Test.Helpers.ServiceFactory;
-using kCura.Relativity.Client;
 using System.Data.SqlClient;
-// IHelper = Relativity.Test.Helpers.Interface.IHelper;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 
 namespace Relativity.Test.Helpers
 {
@@ -37,8 +34,7 @@ namespace Relativity.Test.Helpers
             var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
             return ForUser(username, password);
         }
-
-
+        
         public IDBContext GetDBContext(int caseID)
 		{
 			kCura.Data.RowDataGateway.Context context = new kCura.Data.RowDataGateway.Context(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, string.Format("EDDS{0}", caseID == -1 ? "" : caseID.ToString()), SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);

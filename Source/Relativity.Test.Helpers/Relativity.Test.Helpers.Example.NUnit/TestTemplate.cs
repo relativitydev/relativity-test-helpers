@@ -128,7 +128,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
         #region region Golden Flow
 
-        [Test, global::NUnit.Framework.Description("Test description here")]
+        //[Test, global::NUnit.Framework.Description("Test description here")]
         public void Integration_Test_Golden_Flow_Valid()
         {
             //Example for Arrange, Act, Assert

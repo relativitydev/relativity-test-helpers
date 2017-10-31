@@ -7,63 +7,74 @@ using System.Linq;
 
 namespace Relativity.Test.Helpers.Application
 {
-	public class ApplicationHelpers
-	{
-		public static Int32 ImportApplication(IRSAPIClient client, Int32 workspaceId, bool forceFlag, string filePath, string applicationName, int appArtifactID = -1)
-		{
-			Console.WriteLine("Starting Import Application.....");
-			int artifactID = 0;
-			client.APIOptions.WorkspaceID = workspaceId; //set the target workspace of application to be imported.
+    public class ApplicationHelpers
+    {
+        public static void ImportApplication(IRSAPIClient client, Int32 workspaceId, bool forceFlag, string filePath, int appArtifactID = -1)
+        {
+            Console.WriteLine("Starting Import Application.....");
+            client.APIOptions.WorkspaceID = workspaceId; //set the target workspace of application to be imported.
 
-			// Create an application install request. 
-			// This list contains the ArtifactID for each Relativity Application that you want to install.
-			List<int> appsToOverride = new List<int>();
+            // Set the forceFlag to true. The forceFlag unlocks any applications in the workspace 
+            // that conflict with the application that you are loading. The applications must be unlocked 
+            // for the install operation to succeed.
 
-			// Set the forceFlag to true. The forceFlag unlocks any applications in the workspace 
-			// that conflict with the application that you are loading. The applications must be unlocked 
-			// for the install operation to succeed.
+            var appInstallRequest = new AppInstallRequest();
 
-			AppInstallRequest appInstallRequest = new AppInstallRequest();
+            appInstallRequest.FullFilePath = filePath;
+            appInstallRequest.ForceFlag = forceFlag;
+            appInstallRequest.AppsToOverride.Add(appArtifactID);
 
-			appInstallRequest.FullFilePath = filePath;
-			appInstallRequest.ForceFlag = forceFlag;
-			appInstallRequest.AppsToOverride.Add(appArtifactID);
+            var por = client.InstallApplication(client.APIOptions, appInstallRequest);
 
-			try
-			{
-				ProcessOperationResult por = null;
-				por = client.InstallApplication(client.APIOptions, appInstallRequest);
+            if (por.Success)
+            {
+                ProcessInformation state;
+                do
+                {
+                    Thread.Sleep(10);
+                    state = client.GetProcessState(client.APIOptions, por.ProcessID);
 
-				if (por.Success)
-				{
-					while (client.GetProcessState(client.APIOptions, por.ProcessID).State == ProcessStateValue.Running)
-					{
-						Thread.Sleep(10);
-					}
+                } while (state.State == ProcessStateValue.Running);
 
-					client.GetProcessState(client.APIOptions, por.ProcessID);
-					Console.WriteLine("Import Application Application complete.....");
-				}
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Failed to import Application" + ex.Message);
-			}
+                if (state.State == ProcessStateValue.CompletedWithError)
+                {
+                    throw new ApplicationInstallException(state.Message ?? state.Status ?? "The install completed an unknown error");
+                }
+                else if (state.State == ProcessStateValue.HandledException || state.State == ProcessStateValue.UnhandledException)
+                {
+                    throw new ApplicationInstallException(state.Message ?? state.Status ?? "The install failed with a unknown error");
+                }
+            }
+            else
+            {
+                throw new ApplicationInstallException($"There was an error installing the application {por.Message}");
+            }
+        }
 
-			Console.WriteLine("Querying for Application artifact id....");
-			kCura.Relativity.Client.DTOs.Query<kCura.Relativity.Client.DTOs.RelativityApplication> query = new kCura.Relativity.Client.DTOs.Query<kCura.Relativity.Client.DTOs.RelativityApplication>();
-			query.Fields.Add(new FieldValue(RelativityApplicationFieldNames.Name));
-			query.Condition = new kCura.Relativity.Client.TextCondition(RelativityApplicationFieldNames.Name , kCura.Relativity.Client.TextConditionEnum.EqualTo, applicationName);
-			kCura.Relativity.Client.DTOs.QueryResultSet<kCura.Relativity.Client.DTOs.RelativityApplication> queryResultSet = client.Repositories.RelativityApplication.Query(query);
+        public static Int32 ImportApplication(IRSAPIClient client, Int32 workspaceId, bool forceFlag, string filePath, string applicationName, int appArtifactID = -1)
+        {
+            int artifactID = 0;
+            ImportApplication(client, workspaceId, forceFlag, filePath, appArtifactID);
 
-			if (queryResultSet != null)
-			{
-				artifactID = queryResultSet.Results.FirstOrDefault().Artifact.ArtifactID;
-				Console.WriteLine("Application artifactid is " + artifactID);
-			}
+            Console.WriteLine("Querying for Application artifact id....");
+            var query = new Query<kCura.Relativity.Client.DTOs.RelativityApplication>();
+            query.Fields.Add(new FieldValue(RelativityApplicationFieldNames.Name));
+            query.Condition = new TextCondition(RelativityApplicationFieldNames.Name, TextConditionEnum.EqualTo, applicationName);
+            var queryResultSet = client.Repositories.RelativityApplication.Query(query);
 
-			Console.WriteLine("Exiting Import Application method.....");
-			return artifactID;
-		}
-	}
+            if (queryResultSet != null)
+            {
+                var result = queryResultSet.Results.FirstOrDefault();
+                if (result == null || result.Artifact == null)
+                {
+                    throw new ApplicationInstallException($"Could not find application with name {applicationName}.");
+                }
+                artifactID = result.Artifact.ArtifactID;
+                Console.WriteLine("Application artifactid is " + artifactID);
+            }
+
+            Console.WriteLine("Exiting Import Application method.....");
+            return artifactID;
+        }
+    }
 }

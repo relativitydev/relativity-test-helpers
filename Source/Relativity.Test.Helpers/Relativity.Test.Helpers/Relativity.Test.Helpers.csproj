@@ -92,6 +92,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpers.cs" />
+    <Compile Include="Application\ApplicationInstallException.cs" />
     <Compile Include="ArtifactHelpers\Client.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
