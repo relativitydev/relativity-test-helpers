@@ -1,42 +1,42 @@
 ﻿using System;
 using Relativity.Services.ServiceProxy;
 using Relativity.API;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.ServiceFactory
 {
-	public class ServicesManager : IServicesMgr
-	{
-		string _username = string.Empty;
-		string _password = string.Empty;
+    public class ServicesManager : IServicesMgr
+    {
+        private readonly string  _username;
+        private readonly string  _password;
 
-		public ServicesManager()
-		{
-			_username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
-			_password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
-		}
-
-		public T GetProxy<T>(string username, string password) where T : IDisposable
-		{
-			//Create the ServiceFactory with the given credentials and urls
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(username, password));
-			Relativity.Services.ServiceProxy.ServiceFactory serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
-			//Create proxy
-			T proxy = serviceFactory.CreateProxy<T>();
-			return proxy;
-		}
-
+        public ServicesManager(string username, string password)
+        {
+            _username = username;
+            _password = password;
+        }
 
         public T CreateProxy<T>(ExecutionIdentity ident) where T : IDisposable
         {
-            //Could do something here with the different Security contexts.  I.E.  If ExecutionIdentity.System then use SharedTestHelpers.ConfigurationHelper.SYSTEM_USER_NAME and SharedTestHelpers.ConfigurationHelper.SYSTEM_PASSWORD
-            //          and if ExecutionIdentity.CurrentUser then SharedTestHelpers.ConfigurationHelper.STANDARD_USER_NAME, etc
+            Credentials creds = null;
+            if (ident == ExecutionIdentity.CurrentUser)
+            {
+                creds = new UsernamePasswordCredentials(_username, _password);
+            }
+            else if (ident == ExecutionIdentity.System)
+            {
+                var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
+                var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
+                creds = new UsernamePasswordCredentials(username, password);
+            }
 
-            //Create the ServiceFactory with the given credentials and urls
-            ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(_username, _password));
-            Relativity.Services.ServiceProxy.ServiceFactory serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
-            //Create proxy
+            if (creds == null)
+            {
+                throw new NotSupportedException($"{ident} is not supported in the Test Service Mangager.");
+            }
+
+            var serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), creds);
+            var serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
             T proxy = serviceFactory.CreateProxy<T>();
             return proxy;
         }
