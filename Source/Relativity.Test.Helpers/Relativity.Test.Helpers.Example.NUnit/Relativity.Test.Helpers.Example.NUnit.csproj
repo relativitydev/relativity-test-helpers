@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Relativity.Test.Helpers.Example.NUnit</RootNamespace>
     <AssemblyName>Relativity.Test.Helpers.Example.NUnit</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="kCura.Relativity.Client, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.9.5.169.7\lib\kCura.Relativity.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="kCura.Relativity.ImportAPI, Version=9.5.89.76, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RelativityImportAPI\kCura.Relativity.ImportAPI.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.core.dll</HintPath>
       <Private>False</Private>
@@ -42,14 +50,8 @@
     <Reference Include="kCura.Data.RowDataGateway">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Agents\Client\kCura.Data.RowDataGateway.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.Client">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Services API\Client\kCura.Relativity.Client.dll</HintPath>
-    </Reference>
     <Reference Include="kCura.Relativity.DataReaderClient">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.DataReaderClient.dll</HintPath>
-    </Reference>
-    <Reference Include="kCura.Relativity.ImportAPI">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.framework.dll</HintPath>
@@ -62,8 +64,9 @@
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Relativity.API">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Relativity API\Lib\Relativity.API.dll</HintPath>
+    <Reference Include="Relativity.API, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.9.5.169.7\lib\Relativity.API.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Relativity.Services.DataContracts">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Services API\Client\Relativity.Services.DataContracts.dll</HintPath>

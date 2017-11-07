@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Relativity.Test.Helpers</RootNamespace>
     <AssemblyName>Relativity.Test.Helpers</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -54,29 +54,44 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="kCura.Data.RowDataGateway">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Agents\Client\kCura.Data.RowDataGateway.dll</HintPath>
+    <Reference Include="kCura.Config, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Other.9.5.169.7\lib\kCura.Config.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="kCura.Relativity.Client">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Services API\Client\kCura.Relativity.Client.dll</HintPath>
+    <Reference Include="kCura.Data.RowDataGateway, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Other.9.5.169.7\lib\kCura.Data.RowDataGateway.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="kCura.Relativity.Client, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.9.5.169.7\lib\kCura.Relativity.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="kCura.Relativity.DataReaderClient">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.DataReaderClient.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.ImportAPI">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.ImportAPI.dll</HintPath>
+    <Reference Include="kCura.Relativity.ImportAPI, Version=9.5.89.76, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RelativityImportAPI\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.API">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Relativity API\Lib\Relativity.API.dll</HintPath>
+    <Reference Include="Relativity.API, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.9.5.169.7\lib\Relativity.API.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Relativity.Services.DataContracts">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Services API\Client\Relativity.Services.DataContracts.dll</HintPath>
+    <Reference Include="Relativity.Kepler, Version=1.0.1.333, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.9.5.169.7\lib\Relativity.Kepler.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Relativity.Services.Interfaces">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Services API\Client\Relativity.Services.Interfaces.dll</HintPath>
+    <Reference Include="Relativity.Services.DataContracts, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.9.5.169.7\lib\Relativity.Services.DataContracts.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Relativity.Services.ServiceProxy">
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\Services API\Client\Relativity.Services.ServiceProxy.dll</HintPath>
+    <Reference Include="Relativity.Services.Interfaces, Version=9.5.169.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.9.5.169.7\lib\Relativity.Services.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.333, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.9.5.169.7\lib\Relativity.Services.ServiceProxy.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -137,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
