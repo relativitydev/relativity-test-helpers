@@ -20,12 +20,12 @@ namespace Relativity.Test.Helpers.ServiceFactory.Extentions
             return proxy;
             
         }
-
-
+        
         public static Uri GetKeplerUrl(this IServicesMgr svcmgr)
         {
             // Get Kepler URL
-            Uri keplerUri = new Uri(string.Format("{0}://{1}/relativity.rest/api", SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE, SharedTestHelpers.ConfigurationHelper.REST_SERVER_ADDRESS));
+            Uri keplerUri = new Uri(string.Format("{0}://{1}/relativity.rest/api", SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE, 
+                SharedTestHelpers.ConfigurationHelper.REST_SERVER_ADDRESS));
             return keplerUri;
         }
     }
