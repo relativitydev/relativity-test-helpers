@@ -5,7 +5,6 @@ using System.Reflection;
 using kCura.Relativity.DataReaderClient;
 using kCura.Relativity.ImportAPI;
 using Relativity.API;
-using Relativity.Test.Helpers.SqlHelpers;
 using System.Linq;
 using System.Collections.Generic;
 

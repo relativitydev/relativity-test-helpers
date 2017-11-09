@@ -4,6 +4,10 @@ using System.Configuration;
 
 namespace Relativity.Test.Helpers.SharedTestHelpers
 {
+    //I'd like to move away from this class since it creates a dependency on app.config
+    //This is not always the case for all projects
+    //the values that are relied upon here should be passed into the needed function
+    [Obsolete("This should not be relied upon should be passed into the respected function")]
 	public static class ConfigurationHelper
 	{
 		public static string TEST_DATA_LOCATION

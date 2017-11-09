@@ -11,144 +11,127 @@ using Relativity.Test.Helpers.ServiceFactory.Extentions;
 namespace Relativity.Test.Helpers.WorkspaceHelpers
 {
 
-	/// <summary>
-	/// 
-	/// CreateWorkspaceAsync assists in creating Workspaces for tests
-	/// 
-	/// </summary>
+    /// <summary>
+    /// 
+    /// CreateWorkspaceAsync assists in creating Workspaces for tests
+    /// 
+    /// </summary>
 
-	public class CreateWorkspace
-	{
+    public class CreateWorkspace
+    {
+        public async static Task<Int32> CreateWorkspaceAsync(string workspaceName, string templateName, IServicesMgr svcMgr, string userName, string password)
+        {
+            using (var client = svcMgr.GetProxy<IRSAPIClient>(userName, password))
+            {
+                client.APIOptions.WorkspaceID = -1;
 
-		public async static Task<Int32> CreateWorkspaceAsync(string workspaceName, string templateName, IServicesMgr svcMgr, string userName, string password)
-		{
-			using (var client = svcMgr.GetProxy<IRSAPIClient>(userName, password))
-			{
-				client.APIOptions.WorkspaceID = -1;
-			
-				return await Task.Run(() => Create(client, workspaceName, templateName));
-			}
-		}
+                return await Task.Run(() => Create(client, workspaceName, templateName));
+            }
+        }
 
+        /// <summary>
+        /// Creates a new workspace based on a template workspace
+        /// </summary>
+        /// <param name="proxy">The RSAPI proxy to create the workspace</param>
+        /// <param name="workspaceName">The name of the workspace that will get created</param>
+        /// <param name="templateName">The template workspace that the new workspace will be based off of</param>
+        /// <returns>Artifact Id of the created workspace</returns>
+        public static int Create(IRSAPIClient proxy, string workspaceName, string templateName)
+        {
+            return CreateInternal(proxy, workspaceName, templateName, null);
+        }
+        
+        /// <summary>
+        /// Creates a new workspace based on a template workspace
+        /// </summary>
+        /// <param name="proxy">The RSAPI proxy to create the workspace</param>
+        /// <param name="workspaceName">The name of the workspace that will get created</param>
+        /// <param name="templateName">The template workspace that the new workspace will be based off of</param>
+        /// <param name="serverId">The server Id may not be correct and may need to be updatedServerID is hard-coded since we don't have a way to get the server ID.</param>
+        /// <returns>Artifact Id of the created workspace</returns>
+        public static int Create(IRSAPIClient proxy, string workspaceName, string templateName, int serverId)
+        {
+            return CreateInternal(proxy, workspaceName, templateName, serverId);
+        }
 
-		public static Int32 Create(IRSAPIClient proxy, string workspaceName, string templateName)
-		{
-			try
-			{
-				int workspaceID = 0;
+        private static int CreateInternal(IRSAPIClient proxy, string workspaceName, string templateName, int? serverId)
+        {
+            var oldWorkspaceId = proxy.APIOptions.WorkspaceID;
+            try
+            {
+                proxy.APIOptions.WorkspaceID = -1;
 
-				//Set the workspace ID
-				proxy.APIOptions.WorkspaceID = -1;
+                if (string.IsNullOrWhiteSpace(templateName))
+                {
+                    throw new SystemException("Template name is blank in your configuration setting. Please add a template name to create a workspace");
+                }
+                var resultSet = GetArtifactIdOfTemplate(proxy, templateName);
 
-				if (templateName == string.Empty)
-				{
-					throw new SystemException("Template name is blank in your configuration setting. Please add a template name to create a workspace");
-				}
-				var resultSet = GetArtifactIdOfTemplate(proxy, templateName);
+                if (!resultSet.Success)
+                {
+                    throw new ApplicationException($"Error creating workspace {workspaceName} with error {resultSet.Message}");
+                }
 
-				if (resultSet.Success)
-				{
-					//Save the artifact ID of the template workspace
-					int templateArtifactID = resultSet.Results.FirstOrDefault().Artifact.ArtifactID;
+                if (!resultSet.Results.Any())
+                {
+                    throw new ApplicationException($"No template with name {templateName} found in this environment");
+                }
 
-					//Create the workspace DTO
-					var workspaceDTO = new kCura.Relativity.Client.DTOs.Workspace();
+                var workspace = resultSet.Results.FirstOrDefault().Artifact;
+                int templateArtifactID = workspace.ArtifactID;
 
-					//Set primary fields
-					//The name of the sample data is being set to a random string so that sample data can be debugged
-					//and never causes collisions. You can set this to any string that you want
-					workspaceDTO.Name = workspaceName;
+                var workspaceDTO = new Workspace();
+                workspaceDTO.Name = workspaceName;
 
-					//Get the server id or use the configuration value
-					//NOTE: We're using the server ID from the template workspace. This may not be correct and may need to be updatedServerID is hard-coded since we don't have a way to get the server ID.
-					int? serverID = resultSet.Results.FirstOrDefault().Artifact.ServerID;
+                if (serverId.HasValue)
+                {
+                    workspaceDTO.ServerID = serverId.Value;
+                }
 
-					if (ConfigurationManager.AppSettings.AllKeys.Contains("ServerID"))
-					{
-						int serverIDConfigValue = Convert.ToInt32(ConfigurationManager.AppSettings["ServerID"]);
+                var result = proxy.Repositories.Workspace.CreateAsync(templateArtifactID, workspaceDTO);
 
-						if (serverIDConfigValue != serverID)
-						{
-							serverID = serverIDConfigValue;
-						}
-					}
-					workspaceDTO.ServerID = serverID.Value;
+                if (!result.Success)
+                {
+                    throw new System.Exception($"Workspace creation failed: {result.Message}");
+                }
 
-					kCura.Relativity.Client.ProcessOperationResult result = new kCura.Relativity.Client.ProcessOperationResult();
-					try
-					{
-						//Create the workspace
-						result = proxy.Repositories.Workspace.CreateAsync(templateArtifactID, workspaceDTO);
+                ProcessInformation info = proxy.GetProcessState(proxy.APIOptions, result.ProcessID);
 
-						if (result.Success)
-						{
-							//Manually check the results and return the workspace ID synchronously
-							kCura.Relativity.Client.ProcessInformation info = proxy.GetProcessState(proxy.APIOptions, result.ProcessID);
+                int iteration = 0;
 
-							int iteration = 0;
+                //I have a feeling this will bite us in the future, but it hasn't yet
+                while (info.State != ProcessStateValue.Completed)
+                {
+                    //Workspace creation takes some time sleep until the workspaces is created and then get the artifact id of the new workspace
+                    System.Threading.Thread.Sleep(10000);
+                    info = proxy.GetProcessState(proxy.APIOptions, result.ProcessID);
 
-							while (info.State != ProcessStateValue.Completed)
-							{
-								//Workspace creation takes some time  so threa.sleep ensures we wait until the workspaces is created and then get the artifact id of the new workspace
-								System.Threading.Thread.Sleep(10000);
-								info = proxy.GetProcessState(proxy.APIOptions, result.ProcessID);
+                    if (iteration > 6)
+                    {
+                        Console.WriteLine("Workspace creation timed out");
+                    }
+                    iteration++;
+                }
+                var testId = info?.OperationArtifactIDs?.FirstOrDefault();
+                if (!testId.HasValue)
+                {
+                    throw new Exception("There was an error getting the created workspaceId");
+                }
+                return testId.Value;
+            }
+            finally
+            {
+                proxy.APIOptions.WorkspaceID = oldWorkspaceId;
+            }
+        }
 
-								if (iteration > 6)
-								{
-									Console.WriteLine("Workspace creation timed out");
-								}
-								iteration++;
-							}
-
-							workspaceID = (int)info.OperationArtifactIDs.FirstOrDefault();
-
-							Console.WriteLine("Workspace Created with Artiafact ID :" + workspaceID);
-
-							return workspaceID;
-						}
-						else
-						{
-							throw new System.Exception(String.Format("workspace creation failed: {0}", result.Message));
-						}
-					}
-					catch (Exception ex)
-					{
-						throw new System.Exception(String.Format("Unhandled Exception : {0}", ex));
-					}
-				}
-				else
-				{
-					return workspaceID;
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new System.Exception("Create Workspace failed", ex);
-			}
-		}
-
-		private static QueryResultSet<Workspace> GetArtifactIdOfTemplate(IRSAPIClient proxy, string templateName)
-		{
-			try
-			{
-				//Query for the starter template
-				Query<Workspace> query = new Query<Workspace>();
-
-				query.Condition = new kCura.Relativity.Client.TextCondition(FieldFieldNames.Name, TextConditionEnum.EqualTo, templateName);
-
-				query.Fields = FieldValue.AllFields;
-
-				QueryResultSet<Workspace> resultSet = proxy.Repositories.Workspace.Query(query, 0);
-
-				return resultSet;
-
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);
-
-				throw;
-			}
-		}
-	}
+        private static QueryResultSet<Workspace> GetArtifactIdOfTemplate(IRSAPIClient proxy, string templateName)
+        {
+            var query = new Query<Workspace>();
+            query.Condition = new kCura.Relativity.Client.TextCondition(FieldFieldNames.Name, TextConditionEnum.EqualTo, templateName);
+            query.Fields = FieldValue.AllFields;
+            QueryResultSet<Workspace> resultSet = proxy.Repositories.Workspace.Query(query, 0);
+            return resultSet;
+        }
+    }
 }

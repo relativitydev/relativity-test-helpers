@@ -4,18 +4,22 @@ using kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.WorkspaceHelpers
 {
-	public class WorkspaceHelpers
-	{
-		public static string GetWorkspaceName(IRSAPIClient client, int workspaceArtifactId)
-		{
+    public class WorkspaceHelpers
+    {
+        public static string GetWorkspaceName(IRSAPIClient client, int workspaceArtifactId)
+        {
+            var oldId = client.APIOptions.WorkspaceID;
+            try
+            {
+                client.APIOptions.WorkspaceID = -1;
+                Workspace workspace = client.Repositories.Workspace.ReadSingle(workspaceArtifactId);
+                return workspace.Name;
+            }
+            finally
+            {
+                client.APIOptions.WorkspaceID = oldId;
+            }
 
-			client.APIOptions.WorkspaceID = workspaceArtifactId;
-			Int32 originalWorkspaceID = client.APIOptions.WorkspaceID;
-			client.APIOptions.WorkspaceID = -1;
-			Workspace workspace = client.Repositories.Workspace.ReadSingle(originalWorkspaceID);
-			client.APIOptions.WorkspaceID = originalWorkspaceID;
-			return workspace.Name;
-
-		}
-	}
+        }
+    }
 }
