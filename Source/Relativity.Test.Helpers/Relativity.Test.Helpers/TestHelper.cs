@@ -10,7 +10,7 @@ namespace Relativity.Test.Helpers
         private readonly string _username;
         private readonly string _password;
 
-        private TestHelper() { }
+        public TestHelper() { }
 
         private TestHelper(string username, string password)
         {
