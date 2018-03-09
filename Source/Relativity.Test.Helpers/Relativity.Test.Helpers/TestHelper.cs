@@ -45,7 +45,12 @@ namespace Relativity.Test.Helpers
             return result;
         }
 
-        public ILogFactory GetLoggerFactory()
+	    public ISecretStore GetSecretStore()
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public ILogFactory GetLoggerFactory()
         {
             throw new NotImplementedException();
         }
