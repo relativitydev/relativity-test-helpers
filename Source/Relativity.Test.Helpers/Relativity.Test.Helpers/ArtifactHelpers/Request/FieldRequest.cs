@@ -73,7 +73,6 @@ namespace Relativity.Test.Helpers.ArtifactHelpers.Request
             fieldDTO.IsRequired = IsRequired;
             fieldDTO.Linked = Linked;
             fieldDTO.Width = Width;
-            fieldDTO.IsRelational = IsRelational;
         }
         private void hydrateByFieldType(DTOs.Field fieldDTO)
         {
@@ -87,6 +86,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers.Request
                     fieldDTO.Length = Length;
                     fieldDTO.Unicode = Unicode;
                     fieldDTO.Wrapping = Wrapping;
+                    fieldDTO.IsRelational = IsRelational;
                     break;
                 case FieldType.WholeNumber:
                     fieldDTO.OpenToAssociations = OpenToAssociations;
@@ -111,8 +111,10 @@ namespace Relativity.Test.Helpers.ArtifactHelpers.Request
                     fieldDTO.Wrapping = Wrapping;
                     break;
                 case FieldType.SingleChoice:
+                    fieldDTO.AvailableInFieldTree = AvailableInFieldTree;
                     fieldDTO.OpenToAssociations = OpenToAssociations;
                     fieldDTO.Wrapping = Wrapping;
+                    fieldDTO.Unicode = Unicode;
                     break;
                 case FieldType.Decimal:
                     fieldDTO.OpenToAssociations = OpenToAssociations;
