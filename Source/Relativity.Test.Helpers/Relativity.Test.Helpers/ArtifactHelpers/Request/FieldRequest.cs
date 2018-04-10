@@ -113,8 +113,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers.Request
                 case FieldType.SingleChoice:
                     fieldDTO.AvailableInFieldTree = AvailableInFieldTree;
                     fieldDTO.OpenToAssociations = OpenToAssociations;
-                    fieldDTO.Wrapping = Wrapping;
                     fieldDTO.Unicode = Unicode;
+                    fieldDTO.Wrapping = Wrapping;
                     break;
                 case FieldType.Decimal:
                     fieldDTO.OpenToAssociations = OpenToAssociations;
