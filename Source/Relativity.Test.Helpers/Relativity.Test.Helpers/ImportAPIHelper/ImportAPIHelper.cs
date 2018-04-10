@@ -30,8 +30,10 @@ namespace Relativity.Test.Helpers.ImportAPIHelper
 
         public static ImportBulkArtifactJob GetImportApi(int workspaceId)
         {
-            var jobRequest = new ImportJobRequest(workspaceId);
-            jobRequest.ParentObjectIdSourceFieldName = PARENT_OBJECT_ID_SOURCE_FIELD_NAME;
+            var jobRequest = new ImportJobRequest(workspaceId)
+            {
+                ParentObjectIdSourceFieldName = PARENT_OBJECT_ID_SOURCE_FIELD_NAME
+            };
             return GetImportJob(jobRequest);
         }
 
@@ -155,7 +157,7 @@ namespace Relativity.Test.Helpers.ImportAPIHelper
         /// <param name="prepareDataTableAction">action to customize datatable</param>
         /// <param name="fillDataRow">action to add extra values to a datarow</param>
         /// <returns></returns>
-        public static DataTable GetDataTableFromFolder(
+        public static DataTable GetDocumentDataTableFromFolder(
             this ImportBulkArtifactJob importJob,
             string folder,
             Action<DataTable> prepareDataTableAction = null,
@@ -172,18 +174,38 @@ namespace Relativity.Test.Helpers.ImportAPIHelper
 
             var dataTable = new DataTable();
             dataTable.Columns.Add(importJob.Settings.SelectedIdentifierFieldName);
+            dataTable.Columns.Add(Constants.NATIVE_FILE);
             prepareDataTableAction?.Invoke(dataTable);
 
             var files = Directory.EnumerateFiles(folder);
             foreach (var file in files)
             {
                 var dataRow = dataTable.NewRow();
-                dataRow[importJob.Settings.SelectedIdentifierFieldName] = Path.GetFullPath(file);
+                dataRow[importJob.Settings.SelectedIdentifierFieldName] = Path.GetFileName(file);
+                dataRow[Constants.NATIVE_FILE] = Path.GetFullPath(file);
                 fillDataRow?.Invoke(dataRow);
                 dataTable.Rows.Add(dataRow);
             }
 
             return dataTable;
+        }
+        /// <summary>
+        /// Wrapper to increase speed on creating files from a test data folder
+        /// </summary>
+        /// <param name="workspaceArtifactId">target workspace</param>
+        /// <param name="folderName">location of test files</param>
+        /// <param name="validateNativeTypes">use automatic engine to generate Relativity Native Type (defaulted False)</param>
+        /// <param name="overwriteMode">how import will work on existant documents (defaulted APPEND)</param>
+        public static void ImportDocumentsInFolder(int workspaceArtifactId, string folderName, bool validateNativeTypes = false, OverwriteModeEnum overwriteMode = OverwriteModeEnum.Append)
+        {
+            var request = new ImportJobRequest(workspaceArtifactId)
+            {
+                DisableNativeValidation = !validateNativeTypes,
+                OverwriteMode = overwriteMode
+            };
+            var job = GetImportJob(request);
+            var dataTable = job.GetDocumentDataTableFromFolder(folderName);
+            Import(job, dataTable);
         }
     }
 }

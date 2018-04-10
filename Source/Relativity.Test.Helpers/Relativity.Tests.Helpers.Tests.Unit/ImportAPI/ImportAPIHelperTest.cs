@@ -65,7 +65,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ImportAPI
             var importJob = ImportAPIHelper.GetImportJob(jobRequest, iapi);
 
             //act
-            var dataTable = importJob.GetDataTableFromFolder(".");
+            var dataTable = importJob.GetDocumentDataTableFromFolder(".");
 
             //assert
             Assert.Greater(dataTable.Rows.Count, 0);
