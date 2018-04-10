@@ -106,6 +106,7 @@
     <Compile Include="ArtifactHelpers\Client.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
+    <Compile Include="ArtifactHelpers\Request\FieldRequest.cs" />
     <Compile Include="Authentication\AuthenticationProvider.cs" />
     <Compile Include="GroupHelpers\CreateGroup.cs" />
     <Compile Include="GroupHelpers\DeleteGroup.cs" />
