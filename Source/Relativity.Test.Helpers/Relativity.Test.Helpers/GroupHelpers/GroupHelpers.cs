@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Relativity.Services.Group;
+using Relativity.Services.Permission;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Relativity.Services.Group;
-using Relativity.Services.Permission;
-using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.GroupHelpers
 {

@@ -1,21 +1,18 @@
-﻿using System;
+﻿using Relativity.API;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Relativity.API;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
-	/// <summary>
-	/// 
-	/// Helpers to interact with Documents in Relativity
-	/// 
-	/// </summary>
+    /// <summary>
+    /// 
+    /// Helpers to interact with Documents in Relativity
+    /// 
+    /// </summary>
 
-	public class Document
+    public class Document
 	{
 		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{

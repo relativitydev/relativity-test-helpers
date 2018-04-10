@@ -1,11 +1,11 @@
-﻿using System;
-using kCura.Relativity.Client;
+﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
+using System;
 using User = kCura.Relativity.Client.DTOs.User;
 
 namespace Relativity.Test.Helpers.UserHelpers
 {
-	public class DeleteUser
+    public class DeleteUser
 	{
 		public static bool Delete_User(IRSAPIClient client, int artifactId)
 		{

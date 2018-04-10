@@ -1,5 +1,4 @@
-﻿using System;
-using kCura.Relativity.Client;
+﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.WorkspaceHelpers

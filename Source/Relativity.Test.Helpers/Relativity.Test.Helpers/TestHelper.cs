@@ -1,6 +1,6 @@
-﻿using System;
-using Relativity.API;
+﻿using Relativity.API;
 using Relativity.Test.Helpers.ServiceFactory;
+using System;
 using System.Data.SqlClient;
 
 namespace Relativity.Test.Helpers

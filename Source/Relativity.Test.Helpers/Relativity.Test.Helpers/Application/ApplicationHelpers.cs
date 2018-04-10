@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using kCura.Relativity.Client;
-using System.Threading;
+﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
+using System;
 using System.Linq;
+using System.Threading;
 
 namespace Relativity.Test.Helpers.Application
 {
