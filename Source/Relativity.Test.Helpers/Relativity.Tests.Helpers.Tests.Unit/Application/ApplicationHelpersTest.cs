@@ -1,9 +1,8 @@
-﻿using System;
-using NUnit.Framework;
+﻿using kCura.Relativity.Client;
 using Moq;
-using kCura.Relativity.Client;
-using kCura.Relativity.Client.Repositories;
+using NUnit.Framework;
 using Relativity.Test.Helpers.Application;
+using System;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.Application
 {

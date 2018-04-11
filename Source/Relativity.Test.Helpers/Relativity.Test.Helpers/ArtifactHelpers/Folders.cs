@@ -1,23 +1,22 @@
-﻿using System;
-using System.Linq;
-using kCura.Relativity.Client;
+﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using kCura.Vendor.Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Relativity.API;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
+using System;
+using System.Linq;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
 
-	/// <summary>
-	/// 
-	/// Helpers to interact with Folders in Relativity
-	/// 
-	/// </summary>
-	/// 
-	public class Folders
+    /// <summary>
+    /// 
+    /// Helpers to interact with Folders in Relativity
+    /// 
+    /// </summary>
+    /// 
+    public class Folders
 	{
 		public static Int32 GetRootFolderArtifactID(Int32 workspaceID, IServicesMgr svgMgr, string userName, string password)
 		{

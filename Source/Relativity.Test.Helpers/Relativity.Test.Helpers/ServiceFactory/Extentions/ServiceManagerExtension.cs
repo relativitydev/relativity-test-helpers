@@ -1,10 +1,6 @@
 ﻿using Relativity.API;
 using Relativity.Services.ServiceProxy;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.ServiceFactory.Extentions
 {

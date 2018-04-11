@@ -1,14 +1,14 @@
-﻿using System;
+﻿using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
 using Choice = kCura.Relativity.Client.DTOs.Choice;
 using User = kCura.Relativity.Client.DTOs.User;
 
 namespace Relativity.Test.Helpers.UserHelpers
 {
-	public static class CreateUser
+    public static class CreateUser
 	{
 
 		public static int CreateNewUser(IRSAPIClient client)

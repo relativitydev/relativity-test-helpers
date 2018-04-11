@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Relativity.API;
 using Relativity.Services.ServiceProxy;
-using Relativity.API;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
+using System;
 
 namespace Relativity.Test.Helpers.ServiceFactory
 {

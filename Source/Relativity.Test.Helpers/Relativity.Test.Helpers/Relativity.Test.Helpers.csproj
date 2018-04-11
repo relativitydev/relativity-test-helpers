@@ -65,9 +65,8 @@
     <Reference Include="kCura.Relativity.DataReaderClient">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.DataReaderClient.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.ImportAPI, Version=9.5.89.76, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RelativityImportAPI\kCura.Relativity.ImportAPI.dll</HintPath>
+    <Reference Include="kCura.Relativity.ImportAPI">
+      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.API, Version=9.6.53.73, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Api.9.6.53.73\lib\Relativity.API.dll</HintPath>
@@ -107,12 +106,15 @@
     <Compile Include="ArtifactHelpers\Client.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
+    <Compile Include="ArtifactHelpers\Request\FieldRequest.cs" />
     <Compile Include="Authentication\AuthenticationProvider.cs" />
     <Compile Include="GroupHelpers\CreateGroup.cs" />
     <Compile Include="GroupHelpers\DeleteGroup.cs" />
     <Compile Include="GroupHelpers\GroupHelpers.cs" />
+    <Compile Include="ImportAPIHelper\Constants.cs" />
     <Compile Include="ImportAPIHelper\ImportDocument.cs" />
     <Compile Include="ArtifactHelpers\Folders.cs" />
+    <Compile Include="ImportAPIHelper\Request\ImportJobRequest.cs" />
     <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />
