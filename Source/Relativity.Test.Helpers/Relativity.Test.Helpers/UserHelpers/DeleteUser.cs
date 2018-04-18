@@ -1,6 +1,6 @@
-﻿using System;
-using kCura.Relativity.Client;
+﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
+using System;
 using User = kCura.Relativity.Client.DTOs.User;
 
 namespace Relativity.Test.Helpers.UserHelpers

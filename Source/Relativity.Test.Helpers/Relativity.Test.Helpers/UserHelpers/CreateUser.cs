@@ -1,8 +1,8 @@
-﻿using System;
+﻿using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
 using Choice = kCura.Relativity.Client.DTOs.Choice;
 using User = kCura.Relativity.Client.DTOs.User;
 

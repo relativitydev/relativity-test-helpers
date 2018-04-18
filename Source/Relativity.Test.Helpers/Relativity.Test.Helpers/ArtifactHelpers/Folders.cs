@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
-using kCura.Relativity.Client;
+﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using kCura.Vendor.Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Relativity.API;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
+using System;
+using System.Linq;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
@@ -24,7 +23,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(userName, password))
 			{
 				Query<Folder> query = new Query<Folder>();
-				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo,WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
+				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
 				query.Fields = FieldValue.NoFields;
 				var ResultSet = client.Repositories.Folder.Query(query);
 

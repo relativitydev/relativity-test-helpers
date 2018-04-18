@@ -1,10 +1,8 @@
 ﻿using kCura.Relativity.Client;
-using Relativity.API;
 using Relativity.Services.Choice;
 using Relativity.Services.Client;
 using System;
 using System.Collections.Generic;
-using Relativity.Services.ServiceProxy;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {

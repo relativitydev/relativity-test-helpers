@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
+﻿using kCura.Relativity.Client;
 using Relativity.API;
+using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
-using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {

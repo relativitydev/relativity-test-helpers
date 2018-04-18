@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using Relativity.Services.Security;
+﻿using Relativity.Services.Security;
 using Relativity.Services.Security.Models;
-using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Authentication
 {
@@ -26,9 +21,9 @@ namespace Relativity.Test.Helpers.Authentication
 		public static List<string> AuthenticationProviderPassword(Int32 userartifactid, string emailaddress, string twofactorMode)
 		{
 			List<String> violations = new List<string>();
-		
+
 			try
-			{ 
+			{
 				var loginmanager = LoginProfileManager();
 
 				var userprofile = loginmanager.GetLoginProfileAsync(userartifactid).Result;
@@ -172,9 +167,9 @@ namespace Relativity.Test.Helpers.Authentication
 
 		private static ILoginProfileManager LoginProfileManager()
 		{
-            var helper = TestHelper.System();
-            ILoginProfileManager loginmanager = helper.GetServicesManager().CreateProxy<ILoginProfileManager>(API.ExecutionIdentity.System);
-            return loginmanager;
-        }
-    }
+			var helper = TestHelper.System();
+			ILoginProfileManager loginmanager = helper.GetServicesManager().CreateProxy<ILoginProfileManager>(API.ExecutionIdentity.System);
+			return loginmanager;
+		}
+	}
 }

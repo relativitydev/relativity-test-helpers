@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Relativity.API;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Relativity.API;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
@@ -20,7 +17,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
 
-			 string sql = @"
+			string sql = @"
             SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
             JOIN [EDDSDBO].[ArtifactViewField] AVF WITH(NOLOCK)
             ON EF.TextIdentifier = AVF.HeaderName
