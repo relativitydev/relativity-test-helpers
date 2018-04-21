@@ -23,7 +23,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(userName, password))
 			{
 				Query<Folder> query = new Query<Folder>();
-				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo,WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
+				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
 				query.Fields = FieldValue.NoFields;
 				var ResultSet = client.Repositories.Folder.Query(query);
 

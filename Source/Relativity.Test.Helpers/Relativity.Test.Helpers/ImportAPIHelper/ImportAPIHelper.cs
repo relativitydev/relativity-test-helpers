@@ -37,59 +37,59 @@ namespace Relativity.Test.Helpers.ImportAPIHelper
             return GetImportJob(jobRequest);
         }
 
-        public static void Import(ImportBulkArtifactJob importJob, DataTable data)
-        {
-            var errors = new List<Exception>();
+		public static void Import(ImportBulkArtifactJob importJob, DataTable data)
+		{
+			var errors = new List<Exception>();
 
-            try
-            {
-                importJob.SourceData.SourceData = data.CreateDataReader();
-                Console.WriteLine("Executing import...");
+			try
+			{
+				importJob.SourceData.SourceData = data.CreateDataReader();
+				Console.WriteLine("Executing import...");
 
-                importJob.OnError += report =>
-                {
-                    foreach (var key in report.Keys)
-                    {
-                        var value = report[key];
-                        errors.Add(new Exception($"{key} : {value}"));
-                    }
-                };
+				importJob.OnError += report =>
+				{
+					foreach (var key in report.Keys)
+					{
+						var value = report[key];
+						errors.Add(new Exception($"{key} : {value}"));
+					}
+				};
 
-                importJob.OnFatalException += report =>
-                {
-                    errors.Add(report.FatalException);
-                };
+				importJob.OnFatalException += report =>
+				{
+					errors.Add(report.FatalException);
+				};
 
-                importJob.Execute();
-                if (errors.Any())
-                {
-                    throw new AggregateException(errors);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine(e);
-                throw;
-            }
+				importJob.Execute();
+				if (errors.Any())
+				{
+					throw new AggregateException(errors);
+				}
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine(e);
+				throw;
+			}
 
-        }
+		}
 
-        private static void Import(int workspaceArtifactId, DataTable data)
-        {
-            var importJob = GetImportApi(workspaceArtifactId);
-            Import(importJob, data);
-        }
+		private static void Import(int workspaceArtifactId, DataTable data)
+		{
+			var importJob = GetImportApi(workspaceArtifactId);
+			Import(importJob, data);
+		}
 
-        public static void CreateDocumentswithFolderName(int workspaceArtifactId, int numberOfDocuments, string folderName, string nativePathName)
-        {
-            var hasNative = !string.IsNullOrEmpty(nativePathName);
-            var dt = GetDocumentDataTable(numberOfDocuments, folderName, (i) => new ImportDocument
-            {
-                FilePath = nativePathName,
-                Name = $"IAPI-{(hasNative ? "Native" : "Empty")}-{Guid.NewGuid()}"
-            });
-            Import(workspaceArtifactId, dt);
-        }
+		public static void CreateDocumentswithFolderName(int workspaceArtifactId, int numberOfDocuments, string folderName, string nativePathName)
+		{
+			var hasNative = !string.IsNullOrEmpty(nativePathName);
+			var dt = GetDocumentDataTable(numberOfDocuments, folderName, (i) => new ImportDocument
+			{
+				FilePath = nativePathName,
+				Name = $"IAPI-{(hasNative ? "Native" : "Empty")}-{Guid.NewGuid()}"
+			});
+			Import(workspaceArtifactId, dt);
+		}
 
         private static DataTable GetDocumentDataTable(int documentCount, string folderName, Func<int, ImportDocument> documentFileGenerator)
         {
@@ -99,15 +99,15 @@ namespace Relativity.Test.Helpers.ImportAPIHelper
             table.Columns.Add(Constants.NATIVE_FILE, typeof(string));
             table.Columns.Add(PARENT_OBJECT_ID_SOURCE_FIELD_NAME, typeof(string));
 
-            for (int i = 0; i < documentCount; i++)
-            {
-                var folder = folderName;
-                var document = documentFileGenerator(i);
-                table.Rows.Add(document.Name, document.FilePath, folder);
-            }
+			for (int i = 0; i < documentCount; i++)
+			{
+				var folder = folderName;
+				var document = documentFileGenerator(i);
+				table.Rows.Add(document.Name, document.FilePath, folder);
+			}
 
-            return table;
-        }
+			return table;
+		}
 
         /// <summary>
         /// Get import job based on request

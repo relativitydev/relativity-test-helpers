@@ -17,7 +17,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
 
-			 string sql = @"
+			string sql = @"
             SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
             JOIN [EDDSDBO].[ArtifactViewField] AVF WITH(NOLOCK)
             ON EF.TextIdentifier = AVF.HeaderName
