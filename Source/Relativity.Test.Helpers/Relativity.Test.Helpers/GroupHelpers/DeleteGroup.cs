@@ -5,7 +5,7 @@ using System;
 
 namespace Relativity.Test.Helpers.GroupHelpers
 {
-	public static class DeleteGroup
+    public static class DeleteGroup
 	{
 
 		public static bool Delete_Group(IRSAPIClient client, int artifactId)

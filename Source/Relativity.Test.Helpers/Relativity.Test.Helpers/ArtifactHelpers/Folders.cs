@@ -10,13 +10,13 @@ using IServicesMgr = Relativity.API.IServicesMgr;
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
 
-	/// <summary>
-	/// 
-	/// Helpers to interact with Folders in Relativity
-	/// 
-	/// </summary>
-	/// 
-	public class Folders
+    /// <summary>
+    /// 
+    /// Helpers to interact with Folders in Relativity
+    /// 
+    /// </summary>
+    /// 
+    public class Folders
 	{
 		public static Int32 GetRootFolderArtifactID(Int32 workspaceID, IServicesMgr svgMgr, string userName, string password)
 		{

@@ -8,7 +8,7 @@ using User = kCura.Relativity.Client.DTOs.User;
 
 namespace Relativity.Test.Helpers.UserHelpers
 {
-	public static class CreateUser
+    public static class CreateUser
 	{
 
 		public static int CreateNewUser(IRSAPIClient client)

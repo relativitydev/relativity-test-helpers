@@ -4,7 +4,7 @@ using System;
 
 namespace Relativity.Test.Helpers.GroupHelpers
 {
-	public static class CreateGroup
+    public static class CreateGroup
 	{
 		public static int Create_Group(IRSAPIClient client, String name)
 		{

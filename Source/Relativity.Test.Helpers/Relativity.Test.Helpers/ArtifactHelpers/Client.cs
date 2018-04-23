@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
-	public class Client
+    public class Client
 	{
 		public static int Create_Client(IRSAPIClient client, Relativity.Services.ServiceProxy.ServiceFactory serviceFactory, string name)
 		{

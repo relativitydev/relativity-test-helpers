@@ -6,13 +6,13 @@ using System.Data.SqlClient;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
-	/// <summary>
-	/// 
-	/// Helpers to interact with Documents in Relativity
-	/// 
-	/// </summary>
+    /// <summary>
+    /// 
+    /// Helpers to interact with Documents in Relativity
+    /// 
+    /// </summary>
 
-	public class Document
+    public class Document
 	{
 		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
