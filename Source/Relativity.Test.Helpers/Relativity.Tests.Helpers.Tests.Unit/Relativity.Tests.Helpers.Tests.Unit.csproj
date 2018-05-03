@@ -48,11 +48,11 @@
     </Reference>
     <Reference Include="kCura.Relativity.DataReaderClient, Version=9.6.53.73, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.DataReaderClient.dll</HintPath>
+      <HintPath>..\lib\kCura.Relativity.DataReaderClient.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.ImportAPI, Version=9.5.89.76, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.ImportAPI.dll</HintPath>
+      <HintPath>..\lib\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.7.142.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.7.142\lib\net45\Moq.dll</HintPath>

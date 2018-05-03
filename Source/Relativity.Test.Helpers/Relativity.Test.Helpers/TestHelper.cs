@@ -11,7 +11,12 @@ namespace Relativity.Test.Helpers
         private readonly string _username;
         private readonly string _password;
 
-        public TestHelper() { }
+        public TestHelper()
+        {
+            var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
+            var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
+            ForUser(username, password);
+        }
 
         private TestHelper(string username, string password)
         {
@@ -24,7 +29,6 @@ namespace Relativity.Test.Helpers
             return new TestHelper(username, password);
         }
 
-        [Obsolete("Please use ForUser since we don't want to assume where the system creds come from")]
         public static IHelper System()
         {
             var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
