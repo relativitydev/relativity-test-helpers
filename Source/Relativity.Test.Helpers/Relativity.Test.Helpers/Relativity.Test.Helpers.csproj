@@ -122,8 +122,10 @@
     <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />
+    <Compile Include="SharedTestHelpers\AppConfigSettings.cs" />
     <Compile Include="SharedTestHelpers\ConfigurationHelpers.cs" />
     <Compile Include="ImportAPIHelper\ImportAPIHelper.cs" />
+    <Compile Include="SharedTestHelpers\ConfigurationSettings.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserHelpers\CreateUser.cs" />
