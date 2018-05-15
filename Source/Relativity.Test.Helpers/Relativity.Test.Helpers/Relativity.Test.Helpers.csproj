@@ -54,8 +54,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DbContextHelper, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RelativityDev.DbContextHelper.1.0.0.1\lib\DbContextHelper.dll</HintPath>
+    <Reference Include="DbContextHelper, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RelativityDev.DbContextHelper.2.0.0.1\lib\DbContextHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="kCura, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
