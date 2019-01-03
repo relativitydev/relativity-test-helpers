@@ -54,17 +54,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DbContextHelper, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RelativityDev.DbContextHelper.2.0.0.1\lib\DbContextHelper.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="DbContextHelper, Version=2.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RelativityDev.DbContextHelper.2.0.0.4\lib\net462\DbContextHelper.dll</HintPath>
     </Reference>
-    <Reference Include="kCura, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Other.9.6.85.9\lib\kCura.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="kCura, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Other.10.0.161.8\lib\kCura.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.Client, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.9.6.85.9\lib\kCura.Relativity.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="kCura.Relativity.Client, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.10.0.161.8\lib\kCura.Relativity.Client.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.DataReaderClient">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.DataReaderClient.dll</HintPath>
@@ -72,25 +69,20 @@
     <Reference Include="kCura.Relativity.ImportAPI">
       <HintPath>C:\Program Files\kCura Corporation\Relativity SDK\ImportAPI\Client\x64\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.API, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Api.9.6.85.9\lib\Relativity.API.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Relativity.API, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.10.0.161.8\lib\Relativity.API.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Kepler, Version=1.0.1.445, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Kepler.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Relativity.Kepler, Version=1.0.1.557, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Kepler.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.DataContracts, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Services.DataContracts.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Relativity.Services.DataContracts, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Services.DataContracts.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.Interfaces, Version=9.6.85.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Services.Interfaces.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Relativity.Services.Interfaces, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Services.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.392, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.85.9\lib\Relativity.Services.ServiceProxy.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.557, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Services.ServiceProxy.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

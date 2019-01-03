@@ -98,6 +98,11 @@ namespace Relativity.Test.Helpers
         public void Dispose()
         {
         }
+
+        public IStringSanitizer GetStringSanitizer(int workspaceID)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
