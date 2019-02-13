@@ -118,6 +118,8 @@
     <Compile Include="Import\Request\ImportJobRequest.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\TestLogFactory.cs" />
+    <Compile Include="Objects\ObjectFactory.cs" />
+    <Compile Include="Objects\ObjectHelper.cs" />
     <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />

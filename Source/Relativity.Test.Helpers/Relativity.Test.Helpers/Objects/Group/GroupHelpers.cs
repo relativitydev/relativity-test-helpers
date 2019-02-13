@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Relativity.Test.Helpers.GroupHelpers
+namespace Relativity.Test.Helpers.Group
 {
-	public static class GroupHelpers
+	public static class GroupHelper
 	{
 		public static object DeleteGroup { get; internal set; }
 

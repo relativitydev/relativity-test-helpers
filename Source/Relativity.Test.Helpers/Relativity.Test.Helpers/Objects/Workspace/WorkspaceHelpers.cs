@@ -3,7 +3,7 @@ using kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.Workspace
 {
-	public class WorkspaceHelpers
+	public class WorkspaceHelper
 	{
 		public static string GetWorkspaceName(IRSAPIClient client, int workspaceArtifactId)
 		{
