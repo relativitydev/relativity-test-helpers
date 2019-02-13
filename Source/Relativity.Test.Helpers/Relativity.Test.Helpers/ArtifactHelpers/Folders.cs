@@ -20,7 +20,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	{
 		public static Int32 GetRootFolderArtifactID(Int32 workspaceID, IServicesMgr svgMgr, string userName, string password)
 		{
-			using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(userName, password))
+			using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(new Models.ConfigurationModel()))
 			{
 				Query<Folder> query = new Query<Folder>();
 				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));

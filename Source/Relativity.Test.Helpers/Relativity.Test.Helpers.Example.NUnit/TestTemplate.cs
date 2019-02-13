@@ -59,7 +59,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			// implement_IHelper
 			//create client
-			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(new Models.ConfigurationModel());
 
 			//Create new user 
 			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);

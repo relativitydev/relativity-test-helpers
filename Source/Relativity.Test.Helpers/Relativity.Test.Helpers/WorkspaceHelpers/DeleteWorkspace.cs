@@ -43,7 +43,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 
 		public static bool DeleteTestWorkspace(Int32 workspaceID, IServicesMgr svcMgr, string userName, string password)
 		{
-			using (var proxy = svcMgr.GetProxy<IRSAPIClient>(userName, password))
+			using (var proxy = svcMgr.GetProxy<IRSAPIClient>(new Models.ConfigurationModel()))
 			{
 				return Delete(proxy, workspaceID);
 			}

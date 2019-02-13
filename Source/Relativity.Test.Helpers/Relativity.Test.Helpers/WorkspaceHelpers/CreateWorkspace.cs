@@ -19,7 +19,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 	{
 		public async static Task<Int32> CreateWorkspaceAsync(string workspaceName, string templateName, IServicesMgr svcMgr, string userName, string password)
 		{
-			using (var client = svcMgr.GetProxy<IRSAPIClient>(userName, password))
+			using (var client = svcMgr.GetProxy<IRSAPIClient>(new Models.ConfigurationModel()))
 			{
 				client.APIOptions.WorkspaceID = -1;
 
