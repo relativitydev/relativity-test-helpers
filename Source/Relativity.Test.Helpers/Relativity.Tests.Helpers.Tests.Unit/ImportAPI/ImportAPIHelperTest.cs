@@ -4,8 +4,8 @@ using kCura.Relativity.ImportAPI.Data;
 using kCura.Relativity.ImportAPI.Enumeration;
 using Moq;
 using NUnit.Framework;
-using Relativity.Test.Helpers.ImportAPIHelper;
-using Relativity.Test.Helpers.ImportAPIHelper.Request;
+using Relativity.Test.Helpers.Import;
+using Relativity.Test.Helpers.Import.Request;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.ImportAPI
 {

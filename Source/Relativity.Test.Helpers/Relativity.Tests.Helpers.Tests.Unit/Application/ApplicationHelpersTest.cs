@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Relativity.Test.Helpers.Application;
+using Relativity.Test.Helpers.Application.Exceptions;
 using System;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.Application
@@ -26,7 +27,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 
 
 			//ACT
-			Test.Helpers.Application.ApplicationHelpers.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>());
+			ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>());
 
 			//ASSERT
 			clientMock.Verify(c => c.GetProcessState(It.IsAny<APIOptions>(), It.IsAny<Guid>()), Times.AtLeast(2));
@@ -49,7 +50,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 
 
 			//ACT
-			Assert.Throws<ApplicationInstallException>(() => ApplicationHelpers.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
+			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
 			//ASSERT
 		}
@@ -71,7 +72,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 
 
 			//ACT
-			Assert.Throws<ApplicationInstallException>(() => Test.Helpers.Application.ApplicationHelpers.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
+			Assert.Throws<ApplicationInstallException>(() => Test.Helpers.Application.ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
 			//ASSERT
 
@@ -94,7 +95,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 
 
 			//ACT
-			Assert.Throws<ApplicationInstallException>(() => Test.Helpers.Application.ApplicationHelpers.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
+			Assert.Throws<ApplicationInstallException>(() => Test.Helpers.Application.ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
 			//ASSERT
 		}
@@ -116,7 +117,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 
 
 			//ACT
-			Assert.Throws<ApplicationInstallException>(() => ApplicationHelpers.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
+			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
 			//ASSERT
 		}

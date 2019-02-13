@@ -1,6 +1,7 @@
 ﻿using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
+using Relativity.Test.Helpers.Group;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
@@ -59,17 +60,17 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			// implement_IHelper
 			//create client
-			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(new Models.ConfigurationModel());
+			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(new Configuration.Models.ConfigurationModel());
 
 			//Create new user 
-			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
+			_userArtifactId = Relativity.Test.Helpers.User.CreateUser.CreateNewUser(_client);
 
 			//Create new group
-			Relativity.Test.Helpers.GroupHelpers.CreateGroup.Create_Group(_client, _groupName);
+			CreateGroup.Create_Group(_client, _groupName);
 
 
 			//Create workspace
-			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = Workspace.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 			dbContext = helper.GetDBContext(_workspaceId);
 			_client.APIOptions.WorkspaceID = _workspaceId;
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -80,20 +81,20 @@ namespace Relativity.Test.Helpers.Example.NUnit
 				nativeFilePath = Path.Combine(executableLocation, nativeName);
 			}
 			//Create Documents with a given folder name
-			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
+			Relativity.Test.Helpers.Import.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
-			var folderName = Relativity.Test.Helpers.ArtifactHelpers.Folders.GetFolderName(_rootFolderArtifactID, dbContext);
-			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
+			var folderName = Folder.FolderHelper.GetFolderName(_rootFolderArtifactID, dbContext);
+			Relativity.Test.Helpers.Import.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
-			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_FixedLengthText(_client, _workspaceId);
+			_fixedLengthArtId = Fields.FieldHelper.CreateField_FixedLengthText(_client, _workspaceId);
 
 			//Create Long Text Field
-			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_LongText(_client, _workspaceId);
+			_longtextartid = Fields.FieldHelper.CreateField_LongText(_client, _workspaceId);
 
 			//Create Whole number field
-			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
+			_wholeNumberArtId = Fields.FieldHelper.CreateField_WholeNumber(_client, _workspaceId);
 
 			//Create Yes/no field
 
@@ -112,13 +113,13 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Workspace.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			//Delete User
-			UserHelpers.DeleteUser.Delete_User(_client, _userArtifactId);
+			User.DeleteUser.Delete_User(_client, _userArtifactId);
 
 			//Delete Group
-			GroupHelpers.DeleteGroup.Delete_Group(_client, _groupArtifactId);
+			DeleteGroup.Delete_Group(_client, _groupArtifactId);
 		}
 
 

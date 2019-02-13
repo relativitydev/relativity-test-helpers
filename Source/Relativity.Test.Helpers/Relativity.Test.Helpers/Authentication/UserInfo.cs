@@ -1,6 +1,6 @@
 ﻿using Relativity.API;
 
-namespace Relativity.Test.Helpers.Authentication
+namespace Relativity.Test.Helpers.Authentication.Models
 {
 	public class UserInfo : IUserInfo
 	{

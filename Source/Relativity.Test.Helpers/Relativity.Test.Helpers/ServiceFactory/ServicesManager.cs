@@ -1,7 +1,7 @@
 ﻿using Relativity.API;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
-using Relativity.Test.Helpers.Models;
+using Relativity.Test.Helpers.Configuration.Models;
 using System;
 
 namespace Relativity.Test.Helpers.ServiceFactory

@@ -1,4 +1,4 @@
-﻿namespace Relativity.Test.Helpers.Models
+﻿namespace Relativity.Test.Helpers.Configuration.Models
 {
 	// TODO: Add basic validation
 	public class ConfigurationModel

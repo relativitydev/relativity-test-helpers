@@ -97,43 +97,43 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Application\ApplicationHelpers.cs" />
-    <Compile Include="Application\ApplicationInstallException.cs" />
-    <Compile Include="ArtifactHelpers\Client.cs" />
-    <Compile Include="ArtifactHelpers\Document.cs" />
-    <Compile Include="ArtifactHelpers\Fields.cs" />
-    <Compile Include="ArtifactHelpers\Request\FieldRequest.cs" />
+    <Compile Include="Objects\Application\ApplicationHelpers.cs" />
+    <Compile Include="Objects\Application\ApplicationInstallException.cs" />
+    <Compile Include="Objects\Client\ClientHelper.cs" />
+    <Compile Include="Objects\Document\DocumentHelper.cs" />
+    <Compile Include="Fields\Fields.cs" />
+    <Compile Include="Fields\Request\FieldRequest.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthenticationProvider.cs" />
     <Compile Include="Authentication\UserInfo.cs" />
     <Compile Include="Configuration\ConfigurationModel.cs" />
     <Compile Include="Database\TestDBContext.cs" />
     <Compile Include="Exceptions\IntegrationTestException.cs" />
-    <Compile Include="GroupHelpers\CreateGroup.cs" />
-    <Compile Include="GroupHelpers\DeleteGroup.cs" />
-    <Compile Include="GroupHelpers\GroupHelpers.cs" />
-    <Compile Include="ImportAPIHelper\Constants.cs" />
-    <Compile Include="ImportAPIHelper\ImportDocument.cs" />
-    <Compile Include="ArtifactHelpers\Folders.cs" />
-    <Compile Include="ImportAPIHelper\Request\ImportJobRequest.cs" />
+    <Compile Include="Objects\Group\CreateGroup.cs" />
+    <Compile Include="Objects\Group\DeleteGroup.cs" />
+    <Compile Include="Objects\Group\GroupHelpers.cs" />
+    <Compile Include="Import\Constants.cs" />
+    <Compile Include="Import\ImportDocument.cs" />
+    <Compile Include="Objects\Folder\FolderHelper.cs" />
+    <Compile Include="Import\Request\ImportJobRequest.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\TestLogFactory.cs" />
     <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />
-    <Compile Include="SharedTestHelpers\AppConfigSettings.cs" />
-    <Compile Include="SharedTestHelpers\ConfigurationHelpers.cs" />
-    <Compile Include="ImportAPIHelper\ImportAPIHelper.cs" />
-    <Compile Include="SharedTestHelpers\ConfigurationSettings.cs" />
-    <Compile Include="TestHelpers\TestAgentHelper.cs" />
-    <Compile Include="TestHelpers\TestEHHelper.cs" />
-    <Compile Include="TestHelpers\TestHelper.cs" />
+    <Compile Include="Configuration\AppConfigSettings.cs" />
+    <Compile Include="Configuration\ConfigurationHelpers.cs" />
+    <Compile Include="Import\ImportAPIHelper.cs" />
+    <Compile Include="Configuration\ConfigurationSettings.cs" />
+    <Compile Include="Helpers\TestAgentHelper.cs" />
+    <Compile Include="Helpers\TestEHHelper.cs" />
+    <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserHelpers\CreateUser.cs" />
-    <Compile Include="UserHelpers\DeleteUser.cs" />
-    <Compile Include="WorkspaceHelpers\CreateWorkspace.cs" />
-    <Compile Include="WorkspaceHelpers\DeleteWorkspace.cs" />
-    <Compile Include="WorkspaceHelpers\WorkspaceHelpers.cs" />
+    <Compile Include="Objects\User\CreateUser.cs" />
+    <Compile Include="Objects\User\DeleteUser.cs" />
+    <Compile Include="Objects\Workspace\CreateWorkspace.cs" />
+    <Compile Include="Objects\Workspace\DeleteWorkspace.cs" />
+    <Compile Include="Objects\Workspace\WorkspaceHelpers.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
