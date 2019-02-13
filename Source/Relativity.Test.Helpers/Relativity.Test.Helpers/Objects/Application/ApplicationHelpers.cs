@@ -1,10 +1,11 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
+using Relativity.Test.Helpers.Objects.Application.Exceptions;
 using System;
 using System.Linq;
 using System.Threading;
 
-namespace Relativity.Test.Helpers.Application
+namespace Relativity.Test.Helpers.Objects.Application
 {
 	public class ApplicationHelper
 	{
@@ -37,16 +38,16 @@ namespace Relativity.Test.Helpers.Application
 
 				if (state.State == ProcessStateValue.CompletedWithError)
 				{
-					throw new Exceptions.ApplicationInstallException(state.Message ?? state.Status ?? "The install completed an unknown error");
+					throw new ApplicationInstallException(state.Message ?? state.Status ?? "The install completed an unknown error");
 				}
 				else if (state.State == ProcessStateValue.HandledException || state.State == ProcessStateValue.UnhandledException)
 				{
-					throw new Exceptions.ApplicationInstallException(state.Message ?? state.Status ?? "The install failed with a unknown error");
+					throw new ApplicationInstallException(state.Message ?? state.Status ?? "The install failed with a unknown error");
 				}
 			}
 			else
 			{
-				throw new Exceptions.ApplicationInstallException($"There was an error installing the application {por.Message}");
+				throw new ApplicationInstallException($"There was an error installing the application {por.Message}");
 			}
 		}
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Relativity.Test.Helpers.Group
+namespace Relativity.Test.Helpers.Objects.Group
 {
 	public static class GroupHelper
 	{

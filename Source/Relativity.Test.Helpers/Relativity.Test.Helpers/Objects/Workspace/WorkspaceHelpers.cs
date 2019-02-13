@@ -1,7 +1,7 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 
-namespace Relativity.Test.Helpers.Workspace
+namespace Relativity.Test.Helpers.Objects.Workspace
 {
 	public class WorkspaceHelper
 	{

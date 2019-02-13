@@ -4,7 +4,7 @@ using Relativity.Services.Client;
 using System;
 using System.Collections.Generic;
 
-namespace Relativity.Test.Helpers.Client
+namespace Relativity.Test.Helpers.Objects.Client
 {
     public class ClientHelper
 	{

@@ -7,7 +7,7 @@ using System.Linq;
 using Choice = kCura.Relativity.Client.DTOs.Choice;
 using User = kCura.Relativity.Client.DTOs.User;
 
-namespace Relativity.Test.Helpers.User
+namespace Relativity.Test.Helpers.Objects.User
 {
     public static class CreateUser
 	{

@@ -8,7 +8,7 @@ using System.Linq;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
-namespace Relativity.Test.Helpers.Folder
+namespace Relativity.Test.Helpers.Objects.Folder
 {
 
     /// <summary>

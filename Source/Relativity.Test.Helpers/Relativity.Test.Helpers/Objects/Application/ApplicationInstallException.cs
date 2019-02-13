@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Relativity.Test.Helpers.Application.Exceptions
+namespace Relativity.Test.Helpers.Objects.Application.Exceptions
 {
 	public class ApplicationInstallException : Exception
 	{

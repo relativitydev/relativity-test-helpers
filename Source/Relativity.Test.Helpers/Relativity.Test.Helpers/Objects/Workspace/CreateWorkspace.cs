@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
-namespace Relativity.Test.Helpers.Workspace
+namespace Relativity.Test.Helpers.Objects.Workspace
 {
 
 	/// <summary>

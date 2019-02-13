@@ -4,7 +4,7 @@ using System;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
-namespace Relativity.Test.Helpers.Workspace
+namespace Relativity.Test.Helpers.Objects.Workspace
 {
 	/// <summary>
 	/// 

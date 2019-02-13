@@ -1,8 +1,8 @@
 ﻿using kCura.Relativity.Client;
 using Moq;
 using NUnit.Framework;
-using Relativity.Test.Helpers.Application;
-using Relativity.Test.Helpers.Application.Exceptions;
+using Relativity.Test.Helpers.Objects.Application;
+using Relativity.Test.Helpers.Objects.Application.Exceptions;
 using System;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.Application
@@ -72,7 +72,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 
 
 			//ACT
-			Assert.Throws<ApplicationInstallException>(() => Test.Helpers.Application.ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
+			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
 			//ASSERT
 
@@ -95,7 +95,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 
 
 			//ACT
-			Assert.Throws<ApplicationInstallException>(() => Test.Helpers.Application.ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
+			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
 			//ASSERT
 		}

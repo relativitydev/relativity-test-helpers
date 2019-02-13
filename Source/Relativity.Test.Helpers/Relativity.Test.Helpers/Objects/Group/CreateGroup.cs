@@ -3,7 +3,7 @@ using kCura.Relativity.Client.DTOs;
 using DTOs = kCura.Relativity.Client.DTOs;
 using System;
 
-namespace Relativity.Test.Helpers.Group
+namespace Relativity.Test.Helpers.Objects.Group
 {
     public static class CreateGroup
 	{

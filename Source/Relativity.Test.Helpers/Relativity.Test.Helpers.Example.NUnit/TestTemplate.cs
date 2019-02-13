@@ -1,9 +1,13 @@
 ﻿using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.Group;
+using Relativity.Test.Helpers.Objects.Folder;
+using Relativity.Test.Helpers.Objects.Group;
+using Relativity.Test.Helpers.Objects.User;
+using Relativity.Test.Helpers.Objects.Workspace;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using Relativity.Test.HelpersObjects.Group;
 using System;
 using System.IO;
 using System.Reflection;
@@ -63,14 +67,14 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(new Configuration.Models.ConfigurationModel());
 
 			//Create new user 
-			_userArtifactId = Relativity.Test.Helpers.User.CreateUser.CreateNewUser(_client);
+			_userArtifactId = CreateUser.CreateNewUser(_client);
 
 			//Create new group
 			CreateGroup.Create_Group(_client, _groupName);
 
 
 			//Create workspace
-			_workspaceId = Workspace.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 			dbContext = helper.GetDBContext(_workspaceId);
 			_client.APIOptions.WorkspaceID = _workspaceId;
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -84,7 +88,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.Import.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
-			var folderName = Folder.FolderHelper.GetFolderName(_rootFolderArtifactID, dbContext);
+			var folderName = FolderHelper.GetFolderName(_rootFolderArtifactID, dbContext);
 			Relativity.Test.Helpers.Import.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
@@ -113,10 +117,10 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace
-			Workspace.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			//Delete User
-			User.DeleteUser.Delete_User(_client, _userArtifactId);
+			DeleteUser.Delete_User(_client, _userArtifactId);
 
 			//Delete Group
 			DeleteGroup.Delete_Group(_client, _groupArtifactId);

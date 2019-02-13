@@ -4,7 +4,7 @@ using DTOs = kCura.Relativity.Client.DTOs;
 using System;
 
 
-namespace Relativity.Test.Helpers.Group
+namespace Relativity.Test.HelpersObjects.Group
 {
     public static class DeleteGroup
 	{
