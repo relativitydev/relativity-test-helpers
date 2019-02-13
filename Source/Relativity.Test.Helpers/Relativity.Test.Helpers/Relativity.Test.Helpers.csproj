@@ -240,10 +240,7 @@
     <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />
-    <Compile Include="Configuration\AppConfigSettings.cs" />
-    <Compile Include="Configuration\ConfigurationHelpers.cs" />
     <Compile Include="Import\ImportAPIHelper.cs" />
-    <Compile Include="Configuration\ConfigurationSettings.cs" />
     <Compile Include="Helpers\TestAgentHelper.cs" />
     <Compile Include="Helpers\TestEHHelper.cs" />
     <Compile Include="Helpers\TestHelper.cs" />

@@ -19,7 +19,7 @@ namespace Relativity.Test.Helpers.Objects.Folder
     /// 
     public class FolderHelper
 	{
-		public static Int32 GetRootFolderArtifactID(Int32 workspaceID, IServicesMgr svgMgr, string userName, string password)
+		public Int32 GetRootFolderArtifactID(Int32 workspaceID, IServicesMgr svgMgr, string userName, string password)
 		{
 			using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(new Configuration.Models.ConfigurationModel()))
 			{
@@ -41,7 +41,7 @@ namespace Relativity.Test.Helpers.Objects.Folder
 		}
 
 
-		public static String GetFolderName(Int32 folderArtifactID, IDBContext workspaceDbContext)
+		public String GetFolderName(Int32 folderArtifactID, IDBContext workspaceDbContext)
 		{
 			string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);
 

@@ -15,14 +15,6 @@ namespace Relativity.Test.Helpers.ServiceFactory.Extentions
 			//Create proxy
 			T proxy = serviceFactory.CreateProxy<T>();
 			return proxy;
-
-		}
-
-		public static Uri GetKeplerUrl(this IServicesMgr svcmgr)
-		{
-			// Get Kepler URL
-			Uri keplerUri = new Uri($"{SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE}://{SharedTestHelpers.ConfigurationHelper.REST_SERVER_ADDRESS}/relativity.rest/api");
-			return keplerUri;
 		}
 
 		public static Uri GetKeplerUrl(this IServicesMgr svcmgr, ConfigurationModel configs)
