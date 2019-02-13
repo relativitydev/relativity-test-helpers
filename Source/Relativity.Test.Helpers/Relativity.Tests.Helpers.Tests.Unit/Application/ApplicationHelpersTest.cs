@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Relativity.Test.Helpers.Objects.Application;
 using Relativity.Test.Helpers.Objects.Application.Exceptions;
 using System;
-
+/*
 namespace Relativity.Tests.Helpers.Tests.Unit.Application
 {
 	[TestFixture]
@@ -123,3 +123,4 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 		}
 	}
 }
+*/
