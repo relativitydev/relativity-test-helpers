@@ -1,4 +1,5 @@
-﻿using Relativity.Services.Security;
+﻿using Relativity.API;
+using Relativity.Services.Security;
 using Relativity.Services.Security.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,13 @@ namespace Relativity.Test.Helpers.Authentication
     /// 
     public class AuthenticationProvider
     {
-        public static List<string> AuthenticationProviderPassword(Int32 userartifactid, string emailaddress, string twofactorMode)
+		private IHelper _helper;
+		public AuthenticationProvider(IHelper helper)
+		{
+			_helper = helper;
+		}
+
+        public List<string> AuthenticationProviderPassword(Int32 userartifactid, string emailaddress, string twofactorMode)
         {
             List<String> violations = new List<string>();
         
@@ -78,7 +85,7 @@ namespace Relativity.Test.Helpers.Authentication
         }
 
 
-        public static List<string> RemoveProviderPasswordfromUser(Int32 userartifactid)
+        public List<string> RemoveProviderPasswordfromUser(Int32 userartifactid)
         {
             List<String> violations = new List<string>();
             try
@@ -99,7 +106,7 @@ namespace Relativity.Test.Helpers.Authentication
         }
 
 
-        public static List<string> AuthenticationProviderActiveDirectory(Int32 userartifactid, string emailaddress)
+        public List<string> AuthenticationProviderActiveDirectory(Int32 userartifactid, string emailaddress)
         {
             List<String> violations = new List<string>();
             try
@@ -125,7 +132,7 @@ namespace Relativity.Test.Helpers.Authentication
         }
 
 
-        public static async Task<LoginProfile> RetrieveExistingUserLoginProfileAsync(Int32 userArtifactId)
+        public async Task<LoginProfile> RetrieveExistingUserLoginProfileAsync(Int32 userArtifactId)
         {
             try
             {
@@ -139,7 +146,7 @@ namespace Relativity.Test.Helpers.Authentication
             }
         }
 
-        public static List<string> AuthenticationProviderIntegratedAuth(Int32 userartifactid, string account)
+        public List<string> AuthenticationProviderIntegratedAuth(Int32 userartifactid, string account)
         {
             List<String> violations = new List<string>();
             try
@@ -165,10 +172,9 @@ namespace Relativity.Test.Helpers.Authentication
 
         }
 
-        private static ILoginProfileManager LoginProfileManager()
+        private ILoginProfileManager LoginProfileManager()
         {
-            var helper = TestHelper.System();
-            ILoginProfileManager loginmanager = helper.GetServicesManager().CreateProxy<ILoginProfileManager>(API.ExecutionIdentity.System);
+            ILoginProfileManager loginmanager = _helper.GetServicesManager().CreateProxy<ILoginProfileManager>(API.ExecutionIdentity.System);
             return loginmanager;
         }
     }

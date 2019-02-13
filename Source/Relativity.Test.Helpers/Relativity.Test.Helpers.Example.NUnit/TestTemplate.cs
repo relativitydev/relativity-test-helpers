@@ -58,7 +58,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureSetup()
 		{
 			//Setup for testing		
-			var helper = new TestHelper();
+			var helper = new TestHelper(new Configuration.Models.ConfigurationModel());
 			servicesManager = helper.GetServicesManager();
 			_eddsDbContext = helper.GetDBContext(-1);
 

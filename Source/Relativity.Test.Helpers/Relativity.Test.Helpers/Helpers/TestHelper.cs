@@ -12,37 +12,10 @@ namespace Relativity.Test.Helpers
 	public class TestHelper : IHelper
 	{
 		public readonly ConfigurationModel Configs = null;
-		private readonly string _username;
-		private readonly string _password;
-
-		public TestHelper()
-		{
-			var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
-			var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
-			ForUser(username, password);
-		}
-
-		public TestHelper(string username, string password)
-		{
-			_username = username;
-			_password = password;
-		}
 
 		public TestHelper(ConfigurationModel configs)
 		{
 			Configs = configs;
-		}
-
-		public static IHelper ForUser(string username, string password)
-		{
-			return new TestHelper(username, password);
-		}
-
-		public static IHelper System()
-		{
-			var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
-			var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
-			return ForUser(username, password);
 		}
 
 		public IDBContext GetDBContext(int caseID)
@@ -54,14 +27,8 @@ namespace Relativity.Test.Helpers
 			//You can create a new DBcontext using DBContextHelper for Relativity versions equal to or greater than 9.6.85.9
 			TestDbContext context;
 
-			if (Configs != null)
-			{
 				context = new TestDbContext(this.Configs.SQLServerAddress, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", this.Configs.SQLUserName, this.Configs.SQLPassword);
-			}
-			else
-			{
-				context = new TestDbContext(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
-			}
+
 
 			return context;
 		}
@@ -98,14 +65,8 @@ namespace Relativity.Test.Helpers
 
 		public IServicesMgr GetServicesManager()
 		{
-			if (Configs != null)
-			{
 				return new ServicesManager(Configs);
-			}
-			else
-			{
-				return new ServicesManager(_username, _password);
-			}
+
 
 
 		}
@@ -162,11 +123,6 @@ namespace Relativity.Test.Helpers
 		}
 		#endregion
 
-		/* Needed for Relativity DLLS that are 10.* and above
-		public IStringSanitizer GetStringSanitizer(int workspaceID)
-		{
-				throw new NotImplementedException();
-		} */
 	}
 
 

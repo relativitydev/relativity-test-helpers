@@ -14,16 +14,6 @@ namespace Relativity.Test.Helpers
 	{
 		private TestHelper _helper;
 
-		public TestAgentHelper()
-		{
-			this._helper = new TestHelper();
-		}
-
-		public TestAgentHelper(string username, string password)
-		{
-			this._helper = new TestHelper(username, password);
-		}
-
 		public TestAgentHelper(ConfigurationModel configs)
 		{
 			this._helper = new TestHelper(configs);
@@ -79,11 +69,6 @@ namespace Relativity.Test.Helpers
 		{
 			return this._helper.GetServicesManager();
 		}
-		/* Needed for Relativity DLLS 10.* and above
-		IStringSanitizer IHelper.GetStringSanitizer(int workspaceID)
-		{
-				return this._helper.GetStringSanitizer(workspaceID);
-		} */
 
 		IUrlHelper IHelper.GetUrlHelper()
 		{
