@@ -213,6 +213,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationFactory.cs" />
     <Compile Include="Objects\Application\ApplicationHelpers.cs" />
     <Compile Include="Objects\Application\ApplicationInstallException.cs" />
     <Compile Include="Objects\Client\ClientHelper.cs" />
