@@ -80,8 +80,8 @@
     <Reference Include="kCura.OI.FileID, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.OI.FileID.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.Client, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.10.0.161.8\lib\kCura.Relativity.Client.dll</HintPath>
+    <Reference Include="kCura.Relativity.Client, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.10.1.116.12\lib\net462\kCura.Relativity.Client.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.DataReaderClient, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.Relativity.DataReaderClient.dll</HintPath>
@@ -122,8 +122,8 @@
     <Reference Include="Relativity, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.10.1.116.12\lib\net462\Relativity.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.API, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Api.10.0.161.8\lib\Relativity.API.dll</HintPath>
+    <Reference Include="Relativity.API, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.10.1.116.12\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.DataTransfer.MessageService, Version=1.0.21.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\Relativity.DataTransfer.MessageService.dll</HintPath>

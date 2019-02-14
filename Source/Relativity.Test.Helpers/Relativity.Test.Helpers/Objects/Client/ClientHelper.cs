@@ -1,4 +1,5 @@
 ﻿using kCura.Relativity.Client;
+using Relativity.Services.ServiceProxy;
 using Relativity.Services.Choice;
 using Relativity.Services.Client;
 using System;
