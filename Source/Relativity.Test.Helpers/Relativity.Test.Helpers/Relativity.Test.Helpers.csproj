@@ -74,6 +74,9 @@
     <Reference Include="kCura, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.10.1.116.12\lib\net462\kCura.dll</HintPath>
     </Reference>
+    <Reference Include="kCura.EventHandler, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.EventHandler.10.1.116.12\lib\net462\kCura.EventHandler.dll</HintPath>
+    </Reference>
     <Reference Include="kCura.ImageValidator, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.ImageValidator.dll</HintPath>
     </Reference>
@@ -215,6 +218,7 @@
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationFactory.cs" />
     <Compile Include="Helpers\IHelperTransform.cs" />
+    <Compile Include="Objects\Agent\AgentHelper.cs" />
     <Compile Include="Objects\Application\ApplicationHelper.cs" />
     <Compile Include="Objects\Application\ApplicationInstallException.cs" />
     <Compile Include="Objects\Client\ClientHelper.cs" />
@@ -234,6 +238,7 @@
     <Compile Include="Import\Request\ImportJobRequest.cs" />
     <Compile Include="Helpers\Logging\ConsoleLogger.cs" />
     <Compile Include="Helpers\Logging\TestLogFactory.cs" />
+    <Compile Include="Objects\OAuth2Client\OAuth2ClientHelper.cs" />
     <Compile Include="Objects\ObjectFactory.cs" />
     <Compile Include="Objects\ObjectHelper.cs" />
     <Compile Include="Helpers\ServiceFactory\Extentions\ServiceManagerExtension.cs" />
@@ -243,9 +248,11 @@
     <Compile Include="Helpers\TestAgentHelper.cs" />
     <Compile Include="Helpers\TestEHHelper.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
+    <Compile Include="Objects\RDO\RDOHelper.cs" />
     <Compile Include="Objects\User\UserHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Objects\Workspace\WorkspaceHelper.cs" />
+    <Compile Include="Validation\ConfigurationValidation.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

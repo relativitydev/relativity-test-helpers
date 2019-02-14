@@ -1,4 +1,5 @@
-﻿using kCura.Relativity.Client;
+﻿using kCura.EventHandler;
+using kCura.Relativity.Client;
 using Relativity.API;
 using Relativity.Test.Helpers.Fields.Request;
 using System;
@@ -18,7 +19,21 @@ namespace Relativity.Test.Helpers.Fields
     /// 
     public class FieldHelper
     {
-        public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
+
+		public FieldCollection ConvertFieldValuesToFieldCollection(List<DTOs.FieldValue> fieldValues)
+		{
+			FieldCollection fields = new FieldCollection();
+
+			foreach (var fieldValue in fieldValues)
+			{
+				kCura.EventHandler.FieldValue ehFieldValue = new kCura.EventHandler.FieldValue(fieldValue.Value);
+				kCura.EventHandler.Field field = new kCura.EventHandler.Field(fieldValue.ArtifactID, fieldValue.Name, "Column Name?", (int)fieldValue.FieldType, null, (int)fieldValue.FieldCategory, false, true, ehFieldValue, fieldValue.Guids);
+				fields.Add(field);
+			}
+
+			return fields;
+		}
+		public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
         {
             string sqlquery = @"SELECT [ArtifactID] FROM [EDDSDBO].[Field] Where[DisplayName] like @fieldname";
             var sqlParams = new List<SqlParameter>
