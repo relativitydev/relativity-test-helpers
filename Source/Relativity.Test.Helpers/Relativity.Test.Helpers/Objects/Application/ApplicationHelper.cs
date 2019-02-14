@@ -11,13 +11,13 @@ namespace Relativity.Test.Helpers.Objects.Application
 {
 	public class ApplicationHelper
 	{
-		private IHelper _helper;
+		private TestHelper _helper;
 
-		public ApplicationHelper(IHelper helper)
+		public ApplicationHelper(TestHelper helper)
 		{
 			_helper = helper;
 		}
-		public Int32 ImportApplication(Int32 workspaceId, bool forceFlag, string filePath, string appName, int appArtifactID = -1)
+		public Int32 Import(Int32 workspaceId, bool forceFlag, string filePath, string appName, int appArtifactID = -1)
 		{
 			// Set the forceFlag to true. The forceFlag unlocks any applications in the workspace 
 			// that conflict with the application that you are loading. The applications must be unlocked 

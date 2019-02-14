@@ -9,10 +9,16 @@ using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Objects.User
 {
-	class UserHelper
+	public class UserHelper
 	{
+		private TestHelper _helper;
 
-		public int CreateNewUser(IRSAPIClient client)
+		public UserHelper(TestHelper helper)
+		{
+			_helper = helper;
+		}
+
+		public int CreateNewUser()
 		{
 			const string errorContext = "An error occured when creating a new Relativity User.";
 			var userArtifactId = 0;
@@ -30,14 +36,14 @@ namespace Relativity.Test.Helpers.Objects.User
 			const int sendNewPasswordTo = 1000006;
 
 			//Get the ArtifactIDs for the required Choice, Group, and Client objects.
-			var returnPasswordCodeId = FindChoiceArtifactId(client, sendNewPasswordTo, "Return");
-			var passwordCodeId = FindChoiceArtifactId(client, password, "Auto-generate password");
-			var documentSkipCodeId = FindChoiceArtifactId(client, documentSkip, "Enabled");
-			var documentSkipPreferenceCodeId = FindChoiceArtifactId(client, skipDefaultPreference, "Normal");
-			var defaultFileTypeCodeId = FindChoiceArtifactId(client, defaultSelectedFileType, "Native");
-			var userTypeCodeId = FindChoiceArtifactId(client, userType, "Internal");
-			var everyoneGroupArtifactId = FindGroupArtifactId(client, "Everyone");
-			var clientArtifactId = FindClientArtifactId(client, "Relativity Template");
+			var returnPasswordCodeId = FindChoiceArtifactId(sendNewPasswordTo, "Return");
+			var passwordCodeId = FindChoiceArtifactId(password, "Auto-generate password");
+			var documentSkipCodeId = FindChoiceArtifactId(documentSkip, "Enabled");
+			var documentSkipPreferenceCodeId = FindChoiceArtifactId(skipDefaultPreference, "Normal");
+			var defaultFileTypeCodeId = FindChoiceArtifactId(defaultSelectedFileType, "Native");
+			var userTypeCodeId = FindChoiceArtifactId(userType, "Internal");
+			var everyoneGroupArtifactId = FindGroupArtifactId("Everyone");
+			var clientArtifactId = FindClientArtifactId("Relativity Template");
 
 			var userDto = new DTOs.User
 			{
@@ -72,7 +78,11 @@ namespace Relativity.Test.Helpers.Objects.User
 
 			try
 			{
-				createResults = client.Repositories.User.Create(userDto);
+				using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+				{
+					client.APIOptions.WorkspaceID = -1;
+					createResults = client.Repositories.User.Create(userDto);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -88,11 +98,8 @@ namespace Relativity.Test.Helpers.Objects.User
 			return userArtifactId;
 		}
 
-		public int CreateNewUser(IRSAPIClient client, String firstName, String lastName, String emailAddress, String password, List<int> groupArtifactIds, Boolean relativityAccess, String userType, String clientName)
+		public int CreateNewUser(String firstName, String lastName, String emailAddress, String password, List<int> groupArtifactIds, Boolean relativityAccess, String userType, String clientName)
 		{
-
-			client.APIOptions.WorkspaceID = -1;
-
 			int defaultSelectedFileType = 1;
 			int userTypeCodeTypeId = 3;
 			int documentSkip = 1000003;
@@ -100,14 +107,14 @@ namespace Relativity.Test.Helpers.Objects.User
 			int passwordCodeTypeId = 1000005;
 			int sendNewPasswordTo = 1000006;
 
-			int returnPasswordCodeId = FindChoiceArtifactId(client, sendNewPasswordTo, "Return");
-			int passwordCodeId = FindChoiceArtifactId(client, passwordCodeTypeId, "Manually set password");
-			int documentSkipCodeId = FindChoiceArtifactId(client, documentSkip, "Enabled");
-			int documentSkipPreferenceCodeId = FindChoiceArtifactId(client, skipDefaultPreference, "Normal");
-			int defaultFileTypeCodeId = FindChoiceArtifactId(client, defaultSelectedFileType, "Native");
-			int userTypeCodeId = FindChoiceArtifactId(client, userTypeCodeTypeId, userType);
-			int everyoneGroupArtifactId = FindGroupArtifactId(client, "Everyone");
-			int clientArtifactId = FindClientArtifactId(client, clientName);
+			int returnPasswordCodeId = FindChoiceArtifactId(sendNewPasswordTo, "Return");
+			int passwordCodeId = FindChoiceArtifactId(passwordCodeTypeId, "Manually set password");
+			int documentSkipCodeId = FindChoiceArtifactId(documentSkip, "Enabled");
+			int documentSkipPreferenceCodeId = FindChoiceArtifactId(skipDefaultPreference, "Normal");
+			int defaultFileTypeCodeId = FindChoiceArtifactId(defaultSelectedFileType, "Native");
+			int userTypeCodeId = FindChoiceArtifactId(userTypeCodeTypeId, userType);
+			int everyoneGroupArtifactId = FindGroupArtifactId("Everyone");
+			int clientArtifactId = FindClientArtifactId(clientName);
 
 			DTOs.User userDto = new DTOs.User
 			{
@@ -143,13 +150,17 @@ namespace Relativity.Test.Helpers.Objects.User
 			{
 				userDto.Groups.Add(new kCura.Relativity.Client.DTOs.Group(groupArtifactId));
 			}
-
-			var results = client.Repositories.User.Create(userDto);
+			WriteResultSet<DTOs.User> results;
+			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+			{
+				client.APIOptions.WorkspaceID = -1;
+				results = client.Repositories.User.Create(userDto);
+			}
 			return results.Results[0].Artifact.ArtifactID;
 		}
 
 
-		public int FindChoiceArtifactId(IRSAPIClient proxy, int choiceType, string value)
+		public int FindChoiceArtifactId(int choiceType, string value)
 		{
 			int artifactId = 0;
 
@@ -160,9 +171,12 @@ namespace Relativity.Test.Helpers.Objects.User
 			Query<DTOs.Choice> choiceQuery = new Query<DTOs.Choice>(new List<FieldValue>
 			{ new
 							 FieldValue(ArtifactQueryFieldNames.ArtifactID) }, choiceCompositeCondition, new List<Sort>());
-
-			QueryResultSet<DTOs.Choice> choiceQueryResult = proxy.Repositories.Choice.Query(choiceQuery);
-
+			QueryResultSet<DTOs.Choice> choiceQueryResult;
+			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+			{
+				client.APIOptions.WorkspaceID = -1;
+				choiceQueryResult = client.Repositories.Choice.Query(choiceQuery);
+			}
 			if (choiceQueryResult.Success && choiceQueryResult.Results.Count == 1)
 			{
 				artifactId = choiceQueryResult.Results.FirstOrDefault().Artifact.ArtifactID;
@@ -171,7 +185,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public int FindGroupArtifactId(IRSAPIClient proxy, string group)
+		public int FindGroupArtifactId(string group)
 		{
 			int artifactId = 0;
 
@@ -182,9 +196,12 @@ namespace Relativity.Test.Helpers.Objects.User
 					 };
 
 			queryGroup.Fields.Add(new FieldValue(ArtifactQueryFieldNames.ArtifactID));
-
-			QueryResultSet<kCura.Relativity.Client.DTOs.Group> resultSetGroup = proxy.Repositories.Group.Query(queryGroup, 0);
-
+			QueryResultSet<kCura.Relativity.Client.DTOs.Group> resultSetGroup;
+			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+			{
+				client.APIOptions.WorkspaceID = -1;
+				resultSetGroup = client.Repositories.Group.Query(queryGroup, 0);
+			}
 			if (resultSetGroup.Success && resultSetGroup.Results.Count == 1)
 			{
 				artifactId = resultSetGroup.Results.FirstOrDefault().Artifact.ArtifactID;
@@ -193,7 +210,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public int FindClientArtifactId(IRSAPIClient proxy, string group)
+		public int FindClientArtifactId(string group)
 		{
 			int artifactId = 0;
 
@@ -202,9 +219,12 @@ namespace Relativity.Test.Helpers.Objects.User
 				Condition = new TextCondition(ClientFieldNames.Name, TextConditionEnum.EqualTo, @group),
 				Fields = FieldValue.AllFields
 			};
-
-			QueryResultSet<DTOs.Client> resultSetClient = proxy.Repositories.Client.Query(queryClient, 0);
-
+			QueryResultSet<DTOs.Client> resultSetClient;
+			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+			{
+				client.APIOptions.WorkspaceID = -1;
+				resultSetClient = client.Repositories.Client.Query(queryClient, 0);
+			}
 			if (resultSetClient.Success && resultSetClient.Results.Count == 1)
 			{
 				artifactId = resultSetClient.Results.FirstOrDefault().Artifact.ArtifactID;
@@ -212,15 +232,17 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public bool DeleteUser(IRSAPIClient client, int artifactId)
+		public bool DeleteUser(int artifactId)
 		{
-			client.APIOptions.WorkspaceID = -1;
-			kCura.Relativity.Client.DTOs.User userToDelete = new kCura.Relativity.Client.DTOs.User(artifactId);
-			WriteResultSet<kCura.Relativity.Client.DTOs.User> resultSet = new WriteResultSet<kCura.Relativity.Client.DTOs.User>();
+			var userToDelete = new DTOs.User(artifactId);
+			WriteResultSet<DTOs.User> resultSet;
 			try
 			{
-				resultSet = client.Repositories.User.Delete(userToDelete);
-
+				using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+				{
+					client.APIOptions.WorkspaceID = -1;
+					resultSet = client.Repositories.User.Delete(userToDelete);
+				}
 				if (!resultSet.Success || resultSet.Results.Count == 0)
 				{
 					throw new Exception("User was not found");

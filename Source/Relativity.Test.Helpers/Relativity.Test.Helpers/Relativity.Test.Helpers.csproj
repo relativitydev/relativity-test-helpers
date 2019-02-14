@@ -245,8 +245,6 @@
     <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="Objects\User\UserHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Objects\Workspace\CreateWorkspace.cs" />
-    <Compile Include="Objects\Workspace\DeleteWorkspace.cs" />
     <Compile Include="Objects\Workspace\WorkspaceHelper.cs" />
   </ItemGroup>
   <ItemGroup />

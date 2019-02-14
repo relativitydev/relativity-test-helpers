@@ -14,7 +14,13 @@ namespace Relativity.Test.Helpers.Objects.Document
 
     public class DocumentHelper
 	{
-		public string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		private TestHelper _helper;
+		public DocumentHelper(TestHelper helper)
+		{
+			_helper = helper;
+		}
+
+		public string GetDocumentIdentifierFieldColumnName(Int32 fieldArtifactTypeID)
 		{
 
 			string sql = @"
@@ -28,11 +34,11 @@ namespace Relativity.Test.Helpers.Objects.Document
 				new SqlParameter("@fieldArtifactTypeID", SqlDbType.NVarChar) {Value = fieldArtifactTypeID}
 			};
 
-			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
+			var columnName = _helper.GetDBContext(-1).ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
 			return columnName;
 		}
 
-		public string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		public string GetDocumentIdentifierFieldName(int workspaceID, Int32 fieldArtifactTypeID)
 		{
 			const string sql = @"
             SELECT [TextIdentifier] FROM [EDDSDBO].[ExtendedField] WITH(NOLOCK)
@@ -43,7 +49,7 @@ namespace Relativity.Test.Helpers.Objects.Document
 				new SqlParameter("fieldArtifactTypeID", SqlDbType.NVarChar) {Value = fieldArtifactTypeID}
 			};
 
-			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
+			var columnName = _helper.GetDBContext(workspaceID).ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
 			return columnName;
 		}
 

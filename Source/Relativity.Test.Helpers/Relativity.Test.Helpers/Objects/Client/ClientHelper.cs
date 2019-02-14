@@ -8,25 +8,26 @@ namespace Relativity.Test.Helpers.Objects.Client
 {
     public class ClientHelper
 	{
-		public int CreateClient(IRSAPIClient client, Relativity.Services.ServiceProxy.ServiceFactory serviceFactory, string name)
+		private TestHelper _helper;
+		public ClientHelper(TestHelper helper)
 		{
-			var workspaceId = client.APIOptions.WorkspaceID;
-			client.APIOptions.WorkspaceID = -1;
-
-			using (IClientManager proxy = serviceFactory.CreateProxy<IClientManager>())
+			_helper = helper;
+		}
+		public int Create(string name)
+		{
+			using (IClientManager proxy = _helper.GetServicesManager().CreateProxy<IClientManager>(API.ExecutionIdentity.System))
 			{
 				List<ChoiceRef> choiceRefs = proxy.GetStatusChoicesForClientAsync().Result;
 				ChoiceRef statusRef = choiceRefs.Find(x => x.Name == "Active");
 				var newClient = new Relativity.Services.Client.Client { Name = name, Number = Guid.NewGuid().ToString(), Status = statusRef, Keywords = "Temp Client", Notes = "Used in the Disable Inactve User Integration Test." };
 				int clientArtifactId = proxy.CreateSingleAsync(newClient).Result;
-				client.APIOptions.WorkspaceID = workspaceId;
 				return clientArtifactId;
 			}
 		}
 
-		public void DeleteClient(Relativity.Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
+		public void Delete(int artifactId)
 		{
-			using (IClientManager proxy = serviceFactory.CreateProxy<IClientManager>())
+			using (IClientManager proxy = _helper.GetServicesManager().CreateProxy<IClientManager>(API.ExecutionIdentity.System))
 			{
 				int j = 1;
 				while (j <= 5)

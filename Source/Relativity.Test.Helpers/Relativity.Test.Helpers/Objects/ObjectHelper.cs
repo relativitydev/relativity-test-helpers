@@ -7,5 +7,7 @@
 		public Document.DocumentHelper Document { get; set; }
 		public Folder.FolderHelper Folder { get; set; }
 		public Workspace.WorkspaceHelper Workspace { get; set; }
+		public Group.GroupHelper Group { get; set; }
+		public User.UserHelper User { get; set; }
 	}
 }

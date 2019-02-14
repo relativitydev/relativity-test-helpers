@@ -19,12 +19,18 @@ namespace Relativity.Test.Helpers.Objects.Folder
     /// 
     public class FolderHelper
 	{
-		public Int32 GetRootFolderArtifactID(Int32 workspaceID, IServicesMgr svgMgr, string userName, string password)
+		private TestHelper _helper;
+		public FolderHelper(TestHelper helper)
 		{
-			using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(new Configuration.Models.ConfigurationModel()))
+			_helper = helper;
+		}
+
+		public Int32 GetRootFolderArtifactID(Int32 workspaceID, string workspaceName)
+		{
+			using (IRSAPIClient client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.CurrentUser))
 			{
 				Query<DTOs.Folder> query = new Query<DTOs.Folder>();
-				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, Workspace.WorkspaceHelper.GetWorkspaceName(client, workspaceID));
+				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, workspaceName);
 				query.Fields = FieldValue.NoFields;
 				var ResultSet = client.Repositories.Folder.Query(query);
 
@@ -41,11 +47,11 @@ namespace Relativity.Test.Helpers.Objects.Folder
 		}
 
 
-		public String GetFolderName(Int32 folderArtifactID, IDBContext workspaceDbContext)
+		public String GetFolderName(int workspaceID, Int32 folderArtifactID)
 		{
 			string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);
 
-			string folderName = workspaceDbContext.ExecuteSqlStatementAsScalar(sql).ToString();
+			string folderName = _helper.GetDBContext(workspaceID).ExecuteSqlStatementAsScalar(sql).ToString();
 
 			return folderName;
 		}
