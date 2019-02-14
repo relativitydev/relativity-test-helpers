@@ -214,17 +214,18 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationFactory.cs" />
+    <Compile Include="Helpers\IHelperTransform.cs" />
     <Compile Include="Objects\Application\ApplicationHelper.cs" />
     <Compile Include="Objects\Application\ApplicationInstallException.cs" />
     <Compile Include="Objects\Client\ClientHelper.cs" />
     <Compile Include="Objects\Document\DocumentHelper.cs" />
     <Compile Include="Fields\Fields.cs" />
     <Compile Include="Fields\Request\FieldRequest.cs" />
-    <Compile Include="Authentication\AuthenticationManager.cs" />
-    <Compile Include="Authentication\AuthenticationProvider.cs" />
-    <Compile Include="Authentication\UserInfo.cs" />
+    <Compile Include="Helpers\Authentication\AuthenticationManager.cs" />
+    <Compile Include="Helpers\Authentication\AuthenticationProvider.cs" />
+    <Compile Include="Helpers\Authentication\UserInfo.cs" />
     <Compile Include="Configuration\ConfigurationModel.cs" />
-    <Compile Include="Database\TestDBContext.cs" />
+    <Compile Include="Helpers\Database\TestDBContext.cs" />
     <Compile Include="Exceptions\IntegrationTestException.cs" />
     <Compile Include="Objects\Group\CreateGroup.cs" />
     <Compile Include="Objects\Group\DeleteGroup.cs" />
@@ -233,13 +234,13 @@
     <Compile Include="Import\ImportDocument.cs" />
     <Compile Include="Objects\Folder\FolderHelper.cs" />
     <Compile Include="Import\Request\ImportJobRequest.cs" />
-    <Compile Include="Logging\ConsoleLogger.cs" />
-    <Compile Include="Logging\TestLogFactory.cs" />
+    <Compile Include="Helpers\Logging\ConsoleLogger.cs" />
+    <Compile Include="Helpers\Logging\TestLogFactory.cs" />
     <Compile Include="Objects\ObjectFactory.cs" />
     <Compile Include="Objects\ObjectHelper.cs" />
-    <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
-    <Compile Include="ServiceFactory\ServicesManager.cs" />
-    <Compile Include="ServiceFactory\URLHelper.cs" />
+    <Compile Include="Helpers\ServiceFactory\Extentions\ServiceManagerExtension.cs" />
+    <Compile Include="Helpers\ServiceFactory\ServicesManager.cs" />
+    <Compile Include="Helpers\ServiceFactory\URLHelper.cs" />
     <Compile Include="Import\ImportAPIHelper.cs" />
     <Compile Include="Helpers\TestAgentHelper.cs" />
     <Compile Include="Helpers\TestEHHelper.cs" />

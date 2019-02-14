@@ -7,7 +7,7 @@ using Relativity.API;
 
 namespace Relativity.Test.Helpers.Authentication
 {
-	public class AuthenticationManager : IAuthenticationMgr
+	class AuthenticationManager : IAuthenticationMgr
 	{
 		public IUserInfo UserInfo { get; set; }
 		public string AuthToken { get; set; }

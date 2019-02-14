@@ -14,7 +14,7 @@ namespace Relativity.Test.Helpers
 		private readonly ConfigurationModel _configs;
 		private IHelper _helper;
 
-		public TestEHHelper(ConfigurationModel configs)
+		internal TestEHHelper(ConfigurationModel configs)
 		{
 			_configs = configs;
 			_helper = new TestHelper(_configs);

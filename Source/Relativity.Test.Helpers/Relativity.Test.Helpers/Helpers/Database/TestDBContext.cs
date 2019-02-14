@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Relativity.Test.Helpers.Database
 {
-	public class TestDbContext : IDBContext
+	class TestDbContext : IDBContext
 	{
 		private const string ConnectionString_PersistSecurityInfo = "False";
 		private const string ConnectionString_PacketSize = "4096";

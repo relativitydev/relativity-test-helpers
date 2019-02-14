@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Logging
 {
-	public class ConsoleLogger : IAPILog
+	class ConsoleLogger : IAPILog
 	{
 		private string _Context;
 		public ConsoleLogger()

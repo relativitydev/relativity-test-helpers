@@ -14,7 +14,7 @@ namespace Relativity.Test.Helpers
 	{
 		private TestHelper _helper;
 
-		public TestAgentHelper(ConfigurationModel configs)
+		internal TestAgentHelper(ConfigurationModel configs)
 		{
 			this._helper = new TestHelper(configs);
 		}

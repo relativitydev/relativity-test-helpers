@@ -9,7 +9,7 @@ using Relativity.Test.Helpers.Logging;
 
 namespace Relativity.Test.Helpers
 {
-	public class TestHelper : IHelper
+	public class TestHelper : IHelper, IHelperTransform
 	{
 		public readonly ConfigurationModel Configs = null;
 
@@ -86,6 +86,21 @@ namespace Relativity.Test.Helpers
 			throw new NotImplementedException();
 		}
 
+		public IStringSanitizer GetStringSanitizer(int workspaceID)
+		{
+			throw new NotImplementedException();
+		}
+
+		public TestAgentHelper AsTestAgentHelper()
+		{
+			return new TestAgentHelper(Configs);
+		}
+
+		public TestEHHelper AsTestEHHelper()
+		{
+			return new TestEHHelper(Configs);
+		}
+
 		#region IDisposable Support
 		private bool disposedValue = false; // To detect redundant calls
 
@@ -115,11 +130,6 @@ namespace Relativity.Test.Helpers
 			Dispose(true);
 			// TODO: uncomment the following line if the finalizer is overridden above.
 			// GC.SuppressFinalize(this);
-		}
-
-		public IStringSanitizer GetStringSanitizer(int workspaceID)
-		{
-			throw new NotImplementedException();
 		}
 		#endregion
 
