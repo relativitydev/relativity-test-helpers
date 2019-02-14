@@ -9,7 +9,6 @@ using Relativity.Test.Helpers.Objects.Group;
 using Relativity.Test.Helpers.Objects.User;
 using Relativity.Test.Helpers.Objects.Workspace;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
-using Relativity.Test.HelpersObjects.Group;
 using System;
 using System.IO;
 using System.Reflection;
@@ -18,7 +17,7 @@ using IServicesMgr = Relativity.API.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Example.NUnit
 {
-
+	/*
 	/// <summary>
 	/// 
 	/// Relativity Integration Test Helpers to assist you with writing good Integration Tests for your application. You can use this framework to test event handlers, agents and any workflow that combines agents and frameworks.
@@ -159,5 +158,5 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		#endregion
 
 	}
-
+	*/
 }

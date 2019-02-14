@@ -227,9 +227,7 @@
     <Compile Include="Configuration\ConfigurationModel.cs" />
     <Compile Include="Helpers\Database\TestDBContext.cs" />
     <Compile Include="Exceptions\IntegrationTestException.cs" />
-    <Compile Include="Objects\Group\CreateGroup.cs" />
-    <Compile Include="Objects\Group\DeleteGroup.cs" />
-    <Compile Include="Objects\Group\GroupHelpers.cs" />
+    <Compile Include="Objects\Group\GroupHelper.cs" />
     <Compile Include="Import\Constants.cs" />
     <Compile Include="Import\ImportDocument.cs" />
     <Compile Include="Objects\Folder\FolderHelper.cs" />
@@ -245,12 +243,11 @@
     <Compile Include="Helpers\TestAgentHelper.cs" />
     <Compile Include="Helpers\TestEHHelper.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
+    <Compile Include="Objects\User\UserHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Objects\User\CreateUser.cs" />
-    <Compile Include="Objects\User\DeleteUser.cs" />
     <Compile Include="Objects\Workspace\CreateWorkspace.cs" />
     <Compile Include="Objects\Workspace\DeleteWorkspace.cs" />
-    <Compile Include="Objects\Workspace\WorkspaceHelpers.cs" />
+    <Compile Include="Objects\Workspace\WorkspaceHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

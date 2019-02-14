@@ -1,4 +1,7 @@
-﻿using Relativity.Services.Group;
+﻿using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
+using DTOs = kCura.Relativity.Client.DTOs;
+using Relativity.Services.Group;
 using Relativity.Services.Permission;
 using System;
 using System.Collections.Generic;
@@ -7,11 +10,63 @@ using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Objects.Group
 {
-	public static class GroupHelper
+	public class GroupHelper
 	{
-		public static object DeleteGroup { get; internal set; }
 
-		public static bool AddGroupToWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
+		public int CreateGroup(IRSAPIClient client, String name)
+		{
+
+			var clientID = client.APIOptions.WorkspaceID;
+			client.APIOptions.WorkspaceID = -1;
+			DTOs.Group newGroup = new DTOs.Group();
+			newGroup.Name = name;
+			WriteResultSet<DTOs.Group> resultSet = new WriteResultSet<DTOs.Group>();
+
+			try
+			{
+				resultSet = client.Repositories.Group.Create(newGroup);
+				if (!resultSet.Success || resultSet.Results.Count == 0)
+				{
+					throw new Exception("Group was not found");
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Exception occured while trying to create a new group" + e);
+			}
+			var groupartid = resultSet.Results[0].Artifact.ArtifactID;
+			client.APIOptions.WorkspaceID = clientID;
+			return groupartid;
+		}
+
+		public bool Delete_Group(IRSAPIClient client, int artifactId)
+		{
+			var clientID = client.APIOptions.WorkspaceID;
+			client.APIOptions.WorkspaceID = -1;
+			var groupToDelete = new DTOs.Group(artifactId);
+			WriteResultSet<DTOs.Group> resultSet = new WriteResultSet<DTOs.Group>();
+
+			try
+			{
+				resultSet = client.Repositories.Group.Delete(groupToDelete);
+
+				if (!resultSet.Success || resultSet.Results.Count == 0)
+				{
+					throw new Exception("Group not found in Relativity");
+				}
+
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Group deletion threw an exception" + e);
+				return false;
+			}
+
+			client.APIOptions.WorkspaceID = clientID;
+			return true;
+		}
+
+		public bool AddGroupToWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
 		{
 			bool success = false;
 
@@ -30,7 +85,7 @@ namespace Relativity.Test.Helpers.Objects.Group
 			return success;
 		}
 
-		public static bool RemoveGroupFromWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
+		public bool RemoveGroupFromWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
 		{
 			bool success = false;
 
@@ -49,7 +104,7 @@ namespace Relativity.Test.Helpers.Objects.Group
 			return success;
 		}
 
-		private static async Task SecureItemFromGroupAsync(IPermissionManager mgr, int workspaceId, string groupName, int artifactId)
+		private async Task SecureItemFromGroupAsync(IPermissionManager mgr, int workspaceId, string groupName, int artifactId)
 		{
 			var itemSecurity = await mgr.GetItemLevelSecurityAsync(workspaceId, artifactId);
 			if (!itemSecurity.Enabled)
@@ -78,7 +133,7 @@ namespace Relativity.Test.Helpers.Objects.Group
 		/// <param name="workspaceId">The id of the workspace that contains the group and artifact that should be secured</param>
 		/// <param name="groupName">The group that you want to artifact secured from</param>
 		/// <param name="artifactId">The id of the artifact that should be secured</param>
-		public static void SecureItemFromGroup(IPermissionManager mgr, int workspaceId, string groupName, int artifactId)
+		public void SecureItemFromGroup(IPermissionManager mgr, int workspaceId, string groupName, int artifactId)
 		{
 			Task.WaitAll(SecureItemFromGroupAsync(mgr, workspaceId, groupName, artifactId));
 		}
@@ -91,7 +146,7 @@ namespace Relativity.Test.Helpers.Objects.Group
 		/// <param name="workspaceId">The id of the workspace that contains the group and artifact that should be secured</param>
 		/// <param name="groupName">The group that you want to artifact secured from</param>
 		/// <param name="artifactIds">The ids of the artifacts that should be secured</param>
-		public static void SecureItemFromGroup(IPermissionManager mgr, int workspaceId, string groupName, IEnumerable<int> artifactIds)
+		public void SecureItemFromGroup(IPermissionManager mgr, int workspaceId, string groupName, IEnumerable<int> artifactIds)
 		{
 			var tasks = new List<Task>();
 			foreach (var artifactId in artifactIds)

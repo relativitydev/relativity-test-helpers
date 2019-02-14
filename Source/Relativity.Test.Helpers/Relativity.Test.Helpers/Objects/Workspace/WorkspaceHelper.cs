@@ -1,22 +1,31 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
+using Relativity.API;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using IServicesMgr = Relativity.API.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Objects.Workspace
 {
-
-	/// <summary>
-	/// 
-	/// CreateWorkspaceAsync assists in creating Workspaces for tests
-	/// 
-	/// </summary>
-
-	public class CreateWorkspace
+	public class WorkspaceHelper
 	{
+		public static string GetWorkspaceName(IRSAPIClient client, int workspaceArtifactId)
+		{
+			var oldId = client.APIOptions.WorkspaceID;
+			try
+			{
+				client.APIOptions.WorkspaceID = -1;
+				kCura.Relativity.Client.DTOs.Workspace workspace = client.Repositories.Workspace.ReadSingle(workspaceArtifactId);
+				return workspace.Name;
+			}
+			finally
+			{
+				client.APIOptions.WorkspaceID = oldId;
+			}
+
+		}
+
 		public async static Task<Int32> CreateWorkspaceAsync(string workspaceName, string templateName, IServicesMgr svcMgr, string userName, string password)
 		{
 			using (var client = svcMgr.GetProxy<IRSAPIClient>(new Configuration.Models.ConfigurationModel()))
@@ -130,6 +139,34 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 			query.Fields = FieldValue.AllFields;
 			QueryResultSet<kCura.Relativity.Client.DTOs.Workspace> resultSet = proxy.Repositories.Workspace.Query(query, 0);
 			return resultSet;
+		}
+
+		public bool Delete(IRSAPIClient proxy, int workspaceID)
+		{
+			var oldWorkspaceId = proxy.APIOptions.WorkspaceID;
+			proxy.APIOptions.WorkspaceID = -1;
+			try
+			{
+				//Create a Workspace Artifact and pass to the Delete method on the repository
+				var workspaceDTO = new kCura.Relativity.Client.DTOs.Workspace(workspaceID);
+				var resultSet = proxy.Repositories.Workspace.Delete(workspaceDTO);
+				if (!resultSet.Success)
+				{
+					Console.WriteLine("An error occurred deleting the Workspace: {0}", resultSet.Message);
+					return false;
+				}
+
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("An error occurred deleting the Workspace: {0}", ex.Message);
+				return false;
+			}
+			finally
+			{
+				proxy.APIOptions.WorkspaceID = oldWorkspaceId;
+			}
+			return true;
 		}
 	}
 }

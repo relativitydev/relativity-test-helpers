@@ -8,7 +8,7 @@ namespace Relativity.Test.Helpers.Objects.Client
 {
     public class ClientHelper
 	{
-		public static int Create_Client(IRSAPIClient client, Relativity.Services.ServiceProxy.ServiceFactory serviceFactory, string name)
+		public int CreateClient(IRSAPIClient client, Relativity.Services.ServiceProxy.ServiceFactory serviceFactory, string name)
 		{
 			var workspaceId = client.APIOptions.WorkspaceID;
 			client.APIOptions.WorkspaceID = -1;
@@ -24,7 +24,7 @@ namespace Relativity.Test.Helpers.Objects.Client
 			}
 		}
 
-		public static void Delete_Client(Relativity.Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
+		public void DeleteClient(Relativity.Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
 		{
 			using (IClientManager proxy = serviceFactory.CreateProxy<IClientManager>())
 			{

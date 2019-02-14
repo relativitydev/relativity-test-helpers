@@ -4,15 +4,15 @@ using DTOs = kCura.Relativity.Client.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Choice = kCura.Relativity.Client.DTOs.Choice;
-using User = kCura.Relativity.Client.DTOs.User;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Objects.User
 {
-    public static class CreateUser
+	class UserHelper
 	{
 
-		public static int CreateNewUser(IRSAPIClient client)
+		public int CreateNewUser(IRSAPIClient client)
 		{
 			const string errorContext = "An error occured when creating a new Relativity User.";
 			var userArtifactId = 0;
@@ -49,8 +49,8 @@ namespace Relativity.Test.Helpers.Objects.User
 				ChangeSettings = true,
 				Client = new DTOs.Client(clientArtifactId),
 				DataFocus = 1,
-				DefaultSelectedFileType = new Choice(defaultFileTypeCodeId),
-				DocumentSkip = new Choice(documentSkipCodeId),
+				DefaultSelectedFileType = new DTOs.Choice(defaultFileTypeCodeId),
+				DocumentSkip = new DTOs.Choice(documentSkipCodeId),
 				EmailAddress = emailAddress,
 				EnforceViewerCompatibility = true,
 				FirstName = firstName,
@@ -60,12 +60,12 @@ namespace Relativity.Test.Helpers.Objects.User
 				LastName = lastName,
 				MaximumPasswordAge = 0,
 				NativeViewerCacheAhead = true,
-				PasswordAction = new Choice(passwordCodeId),
+				PasswordAction = new DTOs.Choice(passwordCodeId),
 				RelativityAccess = true,
-				SendPasswordTo = new Choice(returnPasswordCodeId),
-				SkipDefaultPreference = new Choice(documentSkipPreferenceCodeId),
+				SendPasswordTo = new DTOs.Choice(returnPasswordCodeId),
+				SkipDefaultPreference = new DTOs.Choice(documentSkipPreferenceCodeId),
 				TrustedIPs = "",
-				Type = new Choice(userTypeCodeId)
+				Type = new DTOs.Choice(userTypeCodeId)
 			};
 
 			WriteResultSet<DTOs.User> createResults;
@@ -88,7 +88,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return userArtifactId;
 		}
 
-		public static int CreateNewUser(IRSAPIClient client, String firstName, String lastName, String emailAddress, String password, List<int> groupArtifactIds, Boolean relativityAccess, String userType, String clientName)
+		public int CreateNewUser(IRSAPIClient client, String firstName, String lastName, String emailAddress, String password, List<int> groupArtifactIds, Boolean relativityAccess, String userType, String clientName)
 		{
 
 			client.APIOptions.WorkspaceID = -1;
@@ -122,20 +122,20 @@ namespace Relativity.Test.Helpers.Objects.User
 				ChangeSettings = true,
 				Client = new DTOs.Client(clientArtifactId),
 				DataFocus = 1,
-				DefaultSelectedFileType = new Choice(defaultFileTypeCodeId),
-				DocumentSkip = new Choice(documentSkipCodeId),
+				DefaultSelectedFileType = new DTOs.Choice(defaultFileTypeCodeId),
+				DocumentSkip = new DTOs.Choice(documentSkipCodeId),
 				EnforceViewerCompatibility = true,
 				Groups = new List<DTOs.Group> { new kCura.Relativity.Client.DTOs.Group(everyoneGroupArtifactId) },
 				ItemListPageLength = 25,
 				KeyboardShortcuts = true,
 				MaximumPasswordAge = 0,
 				NativeViewerCacheAhead = true,
-				PasswordAction = new Choice(passwordCodeId),
+				PasswordAction = new DTOs.Choice(passwordCodeId),
 				RelativityAccess = relativityAccess,
-				SendPasswordTo = new Choice(returnPasswordCodeId),
-				SkipDefaultPreference = new Choice(documentSkipPreferenceCodeId),
+				SendPasswordTo = new DTOs.Choice(returnPasswordCodeId),
+				SkipDefaultPreference = new DTOs.Choice(documentSkipPreferenceCodeId),
 				TrustedIPs = "",
-				Type = new Choice(userTypeCodeId),
+				Type = new DTOs.Choice(userTypeCodeId),
 				Password = password
 			};
 
@@ -149,7 +149,7 @@ namespace Relativity.Test.Helpers.Objects.User
 		}
 
 
-		public static int FindChoiceArtifactId(IRSAPIClient proxy, int choiceType, string value)
+		public int FindChoiceArtifactId(IRSAPIClient proxy, int choiceType, string value)
 		{
 			int artifactId = 0;
 
@@ -157,11 +157,11 @@ namespace Relativity.Test.Helpers.Objects.User
 			TextCondition choiceNameCondition = new TextCondition(ChoiceFieldNames.Name, TextConditionEnum.EqualTo, value);
 			CompositeCondition choiceCompositeCondition = new CompositeCondition(choiceTypeCondition, CompositeConditionEnum.And, choiceNameCondition);
 
-			Query<Choice> choiceQuery = new Query<Choice>(new List<FieldValue>
+			Query<DTOs.Choice> choiceQuery = new Query<DTOs.Choice>(new List<FieldValue>
 			{ new
 							 FieldValue(ArtifactQueryFieldNames.ArtifactID) }, choiceCompositeCondition, new List<Sort>());
 
-			QueryResultSet<Choice> choiceQueryResult = proxy.Repositories.Choice.Query(choiceQuery);
+			QueryResultSet<DTOs.Choice> choiceQueryResult = proxy.Repositories.Choice.Query(choiceQuery);
 
 			if (choiceQueryResult.Success && choiceQueryResult.Results.Count == 1)
 			{
@@ -171,7 +171,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public static int FindGroupArtifactId(IRSAPIClient proxy, string group)
+		public int FindGroupArtifactId(IRSAPIClient proxy, string group)
 		{
 			int artifactId = 0;
 
@@ -193,7 +193,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public static int FindClientArtifactId(IRSAPIClient proxy, string group)
+		public int FindClientArtifactId(IRSAPIClient proxy, string group)
 		{
 			int artifactId = 0;
 
@@ -212,5 +212,27 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
+		public bool DeleteUser(IRSAPIClient client, int artifactId)
+		{
+			client.APIOptions.WorkspaceID = -1;
+			kCura.Relativity.Client.DTOs.User userToDelete = new kCura.Relativity.Client.DTOs.User(artifactId);
+			WriteResultSet<kCura.Relativity.Client.DTOs.User> resultSet = new WriteResultSet<kCura.Relativity.Client.DTOs.User>();
+			try
+			{
+				resultSet = client.Repositories.User.Delete(userToDelete);
+
+				if (!resultSet.Success || resultSet.Results.Count == 0)
+				{
+					throw new Exception("User was not found");
+				}
+			}
+			catch (System.Exception ex)
+			{
+				Console.WriteLine("An error occurred deleting for the user: {0}", ex.Message);
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

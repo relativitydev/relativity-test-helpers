@@ -14,7 +14,7 @@ namespace Relativity.Test.Helpers.Objects.Document
 
     public class DocumentHelper
 	{
-		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		public string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
 
 			string sql = @"
@@ -32,7 +32,7 @@ namespace Relativity.Test.Helpers.Objects.Document
 			return columnName;
 		}
 
-		public static string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		public string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
 			const string sql = @"
             SELECT [TextIdentifier] FROM [EDDSDBO].[ExtendedField] WITH(NOLOCK)
