@@ -1,20 +1,20 @@
-﻿using Relativity.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace Relativity.Test.Helpers.Objects.Document
 {
-    /// <summary>
-    /// 
-    /// Helpers to interact with Documents in Relativity
-    /// 
-    /// </summary>
+	/// <summary>
+	///
+	/// Helpers to interact with Documents in Relativity
+	///
+	/// </summary>
 
-    public class DocumentHelper
+	public class DocumentHelper
 	{
 		private TestHelper _helper;
+
 		public DocumentHelper(TestHelper helper)
 		{
 			_helper = helper;
@@ -22,7 +22,6 @@ namespace Relativity.Test.Helpers.Objects.Document
 
 		public string GetDocumentIdentifierFieldColumnName(Int32 fieldArtifactTypeID)
 		{
-
 			string sql = @"
             SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
             JOIN [EDDSDBO].[ArtifactViewField] AVF WITH(NOLOCK)
@@ -52,6 +51,5 @@ namespace Relativity.Test.Helpers.Objects.Document
 			var columnName = _helper.GetDBContext(workspaceID).ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
 			return columnName;
 		}
-
 	}
 }

@@ -24,6 +24,4 @@ namespace Relativity.Test.Helpers.ServiceFactory.Extentions
 			return keplerUri;
 		}
 	}
-
-
 }

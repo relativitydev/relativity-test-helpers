@@ -1,11 +1,10 @@
-﻿using DbContextHelper;
-using Relativity.API;
-using Relativity.Test.Helpers.ServiceFactory;
-using System;
-using System.Data.SqlClient;
+﻿using Relativity.API;
 using Relativity.Test.Helpers.Configuration.Models;
 using Relativity.Test.Helpers.Database;
 using Relativity.Test.Helpers.Logging;
+using Relativity.Test.Helpers.ServiceFactory;
+using System;
+using System.Data.SqlClient;
 
 namespace Relativity.Test.Helpers
 {
@@ -27,8 +26,7 @@ namespace Relativity.Test.Helpers
 			//You can create a new DBcontext using DBContextHelper for Relativity versions equal to or greater than 9.6.85.9
 			TestDbContext context;
 
-				context = new TestDbContext(this.Configs.SQLServerAddress, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", this.Configs.SQLUserName, this.Configs.SQLPassword);
-
+			context = new TestDbContext(this.Configs.SQLServerAddress, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", this.Configs.SQLUserName, this.Configs.SQLPassword);
 
 			return context;
 		}
@@ -65,10 +63,7 @@ namespace Relativity.Test.Helpers
 
 		public IServicesMgr GetServicesManager()
 		{
-				return new ServicesManager(Configs);
-
-
-
+			return new ServicesManager(Configs);
 		}
 
 		public IUrlHelper GetUrlHelper()
@@ -102,6 +97,7 @@ namespace Relativity.Test.Helpers
 		}
 
 		#region IDisposable Support
+
 		private bool disposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
@@ -131,9 +127,7 @@ namespace Relativity.Test.Helpers
 			// TODO: uncomment the following line if the finalizer is overridden above.
 			// GC.SuppressFinalize(this);
 		}
-		#endregion
 
+		#endregion IDisposable Support
 	}
-
-
 }

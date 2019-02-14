@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Relativity.API;
+﻿using Relativity.API;
 
 namespace Relativity.Test.Helpers.Authentication
 {
-	class AuthenticationManager : IAuthenticationMgr
+	internal class AuthenticationManager : IAuthenticationMgr
 	{
 		public IUserInfo UserInfo { get; set; }
 		public string AuthToken { get; set; }

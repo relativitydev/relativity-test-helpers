@@ -2,7 +2,7 @@
 
 namespace Relativity.Test.Helpers.ServiceFactory
 {
-	class URLHelper : API.IUrlHelper
+	internal class URLHelper : API.IUrlHelper
 	{
 		public Uri GetApplicationURL(Guid appGuid)
 		{
@@ -13,9 +13,5 @@ namespace Relativity.Test.Helpers.ServiceFactory
 		{
 			throw new NotImplementedException();
 		}
-
-
-
-
 	}
 }

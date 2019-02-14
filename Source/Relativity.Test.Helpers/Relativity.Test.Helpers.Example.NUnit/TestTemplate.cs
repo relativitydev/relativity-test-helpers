@@ -1,37 +1,22 @@
-﻿using kCura.Relativity.Client;
-using NUnit.Framework;
-using Relativity.API;
-using Relativity.Test.Helpers.Configuration;
-using Relativity.Test.Helpers.Configuration.Models;
-using Relativity.Test.Helpers.Import;
-using Relativity.Test.Helpers.Objects.Folder;
-using Relativity.Test.Helpers.Objects.Group;
-using Relativity.Test.Helpers.Objects.User;
-using Relativity.Test.Helpers.Objects.Workspace;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
-using System;
-using System.IO;
-using System.Reflection;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
-using IServicesMgr = Relativity.API.IServicesMgr;
+﻿//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Example.NUnit
 {
 	/*
 	/// <summary>
-	/// 
+	///
 	/// Relativity Integration Test Helpers to assist you with writing good Integration Tests for your application. You can use this framework to test event handlers, agents and any workflow that combines agents and frameworks.
-	/// 
+	///
 	/// Before you get Started, fill out details for the following the app.config file
 	/// "WorkspaceID", "RSAPIServerAddress", "RESTServerAddress",	"AdminUsername","AdminPassword", "SQLServerAddress" ,"SQLUsername","SQLPassword" "TestWorkspaceName"
-	/// 
+	///
 	/// </summary>
 
 	[TestFixture, global::NUnit.Framework.Description("Fixture description here")]
 	public class TestTemplate
 	{
-
 		#region Variables
+
 		private IRSAPIClient _client;
 		private int _workspaceId;
 		private Int32 _rootFolderArtifactID;
@@ -51,15 +36,14 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private int _wholeNumberArtId;
 		private ConfigurationModel _configs;
 
-		#endregion
-
+		#endregion Variables
 
 		#region TestfixtureSetup
 
 		[TestFixtureSetUp]
 		public void Execute_TestFixtureSetup()
 		{
-			//Setup for testing		
+			//Setup for testing
 			_configs = ConfigurationFactory.ReadConfigFromAppSettings();
 			var helper = new TestHelper(_configs);
 			servicesManager = helper.GetServicesManager();
@@ -69,12 +53,11 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//create client
 			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(new Configuration.Models.ConfigurationModel());
 
-			//Create new user 
+			//Create new user
 			_userArtifactId = CreateUser.CreateNewUser(_client);
 
 			//Create new group
 			CreateGroup.Create_Group(_client, _groupName);
-
 
 			//Create workspace
 			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName, _configs.WorkspaceTemplateName, servicesManager, _configs.AdminUsername, _configs.AdminPassword).Result;
@@ -109,13 +92,11 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Create Single Choice fields
 
 			//Create Multiple Choice fields
-
 		}
 
-		#endregion
+		#endregion TestfixtureSetup
 
 		#region TestfixtureTeardown
-
 
 		[TestFixtureTearDown]
 		public void Execute_TestFixtureTeardown()
@@ -130,8 +111,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			DeleteGroup.Delete_Group(_client, _groupArtifactId);
 		}
 
-
-		#endregion
+		#endregion TestfixtureTeardown
 
 		#region region Golden Flow
 
@@ -152,11 +132,9 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//countAfterExecute = SQLHelper.GetFolderCount(_workspaceId);
 			//Assert.AreEqual(countAfterExecute, 0);
 			//Assert.AreNotEqual(countBeforeExecute, countAfterExecute);
-
 		}
 
-		#endregion
-
+		#endregion region Golden Flow
 	}
 	*/
 }

@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Relativity.Test.Helpers.Database
 {
-	class TestDbContext : IDBContext
+	internal class TestDbContext : IDBContext
 	{
 		private const string ConnectionString_PersistSecurityInfo = "False";
 		private const string ConnectionString_PacketSize = "4096";
@@ -691,7 +691,6 @@ namespace Relativity.Test.Helpers.Database
 				{
 					returnList.Add(converter(sqlDataReader));
 				}
-
 			}
 			catch (Exception sqlException)
 			{
@@ -894,6 +893,7 @@ namespace Relativity.Test.Helpers.Database
 		{
 			throw new NotImplementedException();
 		}
+
 		/* Needed for Relativity DLLS that are 10.* and above
 public void ExecuteSqlBulkCopy(IDataReader dataReader, ISqlBulkCopyParameters bulkCopyParameters)
 {

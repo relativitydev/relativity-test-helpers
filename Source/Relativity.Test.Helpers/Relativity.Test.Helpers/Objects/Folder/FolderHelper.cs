@@ -1,25 +1,24 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using DTOs = kCura.Relativity.Client.DTOs;
 using Relativity.API;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using System;
 using System.Linq;
+
+using DTOs = kCura.Relativity.Client.DTOs;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
-using IServicesMgr = Relativity.API.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Objects.Folder
 {
-
-    /// <summary>
-    /// 
-    /// Helpers to interact with Folders in Relativity
-    /// 
-    /// </summary>
-    /// 
-    public class FolderHelper
+	/// <summary>
+	///
+	/// Helpers to interact with Folders in Relativity
+	///
+	/// </summary>
+	///
+	public class FolderHelper
 	{
 		private TestHelper _helper;
+
 		public FolderHelper(TestHelper helper)
 		{
 			_helper = helper;
@@ -46,7 +45,6 @@ namespace Relativity.Test.Helpers.Objects.Folder
 			}
 		}
 
-
 		public String GetFolderName(int workspaceID, Int32 folderArtifactID)
 		{
 			string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);
@@ -55,6 +53,5 @@ namespace Relativity.Test.Helpers.Objects.Folder
 
 			return folderName;
 		}
-
 	}
 }

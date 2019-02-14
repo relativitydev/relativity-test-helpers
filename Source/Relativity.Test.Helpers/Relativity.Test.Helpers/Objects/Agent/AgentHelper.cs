@@ -3,12 +3,8 @@ using Relativity.Services.Agent;
 using Relativity.Services.Interfaces.Agent;
 using Relativity.Services.Interfaces.Agent.Models;
 using Relativity.Services.ResourceServer;
-using Relativity.Test.Helpers.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Objects.Agent
 {
@@ -26,7 +22,7 @@ namespace Relativity.Test.Helpers.Objects.Agent
 			List<AgentTypeResponse> agentTypes = null;
 			using (var agentManager = _helper.GetServicesManager().CreateProxy<IAgentManager>(ExecutionIdentity.System))
 			{
-			  agentTypes = agentManager.GetAgentTypesAsync(-1).Result;
+				agentTypes = agentManager.GetAgentTypesAsync(-1).Result;
 			}
 			return agentTypes;
 		}
@@ -63,6 +59,5 @@ namespace Relativity.Test.Helpers.Objects.Agent
 			}
 			return agentID;
 		}
-
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Relativity.Test.Helpers.Authentication.Models
 {
-	class UserInfo : IUserInfo
+	internal class UserInfo : IUserInfo
 	{
 		public int WorkspaceUserArtifactID { get; set; }
 

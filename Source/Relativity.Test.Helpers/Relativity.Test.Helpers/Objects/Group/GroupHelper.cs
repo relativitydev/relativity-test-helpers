@@ -1,6 +1,5 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using DTOs = kCura.Relativity.Client.DTOs;
 using Relativity.Services.Group;
 using Relativity.Services.Permission;
 using System;
@@ -8,11 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using DTOs = kCura.Relativity.Client.DTOs;
+
 namespace Relativity.Test.Helpers.Objects.Group
 {
 	public class GroupHelper
 	{
 		private TestHelper _helper;
+
 		public GroupHelper(TestHelper helper)
 		{
 			_helper = helper;
@@ -60,7 +62,6 @@ namespace Relativity.Test.Helpers.Objects.Group
 				{
 					throw new Exception("Group not found in Relativity");
 				}
-
 			}
 			catch (Exception e)
 			{
@@ -80,7 +81,6 @@ namespace Relativity.Test.Helpers.Objects.Group
 			using (var permissionManager = _helper.GetServicesManager().CreateProxy<IPermissionManager>(API.ExecutionIdentity.System))
 			{
 				groupSelector = permissionManager.GetWorkspaceGroupSelectorAsync(eddsWorkspaceArtifactID).Result;
-
 			}
 			GroupRef groupRef = groupSelector.DisabledGroups.FirstOrDefault(x => x.Name == group.Name);
 			if (groupRef != null)
@@ -132,9 +132,9 @@ namespace Relativity.Test.Helpers.Objects.Group
 			ItemLevelSecurity itemSecurity;
 			using (var permissionManager = _helper.GetServicesManager().CreateProxy<IPermissionManager>(API.ExecutionIdentity.System))
 			{
-				 itemSecurity = await permissionManager.GetItemLevelSecurityAsync(workspaceId, artifactId).ConfigureAwait(false);
+				itemSecurity = await permissionManager.GetItemLevelSecurityAsync(workspaceId, artifactId).ConfigureAwait(false);
 			}
-				
+
 			if (!itemSecurity.Enabled)
 			{
 				itemSecurity.Enabled = true;

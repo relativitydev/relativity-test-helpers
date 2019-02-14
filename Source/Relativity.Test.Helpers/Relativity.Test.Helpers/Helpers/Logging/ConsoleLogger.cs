@@ -1,19 +1,16 @@
 ﻿using Relativity.API;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Logging
 {
-	class ConsoleLogger : IAPILog
+	internal class ConsoleLogger : IAPILog
 	{
 		private string _Context;
+
 		public ConsoleLogger()
 		{
-
 		}
+
 		public IAPILog ForContext<T>()
 		{
 			this._Context = typeof(T).ToString();

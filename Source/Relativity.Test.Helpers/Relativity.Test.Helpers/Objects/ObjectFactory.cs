@@ -1,10 +1,7 @@
-﻿using Relativity.API;
-
-namespace Relativity.Test.Helpers.Objects
+﻿namespace Relativity.Test.Helpers.Objects
 {
 	public static class ObjectFactory
 	{
-
 		public static ObjectHelper ObjectHelperInstance(TestHelper helper)
 		{
 			var objectHelper = new ObjectHelper
@@ -20,6 +17,5 @@ namespace Relativity.Test.Helpers.Objects
 
 			return objectHelper;
 		}
-
 	}
 }

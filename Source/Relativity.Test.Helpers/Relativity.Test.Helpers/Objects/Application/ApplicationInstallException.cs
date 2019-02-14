@@ -2,8 +2,10 @@
 
 namespace Relativity.Test.Helpers.Objects.Application.Exceptions
 {
-	class ApplicationInstallException : Exception
+	internal class ApplicationInstallException : Exception
 	{
-		public ApplicationInstallException(string message) : base(message) { }
+		public ApplicationInstallException(string message) : base(message)
+		{
+		}
 	}
 }

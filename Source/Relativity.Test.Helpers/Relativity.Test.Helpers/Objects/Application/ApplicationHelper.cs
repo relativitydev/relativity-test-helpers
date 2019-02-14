@@ -1,11 +1,12 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using DTOs = kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using Relativity.Test.Helpers.Objects.Application.Exceptions;
 using System;
 using System.Linq;
 using System.Threading;
+
+using DTOs = kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.Objects.Application
 {
@@ -17,10 +18,11 @@ namespace Relativity.Test.Helpers.Objects.Application
 		{
 			_helper = helper;
 		}
+
 		public Int32 Import(Int32 workspaceId, bool forceFlag, string filePath, string appName, int appArtifactID = -1)
 		{
-			// Set the forceFlag to true. The forceFlag unlocks any applications in the workspace 
-			// that conflict with the application that you are loading. The applications must be unlocked 
+			// Set the forceFlag to true. The forceFlag unlocks any applications in the workspace
+			// that conflict with the application that you are loading. The applications must be unlocked
 			// for the install operation to succeed.
 
 			var appInstallRequest = new AppInstallRequest();
@@ -60,7 +62,6 @@ namespace Relativity.Test.Helpers.Objects.Application
 				{
 					state = client.GetProcessState(client.APIOptions, processID);
 				}
-
 			} while (state.State == ProcessStateValue.Running);
 
 			if (state.State == ProcessStateValue.CompletedWithError)

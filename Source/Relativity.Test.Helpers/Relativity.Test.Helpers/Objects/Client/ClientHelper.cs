@@ -1,19 +1,19 @@
-﻿using kCura.Relativity.Client;
-using Relativity.Services.ServiceProxy;
-using Relativity.Services.Choice;
+﻿using Relativity.Services.Choice;
 using Relativity.Services.Client;
 using System;
 using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.Objects.Client
 {
-    public class ClientHelper
+	public class ClientHelper
 	{
 		private TestHelper _helper;
+
 		public ClientHelper(TestHelper helper)
 		{
 			_helper = helper;
 		}
+
 		public int Create(string name)
 		{
 			using (IClientManager proxy = _helper.GetServicesManager().CreateProxy<IClientManager>(API.ExecutionIdentity.System))

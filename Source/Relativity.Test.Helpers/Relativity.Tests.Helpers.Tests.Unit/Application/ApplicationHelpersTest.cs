@@ -1,10 +1,4 @@
-﻿using kCura.Relativity.Client;
-using Moq;
-using NUnit.Framework;
-using Relativity.Test.Helpers.Objects.Application;
-using Relativity.Test.Helpers.Objects.Application.Exceptions;
-using System;
-/*
+﻿/*
 namespace Relativity.Tests.Helpers.Tests.Unit.Application
 {
 	[TestFixture]
@@ -24,7 +18,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 					.SetupSequence(x => x.GetProcessState(It.IsAny<APIOptions>(), It.IsAny<Guid>()))
 					.Returns(new ProcessInformation { State = ProcessStateValue.Running })
 					.Returns(new ProcessInformation { State = ProcessStateValue.Completed });
-
 
 			//ACT
 			ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>());
@@ -48,7 +41,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 					.Returns(new ProcessInformation { State = ProcessStateValue.Running })
 					.Returns(new ProcessInformation { State = ProcessStateValue.Completed });
 
-
 			//ACT
 			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
@@ -70,12 +62,10 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 					.Returns(new ProcessInformation { State = ProcessStateValue.Running })
 					.Returns(new ProcessInformation { State = ProcessStateValue.CompletedWithError });
 
-
 			//ACT
 			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
 
 			//ASSERT
-
 		}
 
 		[Test]
@@ -92,7 +82,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 					.SetupSequence(x => x.GetProcessState(It.IsAny<APIOptions>(), It.IsAny<Guid>()))
 					.Returns(new ProcessInformation { State = ProcessStateValue.Running })
 					.Returns(new ProcessInformation { State = ProcessStateValue.HandledException });
-
 
 			//ACT
 			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));
@@ -114,7 +103,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Application
 					.SetupSequence(x => x.GetProcessState(It.IsAny<APIOptions>(), It.IsAny<Guid>()))
 					.Returns(new ProcessInformation { State = ProcessStateValue.Running })
 					.Returns(new ProcessInformation { State = ProcessStateValue.UnhandledException });
-
 
 			//ACT
 			Assert.Throws<ApplicationInstallException>(() => ApplicationHelper.ImportApplication(clientMock.Object, It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()));

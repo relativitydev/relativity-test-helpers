@@ -6,7 +6,6 @@ using Relativity.Test.Helpers.Import.Request;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 
 namespace Relativity.Test.Helpers.Import
@@ -157,6 +156,7 @@ namespace Relativity.Test.Helpers.Import
 
 			return importJob;
 		}
+
 		/* This is an extension and should probably be in a separate class
 		/// <summary>
 		/// Get data table from folder location
@@ -221,5 +221,4 @@ namespace Relativity.Test.Helpers.Import
 			//Import(job, dataTable);
 		}
 	}
-	
 }

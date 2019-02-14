@@ -1,6 +1,6 @@
 ﻿namespace Relativity.Test.Helpers
 {
-	interface IHelperTransform
+	internal interface IHelperTransform
 	{
 		TestAgentHelper AsTestAgentHelper();
 

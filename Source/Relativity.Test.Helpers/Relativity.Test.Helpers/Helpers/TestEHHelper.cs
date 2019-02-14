@@ -1,16 +1,11 @@
 ﻿using Relativity.API;
 using Relativity.Test.Helpers.Configuration.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers
 {
 	public class TestEHHelper : IEHHelper
 	{
-
 		private readonly ConfigurationModel _configs;
 		private IHelper _helper;
 
@@ -81,6 +76,7 @@ namespace Relativity.Test.Helpers
 		}
 
 		#region IDisposable Support
+
 		private bool disposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
@@ -120,6 +116,7 @@ namespace Relativity.Test.Helpers
 		{
 			throw new NotImplementedException();
 		}
-		#endregion
+
+		#endregion IDisposable Support
 	}
 }

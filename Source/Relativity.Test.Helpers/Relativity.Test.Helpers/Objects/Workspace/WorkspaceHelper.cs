@@ -1,11 +1,10 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using DTOs = kCura.Relativity.Client.DTOs;
-using Relativity.API;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+
+using DTOs = kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.Objects.Workspace
 {
@@ -28,16 +27,16 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 					client.APIOptions.WorkspaceID = -1;
 					workspace = client.Repositories.Workspace.ReadSingle(workspaceArtifactId);
 				}
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
-
 			}
 			return workspace.Name;
 		}
 
 		public async Task<Int32> CreateWorkspaceAsync(string workspaceName, string templateName, string userName, string password)
 		{
-				return await Task.Run(() => Create(workspaceName, templateName)).ConfigureAwait(false);
+			return await Task.Run(() => Create(workspaceName, templateName)).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -70,7 +69,6 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 			int? testId = null;
 			try
 			{
-				
 				if (string.IsNullOrWhiteSpace(templateName))
 				{
 					throw new SystemException("Template name is blank in your configuration setting. Please add a template name to create a workspace");
@@ -139,9 +137,9 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 					throw new Exception("There was an error getting the created workspaceId");
 				}
 				return testId.Value;
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
-
 			}
 			return testId.Value;
 		}
@@ -179,7 +177,6 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 					Console.WriteLine("An error occurred deleting the Workspace: {0}", resultSet.Message);
 					return false;
 				}
-
 			}
 			catch (Exception ex)
 			{

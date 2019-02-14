@@ -1,11 +1,10 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using DTOs = kCura.Relativity.Client.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using DTOs = kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.Objects.User
 {
@@ -158,7 +157,6 @@ namespace Relativity.Test.Helpers.Objects.User
 			}
 			return results.Results[0].Artifact.ArtifactID;
 		}
-
 
 		public int FindChoiceArtifactId(int choiceType, string value)
 		{

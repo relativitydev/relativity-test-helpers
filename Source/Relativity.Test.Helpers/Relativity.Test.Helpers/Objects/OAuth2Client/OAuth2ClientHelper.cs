@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using Relativity.API;
 using Relativity.Services.Security;
 using Relativity.Services.Security.Models;
-using AuthClient = Relativity.Services.Security.Models.OAuth2Client;
-using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.Configuration.Models;
+using Relativity.Test.Helpers.Exceptions;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
-using Newtonsoft.Json;
+using AuthClient = Relativity.Services.Security.Models.OAuth2Client;
 
 namespace Relativity.Test.Helpers.Objects.OAuth2Client
 {
@@ -51,7 +48,6 @@ namespace Relativity.Test.Helpers.Objects.OAuth2Client
 					{
 						throw new IntegrationTestException("The integration test must have an OAuth2Client present in the remote instance.");
 					}
-
 				}
 			}
 			return clientToCreate;
