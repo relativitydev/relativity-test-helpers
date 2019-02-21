@@ -13,7 +13,8 @@
 				Workspace = new Workspace.WorkspaceHelper(helper),
 				Group = new Group.GroupHelper(helper),
 				User = new User.UserHelper(helper),
-				Matter = new Matter.MatterHelper(helper)
+				Matter = new Matter.MatterHelper(helper),
+				RDO = new RDO.RDOHelper(helper)
 			};
 
 			return objectHelper;
