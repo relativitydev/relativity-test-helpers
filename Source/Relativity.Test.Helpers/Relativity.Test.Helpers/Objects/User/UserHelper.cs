@@ -1,5 +1,6 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
+using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -230,7 +231,36 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public bool DeleteUser(int artifactId)
+		public int QueryUserIDByEmail (string email)
+		{
+			int userID;
+			DTOs.QueryResultSet<DTOs.User> results;
+
+			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+			{
+				client.APIOptions.WorkspaceID = -1;
+
+				var query = new DTOs.Query<DTOs.User>()
+				{
+					Condition = new TextCondition("Email Address", TextConditionEnum.EqualTo, email),
+					Fields = new List<FieldValue> { new FieldValue("Artifact ID") }
+				};
+
+				results = client.Repositories.User.Query(query);
+			}
+
+			if (results.Success)
+			{
+				userID = results.Results.FirstOrDefault().Artifact.ArtifactID;
+			} else
+			{
+				throw new IntegrationTestException($"Failed to retrieve user by email equal to {email}");
+			}
+
+			return userID;
+		}
+
+		public bool Delete(int artifactId)
 		{
 			var userToDelete = new DTOs.User(artifactId);
 			WriteResultSet<DTOs.User> resultSet;

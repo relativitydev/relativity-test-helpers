@@ -32,6 +32,33 @@ namespace Relativity.Test.Helpers.Objects.Client
 			}
 		}
 
+		public int QueryClientIDByName(string name)
+		{
+			int clientID;
+			ClientQueryResultSet results;
+
+			var query = new Services.Query
+			{
+				Condition = $"('Name' == '{name}')"
+			};
+
+			using (IClientManager proxy = _helper.GetServicesManager().CreateProxy<IClientManager>(API.ExecutionIdentity.System))
+			{
+				results = proxy.QueryAsync(query).Result;
+			}
+
+			if (results.Success)
+			{
+				clientID = results.Results[0].Artifact.ArtifactID;
+			}
+			else
+			{
+				throw new Exceptions.IntegrationTestException($"Client was not found with name equal to {name}");
+			}
+
+			return clientID;
+		}
+
 		public void Delete(int artifactId)
 		{
 			using (IClientManager proxy = _helper.GetServicesManager().CreateProxy<IClientManager>(API.ExecutionIdentity.System))

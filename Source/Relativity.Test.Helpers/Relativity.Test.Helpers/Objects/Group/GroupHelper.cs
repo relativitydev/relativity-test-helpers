@@ -2,6 +2,7 @@
 using kCura.Relativity.Client.DTOs;
 using Relativity.Services.Group;
 using Relativity.Services.Permission;
+using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +47,36 @@ namespace Relativity.Test.Helpers.Objects.Group
 			return groupartid;
 		}
 
-		public bool DeleteGroup(int artifactId)
+		public int QueryGroupIDByName(String name)
+		{
+			int groupID;
+			QueryResultSet<DTOs.Group> results;
+
+			var query = new DTOs.Query<DTOs.Group>
+			{
+				Condition = new TextCondition("Name", TextConditionEnum.EqualTo, name),
+				Fields = new List<FieldValue> { new FieldValue("Artifact ID") }
+			};
+
+			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(API.ExecutionIdentity.System))
+			{
+				client.APIOptions.WorkspaceID = -1;
+				results = client.Repositories.Group.Query(query);
+			}
+
+			if (results.Success)
+			{
+				groupID = results.Results[0].Artifact.ArtifactID;
+			}
+			else
+			{
+				throw new IntegrationTestException($"Failed to query group by name equal to {name}");
+			}
+
+			return groupID;
+		}
+
+		public bool Delete(int artifactId)
 		{
 			var groupToDelete = new DTOs.Group(artifactId);
 			WriteResultSet<DTOs.Group> resultSet = new WriteResultSet<DTOs.Group>();

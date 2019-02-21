@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Relativity.Services.Matter;
 using Relativity.API;
 using kCura.Relativity.Client;
+using Relativity.Test.Helpers.Exceptions;
 
 namespace Relativity.Test.Helpers.Objects.Matter
 {
@@ -36,6 +37,33 @@ namespace Relativity.Test.Helpers.Objects.Matter
 				matterArtifactID = matterManager.CreateSingleAsync(matterDTO).Result;
 			}
 			return matterArtifactID;
+		}
+
+		public int QueryMatterByName(string name)
+		{
+			int matterID;
+			MatterQueryResultSet results;
+
+			var query = new Services.Query
+			{
+				Condition = $"('Name' == '{name}')"
+			};
+
+			using (var matterManager = _helper.GetServicesManager().CreateProxy<IMatterManager>(ExecutionIdentity.CurrentUser))
+			{
+				results = matterManager.QueryAsync(query).Result;
+			}
+
+			if (results.Success)
+			{
+				matterID = results.Results[0].Artifact.ArtifactID;
+			}
+			else
+			{
+				throw new IntegrationTestException($"Failed to retrieve matter by name equal to {name}");
+			}
+
+			return matterID;
 		}
 
 		public void Delete(int matterID)
