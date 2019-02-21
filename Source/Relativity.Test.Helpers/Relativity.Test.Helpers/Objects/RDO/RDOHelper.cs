@@ -1,6 +1,8 @@
 ﻿using kCura.Relativity.Client;
 using Relativity.API;
 using DTOs = kCura.Relativity.Client.DTOs;
+using System;
+using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.Objects.RDO
 {

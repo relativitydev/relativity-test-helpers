@@ -20,7 +20,13 @@ namespace Relativity.Test.Helpers.Objects.Client
 			{
 				List<ChoiceRef> choiceRefs = proxy.GetStatusChoicesForClientAsync().Result;
 				ChoiceRef statusRef = choiceRefs.Find(x => x.Name == "Active");
-				var newClient = new Relativity.Services.Client.Client { Name = name, Number = Guid.NewGuid().ToString(), Status = statusRef, Keywords = "Temp Client", Notes = "Used in the Disable Inactve User Integration Test." };
+				var newClient = new Relativity.Services.Client.Client
+				{
+					Name = name,
+					Number = new Random().Next(1000).ToString(),
+					Status = statusRef,
+					Keywords = "Integration Test Client"
+				};
 				int clientArtifactId = proxy.CreateSingleAsync(newClient).Result;
 				return clientArtifactId;
 			}

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Relativity.Services.Matter;
 using Relativity.API;
+using kCura.Relativity.Client;
 
 namespace Relativity.Test.Helpers.Objects.Matter
 {
@@ -28,7 +29,8 @@ namespace Relativity.Test.Helpers.Objects.Matter
 					Name = matterName,
 					Client = new Relativity.Services.Client.ClientRef(clientArtifactID),
 					Number = new Random().Next(1000).ToString(),
-					Status = new Relativity.Services.Choice.ChoiceRef(671)
+					Status = new Relativity.Services.Choice.ChoiceRef(671),
+					Notes = "Integration Test Matter"
 				};
 
 				matterArtifactID = matterManager.CreateSingleAsync(matterDTO).Result;
