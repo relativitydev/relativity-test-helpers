@@ -12,7 +12,8 @@
 				Folder = new Folder.FolderHelper(helper),
 				Workspace = new Workspace.WorkspaceHelper(helper),
 				Group = new Group.GroupHelper(helper),
-				User = new User.UserHelper(helper)
+				User = new User.UserHelper(helper),
+				Matter = new Matter.MatterHelper(helper)
 			};
 
 			return objectHelper;

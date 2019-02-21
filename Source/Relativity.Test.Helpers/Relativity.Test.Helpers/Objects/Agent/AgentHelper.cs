@@ -20,7 +20,7 @@ namespace Relativity.Test.Helpers.Objects.Agent
 		public List<AgentTypeResponse> ReadAgentTypes()
 		{
 			List<AgentTypeResponse> agentTypes = null;
-			using (var agentManager = _helper.GetServicesManager().CreateProxy<IAgentManager>(ExecutionIdentity.System))
+			using (var agentManager = _helper.GetServicesManager().CreateProxy<Services.Interfaces.Agent.IAgentManager>(ExecutionIdentity.System))
 			{
 				agentTypes = agentManager.GetAgentTypesAsync(-1).Result;
 			}
@@ -30,7 +30,7 @@ namespace Relativity.Test.Helpers.Objects.Agent
 		public AgentServerResponse WithAnAgentServer()
 		{
 			List<AgentServerResponse> resourceServers = null;
-			using (var agentManager = _helper.GetServicesManager().CreateProxy<IAgentManager>(ExecutionIdentity.System))
+			using (var agentManager = _helper.GetServicesManager().CreateProxy<Services.Interfaces.Agent.IAgentManager>(ExecutionIdentity.System))
 			{
 				resourceServers = agentManager.GetAgentServersAsync(-1).Result;
 			}
@@ -42,7 +42,7 @@ namespace Relativity.Test.Helpers.Objects.Agent
 		public int Create(AgentTypeRef agentType, ResourceServerRef agentServerRef)
 		{
 			int agentID = -1;
-			using (var agentManager = _helper.GetServicesManager().CreateProxy<IAgentManager>(ExecutionIdentity.System))
+			using (var agentManager = _helper.GetServicesManager().CreateProxy<Services.Interfaces.Agent.IAgentManager>(ExecutionIdentity.System))
 			{
 				/*
 				var agentDto = new AgentRequest()

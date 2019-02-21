@@ -9,5 +9,6 @@
 		public Workspace.WorkspaceHelper Workspace { get; set; }
 		public Group.GroupHelper Group { get; set; }
 		public User.UserHelper User { get; set; }
+		public Matter.MatterHelper Matter { get; set; }
 	}
 }
