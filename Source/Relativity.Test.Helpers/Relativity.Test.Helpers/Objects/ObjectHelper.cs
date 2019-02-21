@@ -10,5 +10,8 @@
 		public Group.GroupHelper Group { get; set; }
 		public User.UserHelper User { get; set; }
 		public Matter.MatterHelper Matter { get; set; }
+
+		// only create via factory method
+		internal ObjectHelper()	{	}
 	}
 }
