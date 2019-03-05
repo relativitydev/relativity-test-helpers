@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using AuthClient = Relativity.Services.Security.Models.OAuth2Client;
+using Relativity.Test.Helpers.Objects.OAuth2Client.Models;
 
 namespace Relativity.Test.Helpers.Objects.OAuth2Client
 {
@@ -20,6 +21,11 @@ namespace Relativity.Test.Helpers.Objects.OAuth2Client
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Creates OAuth2Client or reads existing OAuth2Client
+		/// </summary>
+		/// <param name="shouldCreateOAuth2Client"></param>
+		/// <returns></returns>
 		public AuthClient Create(bool shouldCreateOAuth2Client = true)
 		{
 			AuthClient clientToCreate;
@@ -53,6 +59,13 @@ namespace Relativity.Test.Helpers.Objects.OAuth2Client
 			return clientToCreate;
 		}
 
+		/// <summary>
+		/// Returns an auth token by clientID and client secret.
+		/// </summary>
+		/// <param name="configs"></param>
+		/// <param name="clientID"></param>
+		/// <param name="clientSecret"></param>
+		/// <returns></returns>
 		public string ReadToken(ConfigurationModel configs, string clientID, string clientSecret)
 		{
 			string authToken;
@@ -82,13 +95,6 @@ namespace Relativity.Test.Helpers.Objects.OAuth2Client
 			}
 
 			return authToken;
-		}
-
-		public class AuthContent
-		{
-			public string access_token { get; set; }
-			public string expires_in { get; set; }
-			public string token_type { get; set; }
 		}
 	}
 }

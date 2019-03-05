@@ -14,6 +14,11 @@ namespace Relativity.Test.Helpers.Objects.Client
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Creates a Client object with a random number and active status
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public int Create(string name)
 		{
 			using (IClientManager proxy = _helper.GetServicesManager().CreateProxy<IClientManager>(API.ExecutionIdentity.System))
@@ -32,6 +37,11 @@ namespace Relativity.Test.Helpers.Objects.Client
 			}
 		}
 
+		/// <summary>
+		/// Returns the first client ID which matches the name supplied.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public int QueryClientIDByName(string name)
 		{
 			int clientID;
@@ -59,7 +69,11 @@ namespace Relativity.Test.Helpers.Objects.Client
 			return clientID;
 		}
 
-		public void Delete(int artifactId)
+		/// <summary>
+		/// Removes a client object by artifact ID.
+		/// </summary>
+		/// <param name="clientID"></param>
+		public void Delete(int clientID)
 		{
 			using (IClientManager proxy = _helper.GetServicesManager().CreateProxy<IClientManager>(API.ExecutionIdentity.System))
 			{
@@ -68,7 +82,7 @@ namespace Relativity.Test.Helpers.Objects.Client
 				{
 					try
 					{
-						proxy.DeleteSingleAsync(artifactId).Wait();
+						proxy.DeleteSingleAsync(clientID).Wait();
 						j++;
 						break;
 					}

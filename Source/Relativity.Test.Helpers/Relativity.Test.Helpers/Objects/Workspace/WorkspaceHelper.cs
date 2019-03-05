@@ -21,6 +21,11 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Returns the name of a workspace by artifact ID.
+		/// </summary>
+		/// <param name="workspaceArtifactId"></param>
+		/// <returns></returns>
 		public string GetWorkspaceName(int workspaceArtifactId)
 		{
 			kCura.Relativity.Client.DTOs.Workspace workspace = new DTOs.Workspace();
@@ -38,6 +43,14 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 			return workspace.Name;
 		}
 
+		/// <summary>
+		/// Creates a workspace and returns its artifact ID. No retry logic.
+		/// </summary>
+		/// <param name="workspaceName"></param>
+		/// <param name="clientArtifactID"></param>
+		/// <param name="matterArtifactID"></param>
+		/// <param name="templateWorkspace"></param>
+		/// <returns></returns>
 		public int Create(string workspaceName, int clientArtifactID, int matterArtifactID, DTOs.Workspace templateWorkspace)
 		{
 			int workspaceID;
@@ -63,6 +76,10 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 			}
 		}
 
+		/// <summary>
+		/// Returns the Relativity Starter Template workspace.
+		/// </summary>
+		/// <returns></returns>
 		public DTOs.Workspace ReadTemplateWorkspace()
 		{
 			DTOs.Workspace templateWorkspace;
@@ -77,6 +94,11 @@ namespace Relativity.Test.Helpers.Objects.Workspace
 			return templateWorkspace;
 		}
 
+		/// <summary>
+		/// Deletes the workspace by artifact ID.
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <returns></returns>
 		public bool Delete(int workspaceID)
 		{
 			try

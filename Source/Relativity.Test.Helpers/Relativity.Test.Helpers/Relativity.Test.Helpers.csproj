@@ -233,7 +233,7 @@
     <Compile Include="Helpers\IHelperTransform.cs" />
     <Compile Include="Objects\Agent\AgentHelper.cs" />
     <Compile Include="Objects\Application\ApplicationHelper.cs" />
-    <Compile Include="Objects\Application\ApplicationInstallException.cs" />
+    <Compile Include="Exceptions\ApplicationInstallException.cs" />
     <Compile Include="Objects\Client\ClientHelper.cs" />
     <Compile Include="Objects\Document\DocumentHelper.cs" />
     <Compile Include="Objects\Field\FieldHelper.cs" />
@@ -252,6 +252,7 @@
     <Compile Include="Helpers\Logging\ConsoleLogger.cs" />
     <Compile Include="Helpers\Logging\TestLogFactory.cs" />
     <Compile Include="Objects\Matter\MatterHelper.cs" />
+    <Compile Include="Objects\OAuth2Client\AuthContent.cs" />
     <Compile Include="Objects\OAuth2Client\OAuth2ClientHelper.cs" />
     <Compile Include="Objects\ObjectFactory.cs" />
     <Compile Include="Objects\ObjectHelper.cs" />

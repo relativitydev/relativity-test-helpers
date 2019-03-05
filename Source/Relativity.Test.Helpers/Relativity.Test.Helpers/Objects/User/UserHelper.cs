@@ -18,7 +18,11 @@ namespace Relativity.Test.Helpers.Objects.User
 			_helper = helper;
 		}
 
-		public int CreateNewUser()
+		/// <summary>
+		/// Creates a temporary, enabled user with a default generated password.
+		/// </summary>
+		/// <returns></returns>
+		public int Create()
 		{
 			const string errorContext = "An error occured when creating a new Relativity User.";
 			var userArtifactId = 0;
@@ -98,7 +102,19 @@ namespace Relativity.Test.Helpers.Objects.User
 			return userArtifactId;
 		}
 
-		public int CreateNewUser(String firstName, String lastName, String emailAddress, String password, List<int> groupArtifactIds, Boolean relativityAccess, String userType, String clientName)
+		/// <summary>
+		/// Creates a user with a supplied identity.
+		/// </summary>
+		/// <param name="firstName"></param>
+		/// <param name="lastName"></param>
+		/// <param name="emailAddress"></param>
+		/// <param name="password"></param>
+		/// <param name="groupArtifactIds"></param>
+		/// <param name="relativityAccess"></param>
+		/// <param name="userType"></param>
+		/// <param name="clientName"></param>
+		/// <returns></returns>
+		public int Create(String firstName, String lastName, String emailAddress, String password, List<int> groupArtifactIds, Boolean relativityAccess, String userType, String clientName)
 		{
 			int defaultSelectedFileType = 1;
 			int userTypeCodeTypeId = 3;
@@ -159,7 +175,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return results.Results[0].Artifact.ArtifactID;
 		}
 
-		public int FindChoiceArtifactId(int choiceType, string value)
+		private int FindChoiceArtifactId(int choiceType, string value)
 		{
 			int artifactId = 0;
 
@@ -184,7 +200,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public int FindGroupArtifactId(string group)
+		private int FindGroupArtifactId(string group)
 		{
 			int artifactId = 0;
 
@@ -209,7 +225,7 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
-		public int FindClientArtifactId(string group)
+		private int FindClientArtifactId(string group)
 		{
 			int artifactId = 0;
 
@@ -231,6 +247,11 @@ namespace Relativity.Test.Helpers.Objects.User
 			return artifactId;
 		}
 
+		/// <summary>
+		/// Returns the first artifact ID of a user that matches the email address.
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
 		public int QueryUserIDByEmail (string email)
 		{
 			int userID;
@@ -260,6 +281,11 @@ namespace Relativity.Test.Helpers.Objects.User
 			return userID;
 		}
 
+		/// <summary>
+		/// Deletes a user by artifact ID.
+		/// </summary>
+		/// <param name="artifactId"></param>
+		/// <returns></returns>
 		public bool Delete(int artifactId)
 		{
 			var userToDelete = new DTOs.User(artifactId);

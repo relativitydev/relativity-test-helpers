@@ -19,6 +19,12 @@ namespace Relativity.Test.Helpers.Objects.Matter
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Creates a matter with a random number and active status.
+		/// </summary>
+		/// <param name="matterName"></param>
+		/// <param name="clientArtifactID"></param>
+		/// <returns></returns>
 		public int Create(string matterName, int clientArtifactID)
 		{
 			int matterArtifactID;
@@ -39,7 +45,12 @@ namespace Relativity.Test.Helpers.Objects.Matter
 			return matterArtifactID;
 		}
 
-		public int QueryMatterByName(string name)
+		/// <summary>
+		/// Returns the first matter artifact ID that matches the name provided.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public int QueryMatterIDByName(string name)
 		{
 			int matterID;
 			MatterQueryResultSet results;
@@ -66,6 +77,10 @@ namespace Relativity.Test.Helpers.Objects.Matter
 			return matterID;
 		}
 
+		/// <summary>
+		/// Deletes the matter by artifact ID.
+		/// </summary>
+		/// <param name="matterID"></param>
 		public void Delete(int matterID)
 		{
 			using (var matterManager = _helper.GetServicesManager().CreateProxy<IMatterManager>(ExecutionIdentity.CurrentUser))

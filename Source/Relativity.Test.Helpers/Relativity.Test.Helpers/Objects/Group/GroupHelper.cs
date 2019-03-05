@@ -21,7 +21,12 @@ namespace Relativity.Test.Helpers.Objects.Group
 			_helper = helper;
 		}
 
-		public int CreateGroup(String name)
+		/// <summary>
+		/// Creates a group object
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public int Create(String name)
 		{
 			DTOs.Group newGroup = new DTOs.Group();
 			newGroup.Name = name;
@@ -47,6 +52,11 @@ namespace Relativity.Test.Helpers.Objects.Group
 			return groupartid;
 		}
 
+		/// <summary>
+		/// Returns the first group artifact ID that matches the name provided.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public int QueryGroupIDByName(String name)
 		{
 			int groupID;
@@ -76,6 +86,11 @@ namespace Relativity.Test.Helpers.Objects.Group
 			return groupID;
 		}
 
+		/// <summary>
+		/// Deletes the group by artifact ID.
+		/// </summary>
+		/// <param name="artifactId"></param>
+		/// <returns></returns>
 		public bool Delete(int artifactId)
 		{
 			var groupToDelete = new DTOs.Group(artifactId);
@@ -102,6 +117,12 @@ namespace Relativity.Test.Helpers.Objects.Group
 			return true;
 		}
 
+		/// <summary>
+		/// Adds the supplied group to a workspace
+		/// </summary>
+		/// <param name="eddsWorkspaceArtifactID"></param>
+		/// <param name="group"></param>
+		/// <returns></returns>
 		public bool AddGroupToWorkspace(Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
 		{
 			bool success = false;
@@ -127,6 +148,12 @@ namespace Relativity.Test.Helpers.Objects.Group
 			return success;
 		}
 
+		/// <summary>
+		/// Removes the supplied group from a workspace.
+		/// </summary>
+		/// <param name="eddsWorkspaceArtifactID"></param>
+		/// <param name="group"></param>
+		/// <returns></returns>
 		public bool RemoveGroupFromWorkspace(Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
 		{
 			bool success = false;

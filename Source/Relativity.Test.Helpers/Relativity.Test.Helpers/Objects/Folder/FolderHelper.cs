@@ -3,18 +3,11 @@ using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using System;
 using System.Linq;
-
 using DTOs = kCura.Relativity.Client.DTOs;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Objects.Folder
 {
-	/// <summary>
-	///
-	/// Helpers to interact with Folders in Relativity
-	///
-	/// </summary>
-	///
+
 	public class FolderHelper
 	{
 		private TestHelper _helper;
@@ -24,6 +17,12 @@ namespace Relativity.Test.Helpers.Objects.Folder
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Returns the artifactID of the root folder by querying for the folder that matches the workspace name.
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <param name="workspaceName"></param>
+		/// <returns></returns>
 		public Int32 GetRootFolderArtifactID(Int32 workspaceID, string workspaceName)
 		{
 			using (IRSAPIClient client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.CurrentUser))
@@ -45,6 +44,12 @@ namespace Relativity.Test.Helpers.Objects.Folder
 			}
 		}
 
+		/// <summary>
+		/// Returns folder name by artifact ID.
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <param name="folderArtifactID"></param>
+		/// <returns></returns>
 		public String GetFolderName(int workspaceID, Int32 folderArtifactID)
 		{
 			string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);

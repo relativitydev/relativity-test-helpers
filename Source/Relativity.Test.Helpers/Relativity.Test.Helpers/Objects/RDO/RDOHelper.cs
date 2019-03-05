@@ -15,6 +15,11 @@ namespace Relativity.Test.Helpers.Objects.RDO
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Deletes an RDO by artifactID.
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <param name="rdoArtifactID"></param>
 		public void Delete(int workspaceID, int rdoArtifactID)
 		{
 			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
@@ -24,6 +29,12 @@ namespace Relativity.Test.Helpers.Objects.RDO
 			}
 		}
 
+		/// <summary>
+		/// Reads a single RDO by artifactID
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <param name="rdoArtifactID"></param>
+		/// <returns></returns>
 		public DTOs.RDO ReadSingle(int workspaceID, int rdoArtifactID)
 		{
 			DTOs.RDO rdo;

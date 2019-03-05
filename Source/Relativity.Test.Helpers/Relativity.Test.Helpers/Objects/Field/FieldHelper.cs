@@ -1,7 +1,7 @@
 ﻿using kCura.EventHandler;
 using kCura.Relativity.Client;
 using Relativity.API;
-using Relativity.Test.Helpers.Fields.Request;
+using Relativity.Test.Helpers.Fields.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;

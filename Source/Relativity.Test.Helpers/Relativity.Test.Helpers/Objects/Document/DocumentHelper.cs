@@ -20,6 +20,11 @@ namespace Relativity.Test.Helpers.Objects.Document
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Returns the column name of the document identifier. Typically 'ControlNumber'.
+		/// </summary>
+		/// <param name="fieldArtifactTypeID"></param>
+		/// <returns></returns>
 		public string GetDocumentIdentifierFieldColumnName(Int32 fieldArtifactTypeID)
 		{
 			string sql = @"
@@ -37,6 +42,12 @@ namespace Relativity.Test.Helpers.Objects.Document
 			return columnName;
 		}
 
+		/// <summary>
+		/// Returns the column name of the document identifier. Typically 'Control Number'.
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <param name="fieldArtifactTypeID"></param>
+		/// <returns></returns>
 		public string GetDocumentIdentifierFieldName(int workspaceID, Int32 fieldArtifactTypeID)
 		{
 			const string sql = @"

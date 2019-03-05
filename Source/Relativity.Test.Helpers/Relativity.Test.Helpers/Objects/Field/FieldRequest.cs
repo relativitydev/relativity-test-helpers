@@ -2,7 +2,7 @@
 using System;
 using DTOs = kCura.Relativity.Client.DTOs;
 
-namespace Relativity.Test.Helpers.Fields.Request
+namespace Relativity.Test.Helpers.Fields.Models
 {
 	public class FieldRequest
 	{

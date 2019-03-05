@@ -18,6 +18,10 @@ namespace Relativity.Test.Helpers.Objects.Agent
 			_helper = helper;
 		}
 
+		/// <summary>
+		/// Returns a list of all available agent types.
+		/// </summary>
+		/// <returns></returns>
 		public List<AgentTypeResponse> ReadAgentTypes()
 		{
 			List<AgentTypeResponse> agentTypes = null;
@@ -28,6 +32,10 @@ namespace Relativity.Test.Helpers.Objects.Agent
 			return agentTypes;
 		}
 
+		/// <summary>
+		/// Returns the first resource server where type is equal to 'Agent'
+		/// </summary>
+		/// <returns></returns>
 		public AgentServerResponse ReadAgentServer()
 		{
 			List<AgentServerResponse> resourceServers = null;
