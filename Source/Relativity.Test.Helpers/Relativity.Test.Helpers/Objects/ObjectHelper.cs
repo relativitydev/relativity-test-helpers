@@ -11,6 +11,7 @@
 		public User.UserHelper User { get; set; }
 		public Matter.MatterHelper Matter { get; set; }
 		public RDO.RDOHelper RDO { get; set; }
+		public Field.FieldHelper Field { get; set; }
 
 		// only create via factory method
 		internal ObjectHelper()	{	}

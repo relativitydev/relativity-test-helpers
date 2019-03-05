@@ -14,7 +14,8 @@
 				Group = new Group.GroupHelper(helper),
 				User = new User.UserHelper(helper),
 				Matter = new Matter.MatterHelper(helper),
-				RDO = new RDO.RDOHelper(helper)
+				RDO = new RDO.RDOHelper(helper),
+				Field = new Field.FieldHelper(helper)
 			};
 
 			return objectHelper;

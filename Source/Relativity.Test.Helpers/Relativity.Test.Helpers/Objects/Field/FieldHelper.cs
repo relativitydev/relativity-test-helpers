@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using DTOs = kCura.Relativity.Client.DTOs;
 
-namespace Relativity.Test.Helpers.Fields
+namespace Relativity.Test.Helpers.Field
 {
 	/// <summary>
 	///
@@ -19,6 +19,13 @@ namespace Relativity.Test.Helpers.Fields
 	///
 	public class FieldHelper
 	{
+		private TestHelper _helper;
+
+		public FieldHelper(TestHelper helper)
+		{
+			_helper = helper;
+		}
+
 		public FieldCollection ConvertFieldValuesToFieldCollection(List<DTOs.FieldValue> fieldValues)
 		{
 			FieldCollection fields = new FieldCollection();
@@ -33,98 +40,102 @@ namespace Relativity.Test.Helpers.Fields
 			return fields;
 		}
 
-		public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
+		public int GetFieldArtifactID(int workspaceID, String fieldname)
 		{
 			string sqlquery = @"SELECT [ArtifactID] FROM [EDDSDBO].[Field] Where[DisplayName] like @fieldname";
 			var sqlParams = new List<SqlParameter>
 						{
 								new SqlParameter("@fieldname", SqlDbType.NVarChar) {Value = fieldname}
 						};
-			int artifactTypeId = workspaceDbContext.ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
+			int artifactTypeId = _helper.GetDBContext(workspaceID).ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
 			return artifactTypeId;
 		}
 
-		public static int GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
+		public int GetFieldCount(int workspaceID, int fieldArtifactId)
 		{
 			string sqlquery = String.Format(@"select count(*) from [EDDSDBO].[ExtendedField] where ArtifactID = @fieldArtifactId");
 			var sqlParams = new List<SqlParameter>
 						{
 								new SqlParameter("@fieldArtifactId", SqlDbType.NVarChar) {Value = fieldArtifactId}
 						};
-			int fieldCount = workspaceDbContext.ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
+			int fieldCount = _helper.GetDBContext(workspaceID).ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
 			return fieldCount;
 		}
 
-		public static int CreateField(IRSAPIClient client, FieldRequest request)
+		public int CreateField(int workspaceID, FieldRequest request)
 		{
 			int fieldID = 0;
-			//Set the workspace ID
-			client.APIOptions.WorkspaceID = request.WorkspaceID;
+			DTOs.WriteResultSet<DTOs.Field> results;
+
 			//Create a Field DTO
 			var fieldDTO = new DTOs.Field();
 			//Set secondary fields
 			request.HydrateFieldDTO(fieldDTO);
 			//Create the field
-			var resultSet = client.Repositories.Field.Create(fieldDTO);
-			//Check for success
-			if (resultSet.Success)
+			using (var client = _helper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
 			{
-				fieldID = resultSet.Results.FirstOrDefault().Artifact.ArtifactID;
+				client.APIOptions.WorkspaceID = workspaceID;
+				results = client.Repositories.Field.Create(fieldDTO);
+			}
+			//Check for success
+			if (results.Success)
+			{
+				fieldID = results.Results.FirstOrDefault().Artifact.ArtifactID;
 			}
 			else
 			{
-				var innEx = resultSet.Results.Any() ? new Exception(resultSet.Results.First().Message) : null;
-				throw new Exception(resultSet.Message, innEx);
+				var innEx = results.Results.Any() ? new Exception(results.Results.First().Message) : null;
+				throw new Exception(results.Message, innEx);
 			}
 			return fieldID;
 		}
 
-		public static int CreateField_Date(IRSAPIClient client, int workspaceID)
+		public int CreateField_Date(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.Date);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 
-		public static int CreateField_User(IRSAPIClient client, int workspaceID)
+		public int CreateField_User(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.User);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 
-		public static int CreateField_FixedLengthText(IRSAPIClient client, int workspaceID)
+		public int CreateField_FixedLengthText(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.FixedLengthText);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 
-		public static int CreateField_LongText(IRSAPIClient client, int workspaceID)
+		public int CreateField_LongText(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.LongText);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 
-		public static int CreateField_WholeNumber(IRSAPIClient client, int workspaceID)
+		public int CreateField_WholeNumber(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.WholeNumber);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 
-		public static int CreateField_YesNO(IRSAPIClient client, int workspaceID)
+		public int CreateField_YesNO(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.YesNo);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 
-		public static int CreateField_SingleChoice(IRSAPIClient client, int workspaceID)
+		public int CreateField_SingleChoice(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.SingleChoice);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 
-		public static int CreateField_MultipleChoice(IRSAPIClient client, int workspaceID)
+		public int CreateField_MultipleChoice(int workspaceID)
 		{
 			var fieldRequest = new FieldRequest(workspaceID, FieldType.MultipleChoice);
-			return CreateField(client, fieldRequest);
+			return CreateField(workspaceID, fieldRequest);
 		}
 	}
 }
