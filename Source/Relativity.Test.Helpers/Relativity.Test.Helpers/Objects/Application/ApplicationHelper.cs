@@ -1,7 +1,7 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using Relativity.API;
-using Relativity.Test.Helpers.Objects.Application.Exceptions;
+using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Linq;
 using System.Threading;
