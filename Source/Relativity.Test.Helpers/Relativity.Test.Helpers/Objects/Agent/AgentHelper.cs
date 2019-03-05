@@ -3,6 +3,7 @@ using Relativity.Services.Agent;
 using Relativity.Services.Interfaces.Agent;
 using Relativity.Services.Interfaces.Agent.Models;
 using Relativity.Services.ResourceServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,7 +28,7 @@ namespace Relativity.Test.Helpers.Objects.Agent
 			return agentTypes;
 		}
 
-		public AgentServerResponse WithAnAgentServer()
+		public AgentServerResponse ReadAgentServer()
 		{
 			List<AgentServerResponse> resourceServers = null;
 			using (var agentManager = _helper.GetServicesManager().CreateProxy<Services.Interfaces.Agent.IAgentManager>(ExecutionIdentity.System))
@@ -39,6 +40,12 @@ namespace Relativity.Test.Helpers.Objects.Agent
 			return agentServers.First();
 		}
 
+		/// <summary>
+		/// Deprecated: Needs update to newest Agent Manager API
+		/// </summary>
+		/// <param name="agentType"></param>
+		/// <param name="agentServerRef"></param>
+		/// <returns></returns>
 		public int Create(AgentTypeRef agentType, ResourceServerRef agentServerRef)
 		{
 			int agentID = -1;
@@ -58,6 +65,15 @@ namespace Relativity.Test.Helpers.Objects.Agent
 				*/
 			}
 			return agentID;
+		}
+
+		/// <summary>
+		/// Deprecated: Needs update to newest Agent Manager API
+		/// </summary>
+		/// <param name="agentID"></param>
+		public void Delete(int agentID)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
