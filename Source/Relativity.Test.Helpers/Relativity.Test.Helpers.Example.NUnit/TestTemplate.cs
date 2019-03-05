@@ -53,8 +53,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureSetup()
 		{
 			//Setup for testing		
-			//var helper = new TestHelper();
-		    var helper = TestHelper.System();
+			var helper = new TestHelper();
 			servicesManager = helper.GetServicesManager();
 			_eddsDbContext = helper.GetDBContext(-1);
 
@@ -96,6 +95,12 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Create Whole number field
 			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
 
+			//Create Yes/no field
+
+			//Create Single Choice fields
+
+			//Create Multiple Choice fields
+
 		}
 
 		#endregion
@@ -124,11 +129,20 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		[Test, global::NUnit.Framework.Description("Test description here")]
 		public void Integration_Test_Golden_Flow_Valid()
 		{
+			//Example for Arrange, Act, Assert
+
 			//Arrange
+			//CreateEmptyFolders();
+			//countBeforeExecute = SQLHelper.GetFolderCount(_workspaceId);
 
-			//Act
+			////Act
+			//_Executeresult = TestHelpers.Execute.ExecuteRelativityScriptByNameThroughRsapi("Delete Empty Case Folders", _workspaceId);
 
-			//Assert
+			////Assert
+			//Assert.AreEqual(_Executeresult, "Empty folders deleted with no errors.");
+			//countAfterExecute = SQLHelper.GetFolderCount(_workspaceId);
+			//Assert.AreEqual(countAfterExecute, 0);
+			//Assert.AreNotEqual(countBeforeExecute, countAfterExecute);
 
 		}
 

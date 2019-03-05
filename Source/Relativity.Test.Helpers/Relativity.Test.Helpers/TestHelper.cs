@@ -1,11 +1,8 @@
-﻿using Relativity.API;
+﻿using DbContextHelper;
+using Relativity.API;
 using Relativity.Test.Helpers.ServiceFactory;
 using System;
 using System.Data.SqlClient;
-using DbContextHelper;
-
-using kCura.Data.RowDataGateway;
-
 
 namespace Relativity.Test.Helpers
 {
@@ -46,7 +43,7 @@ namespace Relativity.Test.Helpers
             //return new DBContext(context);
 
             //You can create a new DBcontext using DBContextHelper for Relativity versions equal to or greater than 9.6.85.9
-	        var context = new DbContext(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, string.Format("EDDS{0}", caseID == -1 ? "" : caseID.ToString()), SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
+            var context = new DbContext(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, string.Format("EDDS{0}", caseID == -1 ? "" : caseID.ToString()), SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
             return context;
         }
 
