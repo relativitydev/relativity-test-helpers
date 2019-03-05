@@ -236,8 +236,8 @@
     <Compile Include="Objects\Application\ApplicationInstallException.cs" />
     <Compile Include="Objects\Client\ClientHelper.cs" />
     <Compile Include="Objects\Document\DocumentHelper.cs" />
-    <Compile Include="Fields\Fields.cs" />
-    <Compile Include="Fields\Request\FieldRequest.cs" />
+    <Compile Include="Objects\Field\FieldHelper.cs" />
+    <Compile Include="Objects\Field\FieldRequest.cs" />
     <Compile Include="Helpers\Authentication\AuthenticationManager.cs" />
     <Compile Include="Helpers\Authentication\AuthenticationProvider.cs" />
     <Compile Include="Helpers\Authentication\UserInfo.cs" />
