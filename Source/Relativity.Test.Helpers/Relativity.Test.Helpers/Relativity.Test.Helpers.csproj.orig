@@ -58,7 +58,6 @@
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
       <HintPath>..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
-<<<<<<< HEAD
     </Reference>
     <Reference Include="DbContextHelper, Version=2.0.0.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RelativityDev.DbContextHelper.2.0.0.4\lib\net462\DbContextHelper.dll</HintPath>
@@ -129,10 +128,6 @@
     <Reference Include="Relativity.API, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Api.10.1.116.12\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.DataTransfer.MessageService, Version=1.0.21.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\Relativity.DataTransfer.MessageService.dll</HintPath>
-=======
-    </Reference>
     <Reference Include="DbContextHelper, Version=3.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RelativityDev.DbContextHelper.3.0.0.2\lib\DbContextHelper.dll</HintPath>
     </Reference>
@@ -141,7 +136,6 @@
     </Reference>
     <Reference Include="kCura.Relativity.Client, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Rsapi.10.1.116.12\lib\net462\kCura.Relativity.Client.dll</HintPath>
->>>>>>> relativitydev-merge
     </Reference>
     <Reference Include="Relativity.Kepler, Version=1.0.1.409, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Kepler.1.0.1.409\lib\net462\Relativity.Kepler.dll</HintPath>
@@ -149,7 +143,6 @@
     <Reference Include="Relativity.Logging, Version=2018.11.5.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Logging.2018.11.5\lib\net462\Relativity.Logging.dll</HintPath>
     </Reference>
-<<<<<<< HEAD
     <Reference Include="Relativity.Logging.Interfaces, Version=2018.11.5.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Logging.2018.11.5\lib\net462\Relativity.Logging.Interfaces.dll</HintPath>
     </Reference>
@@ -224,7 +217,6 @@
     </Reference>
     <Reference Include="Renci.SshNet, Version=2016.0.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.0.0\lib\net40\Renci.SshNet.dll</HintPath>
-=======
     <Reference Include="Relativity, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.10.1.116.12\lib\net462\Relativity.dll</HintPath>
     </Reference>
@@ -248,19 +240,15 @@
     </Reference>
     <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.557, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.ObjectManager.10.1.116.12\lib\net462\Relativity.Services.ServiceProxy.dll</HintPath>
->>>>>>> relativitydev-merge
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
-<<<<<<< HEAD
     <Reference Include="System.Net.Http" />
     <Reference Include="ZetaLongPaths, Version=1.0.0.16, Culture=neutral, PublicKeyToken=b764f59068f31f38, processorArchitecture=MSIL">
       <HintPath>..\packages\ZetaLongPaths.1.0.0.16\lib\net40-full\ZetaLongPaths.dll</HintPath>
     </Reference>
-=======
     <Reference Include="System.Web.Extensions" />
->>>>>>> relativitydev-merge
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -312,7 +300,6 @@
     <Compile Include="Validation\ConfigurationValidation.cs" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Content Include="LICENSE.txt" />
     <Content Include="oi\unmanaged\oilink.exe" />
     <Content Include="oi\unmanaged\oilink.jar" />
@@ -329,7 +316,7 @@
     <Content Include="oi\unmanaged\scclo-R1.dll" />
     <Content Include="oi\unmanaged\sccut-R1.dll" />
     <Content Include="oi\unmanaged\wvcore-R1.dll" />
-=======
+
     <Content Include="FreeImage.dll" />
     <Content Include="LICENSE.txt" />
     <Content Include="sccfi.dll">
@@ -347,7 +334,6 @@
     <Content Include="wvcore.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
->>>>>>> relativitydev-merge
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

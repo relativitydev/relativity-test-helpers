@@ -59,7 +59,6 @@
     <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
       <HintPath>..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
     </Reference>
-    </Reference>
     <Reference Include="kCura, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.10.0.161.8\lib\kCura.dll</HintPath>
     </Reference>
@@ -89,8 +88,6 @@
     </Reference>
     <Reference Include="Relativity.Services.Interfaces, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Services.Interfaces.dll</HintPath>
-    </Reference>
-    </Reference>
     </Reference>
     <Reference Include="kCura.Relativity.ImportAPI.Extension, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.Relativity.ImportAPI.Extension.dll</HintPath>
