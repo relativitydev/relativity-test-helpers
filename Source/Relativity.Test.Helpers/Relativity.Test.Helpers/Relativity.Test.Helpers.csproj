@@ -59,14 +59,15 @@
     <Reference Include="BCrypt.Net, Version=0.1.5073.29922, Culture=neutral, PublicKeyToken=6bcd409ee6bc9292, processorArchitecture=MSIL">
       <HintPath>..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
     </Reference>
-    <Reference Include="DbContextHelper, Version=2.0.0.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RelativityDev.DbContextHelper.2.0.0.4\lib\net462\DbContextHelper.dll</HintPath>
     </Reference>
-    <Reference Include="FaspManager, Version=3.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.5.0.2\lib\net462\FaspManager.dll</HintPath>
+    <Reference Include="kCura, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Other.10.0.161.8\lib\kCura.dll</HintPath>
     </Reference>
-    <Reference Include="FreeImageNET, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\FreeImageNET.dll</HintPath>
+    <Reference Include="kCura.Relativity.Client, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.10.0.161.8\lib\kCura.Relativity.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="kCura.Relativity.Client, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.10.1.116.12\lib\net462\kCura.Relativity.Client.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\Ionic.Zip.dll</HintPath>
@@ -74,23 +75,22 @@
     <Reference Include="kCura, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.10.1.116.12\lib\net462\kCura.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.EventHandler, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.EventHandler.10.1.116.12\lib\net462\kCura.EventHandler.dll</HintPath>
+    <Reference Include="Relativity.API, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.10.0.161.8\lib\Relativity.API.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.API, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.10.1.116.12\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="kCura.ImageValidator, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.ImageValidator.dll</HintPath>
+      <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Kepler.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.OI.FileID, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.OI.FileID.dll</HintPath>
+    <Reference Include="Relativity.Services.DataContracts, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Services.DataContracts.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.Client, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.10.1.116.12\lib\net462\kCura.Relativity.Client.dll</HintPath>
+    <Reference Include="Relativity.Services.Interfaces, Version=10.0.161.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.0.161.8\lib\Relativity.Services.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.DataReaderClient, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.Relativity.DataReaderClient.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.ImportAPI, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.Relativity.ImportAPI.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.ImportAPI.Extension, Version=10.1.116.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\kCura.Relativity.ImportAPI.Extension.dll</HintPath>
@@ -215,7 +215,6 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="ZetaLongPaths, Version=1.0.0.16, Culture=neutral, PublicKeyToken=b764f59068f31f38, processorArchitecture=MSIL">
       <HintPath>..\packages\ZetaLongPaths.1.0.0.16\lib\net40-full\ZetaLongPaths.dll</HintPath>
     </Reference>
@@ -269,10 +268,8 @@
     <Compile Include="Objects\Workspace\WorkspaceHelper.cs" />
     <Compile Include="Validation\ConfigurationValidation.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="LICENSE.txt" />
-    <Content Include="oi\unmanaged\oilink.exe" />
     <Content Include="oi\unmanaged\oilink.jar" />
     <Content Include="oi\unmanaged\sccca-R1.dll" />
     <Content Include="oi\unmanaged\sccch-R1.dll" />

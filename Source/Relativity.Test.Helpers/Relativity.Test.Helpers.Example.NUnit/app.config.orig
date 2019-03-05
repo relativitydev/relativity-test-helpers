@@ -1,0 +1,67 @@
+<<<<<<< HEAD
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<appSettings>
+		<add key="WorkspaceID" value="1017508" />
+		<add key="WorkspaceName" value="Example Integration Test" />
+		<add key="ServerHostBinding" value="http" />
+		<add key="ServerHostName" value="devvm-10.0" />
+		<add key="AdminUsername" value="relativity.admin@relativity.com" />
+		<add key="AdminPassword" value="Test1234!" />
+		<add key="SQLUsername" value="eddsdbo" />
+		<add key="SQLPassword" value="Test1234!" />
+	</appSettings>
+	<runtime>
+		<assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+			<dependentAssembly>
+				<assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" />
+			</dependentAssembly>
+		</assemblyBinding>
+	</runtime>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <section name="kCura.Config" type="System.Configuration.DictionarySectionHandler, System, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </configSections>
+  <kCura.Config configSource="kCuraConnection.config" />
+  <appSettings file="appSettings.config">
+    <add key="WorkspaceID" value="0" />
+    <add key="RSAPIServerAddress" value="" />
+    <add key="RESTServerAddress" value="" />
+    <add key="AdminUsername" value="" />
+    <add key="AdminPassword" value="" />
+    <add key="SQLServerAddress" value="" />
+    <add key="SQLUsername" value="" />
+    <add key="SQLPassword" value="" />
+    <add key="TestWorkspaceName" value="Integration Tests" />
+    <add key="ServerBindingType" value="http" />
+    <add key="TestWorkspaceTemplateName" value="New Case Template" />
+    <add key="ClientSettingsProvider.ServiceUri" value="" />
+  </appSettings>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-9.0.0.0" newVersion="9.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.2" />
+  </startup>
+  <system.web>
+    <membership defaultProvider="ClientAuthenticationMembershipProvider">
+      <providers>
+        <add name="ClientAuthenticationMembershipProvider" type="System.Web.ClientServices.Providers.ClientFormsAuthenticationMembershipProvider, System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" serviceUri="" />
+      </providers>
+    </membership>
+    <roleManager defaultProvider="ClientRoleProvider" enabled="true">
+      <providers>
+        <add name="ClientRoleProvider" type="System.Web.ClientServices.Providers.ClientRoleProvider, System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" serviceUri="" cacheTimeout="86400" />
+      </providers>
+    </roleManager>
+  </system.web>
+>>>>>>> relativitydev-merge
+</configuration>
