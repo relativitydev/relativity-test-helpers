@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Test.Helpers", "Relativity.Test.Helpers\Relativity.Test.Helpers.csproj", "{500FCC47-7792-47E0-8308-FF7632C65CC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Test.Helpers.Example.NUnit", "Relativity.Test.Helpers.Example.NUnit\Relativity.Test.Helpers.Example.NUnit.csproj", "{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Test.Helpers.Example", "Relativity.Test.Helpers.Example.NUnit\Relativity.Test.Helpers.Example.csproj", "{AAA809DA-EA6F-474C-B9C0-D2B6217A5702}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Tests.Helpers.Tests.Unit", "Relativity.Tests.Helpers.Tests.Unit\Relativity.Tests.Helpers.Tests.Unit.csproj", "{CB3D61D1-8E16-48F6-8CB9-1D2A71D339FA}"
 EndProject
