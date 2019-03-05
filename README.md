@@ -16,7 +16,7 @@ A build of the _master_ branch is available as a [nuget package](https://www.nug
 
 The primary objects of this project are:
 
-* ConfigurationFactory
+## ConfigurationFactory
 
 Integration tests require configuration to point to the correct Relativity instance with the appropriate user credentials. This project simplifies configuration through the use of an app.config file. A typical integration test contains the following app.config XML settings:
 
@@ -42,15 +42,37 @@ To retrieve the app.config settings, you can use the following code snippet:
 ConfigurationModel LocalConfig = ConfigurationFactory.ReadConfigFromAppSettings();
 ```
 
-* TestHelper
+## TestHelper
 
-This is a stand-alone implementation of the IHelper interface. A new instance of this object can be instantiated 
+This is a stand-alone implementation of the IHelper interface. A new instance of this object can be instantiated by using the following code snippet:
 
-* ObjectHelper
+```
+TestHelper TestHelper = new TestHelper(LocalConfig);
+```
 
-* ConfigurationFactory
+## ObjectHelper
 
+Integration tests may have complex setup and teardown requirements. A quality integration test manages all objects without manual intervention, which means it must create the workspace, install your application, create agents, and more. When the tests complete, all of these objects must be cleaned up to allow the test to repeat without side effects. ObjectHelper gives you common methods to set up and tear down these necessary objects for your integration test.
 
+To instantiate an instance of ObjectHelper, use the factory method in the following code snippet:
 
+```
+ObjectHelper ObjectHelper = ObjectFactory.ObjectHelperInstance(TestHelper);
+```
+
+There is full or partial support for the following objects:
+
+* Agent
+* Application
+* Client
+* Document
+* Field
+* Folder
+* Group
+* Matter
+* OAuth2Client
+* RDO
+* User
+* Workspace
 
 For a sample integration test, check the Relativity.Test.Helpers.Example project.
