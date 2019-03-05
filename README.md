@@ -1,33 +1,9 @@
-﻿# relativity-integration-test-helpers
-Open Source Community: Integration testing is a software testing methodology used to test individual software components or units of code to verify their interaction. These components are tested as a single group or organized in an iterative manner. That said, we have created Relativity Integration Test Helpers to assist you with writing good Integration Tests for your Relativity application. You can use this framework to test event handlers, agents or any workflow that combines agents and Eventhandlers. We will continue adding more helpers but in the mean time you should be able to create workspaces, create dbcontext, proxy and create documents with this framework.
- This framework is only compatible for Relativity 9.5 and above.
+﻿# relativity-test-helpers-fork
+
+Open Source Community: Integration testing is a software testing methodology to test the integration of two or more systems. With Relativity® applications, this typically means the integration between your Relativity application's code and one or more Relativity instances. These components are tested as a single group or organized in an iterative manner. We have created Relativity Integration Test Helpers to assist you with writing high-quality, low-effort integration tests for your Relativity application. You can use this framework to test event handlers, agents, custom pages, or any workflow that combines these Relativity extensibility points.
+
+The _develop_ branch is in active development and is subject to breaking changes.
  
-This is also available as a [nuget package].(https://www.nuget.org/packages/RelativityDev.RelativityTestHelpers/)
+A build of this github project's _master_ branch is available as a [nuget package](https://www.nuget.org/packages/RelativityDev.RelativityTestHelpers/).
  
-This project requires references to Relativity's Relativity® SDK dlls. These dlls are not part of the open source project and can be obtained by contacting support@relativity.com, getting it from your Relativity instance, or installing the SDK from the [Community Portal](https://community.relativity.com/s/files).
-Under "relativity-integration-test-helpers\Source\Relativity.Test.Helpers\" you will need to create a "Packages" folder if one does not exist and you will need to add the following dlls to this folder. Once you do that you should be able to run your integration tests against an environment.
-
-• FreeImageNET.dll
-• kCura.Relativity.Client.dll
-• Relativity.API.dll
-• Ionic.Zip.dll
-• itextsharp.dll
-• kCura.Data.dll
-• kCura.Data.RowDataGateway.dll
-• kCura.ImageValidator.dll
-• kCura.Injection.dll
-• kCura.OI.FileID.dll
-• kCura.Relativity.DataReaderClient.dll
-• kCura.Relativity.ImportAPI.dll
-• kCura.Utility.dll
-• kCura.Windows.Forms.dll
-• kCura.Windows.Process.dll
-• kCura.WinEDDS.dll
-• kCura.WinEDDS.ImportExtension.dll
-• Newtonsoft.Json.dll
-• Relativity.API.dll
-• Relativity.dll
-• Relativity.Services.DataContracts.dll
-• Relativity.Services.ServiceProxy.dll
-
-
+This project requires references to the Relativity® SDK. You may obtain the necessary assemblies from NuGet, by contacting Relativity support by email at support@relativity.com, by pulling them from your Relativity instance at C:\Program Files\kCura Corporation, or by installing the SDK from the [Community Portal](https://community.relativity.com/s/files).
