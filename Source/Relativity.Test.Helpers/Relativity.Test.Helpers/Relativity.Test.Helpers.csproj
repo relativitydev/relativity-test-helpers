@@ -217,6 +217,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationFactory.cs" />
+    <Compile Include="Exceptions\DbContextHelperException.cs" />
     <Compile Include="Helpers\IHelperTransform.cs" />
     <Compile Include="Objects\Agent\AgentHelper.cs" />
     <Compile Include="Objects\Application\ApplicationHelper.cs" />

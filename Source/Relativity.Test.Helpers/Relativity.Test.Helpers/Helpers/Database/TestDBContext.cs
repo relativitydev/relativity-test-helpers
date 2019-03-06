@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using Relativity.Test.Helpers.Exceptions;
 
 // ReSharper disable InconsistentNaming
 

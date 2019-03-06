@@ -60,7 +60,7 @@ namespace Relativity.Test.Helpers.Objects.OAuth2Client
 		}
 
 		/// <summary>
-		/// Returns an auth token by clientID and client secret.
+		/// Returns an auth token by clientID and client secret. Not implemented due to Http issues.
 		/// </summary>
 		/// <param name="configs"></param>
 		/// <param name="clientID"></param>
@@ -68,6 +68,8 @@ namespace Relativity.Test.Helpers.Objects.OAuth2Client
 		/// <returns></returns>
 		public string ReadToken(ConfigurationModel configs, string clientID, string clientSecret)
 		{
+			throw new NotImplementedException();
+			/*
 			string authToken;
 			var requestString = String.Format("{0}://{1}/Relativity/Identity/connect/token", configs.ServerHostBinding, configs.ServerHostName);
 
@@ -95,6 +97,7 @@ namespace Relativity.Test.Helpers.Objects.OAuth2Client
 			}
 
 			return authToken;
+			*/
 		}
 	}
 }
