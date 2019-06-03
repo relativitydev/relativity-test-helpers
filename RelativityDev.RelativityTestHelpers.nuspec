@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RelativityDev.RelativityTestHelpers</id>
+    <version>6.0.0.1</version>
+    <authors>RelativityDev</authors>
+    <owners>RelativityDev</owners>
+    <licenseUrl>https://github.com/relativitydev/relativity-test-helpers/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/relativitydev/relativity-test-helpers</projectUrl>
+    <iconUrl>https://bit.ly/2qFJQzk</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>This NuGet package contains a helper library to write integration tests for testing Relativity applications. This is a community supported implementation. If this does not meet your needs for your implementation you are invited to contribute to the project.</description>
+    <releaseNotes>Initial version.</releaseNotes>
+    <copyright></copyright>
+    <tags>relativity-test-helpers relativity test helpers relativity test helpers test helpers integration tests relativity integration tests </tags>
+  </metadata>
+  <files>
+    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\Relativity.Test.Helpers.dll" target="lib\net62\" />
+  </files>
+</package>
