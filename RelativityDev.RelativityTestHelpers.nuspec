@@ -15,6 +15,6 @@
     <tags>relativity-test-helpers relativity test helpers relativity test helpers test helpers integration tests relativity integration tests </tags>
   </metadata>
   <files>
-    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\Relativity.Test.Helpers.dll"
+    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\Relativity.Test.Helpers.dll" target="lib\net62\" />
   </files>
 </package>
