@@ -256,3 +256,5 @@ paket-files/
 
 # Import API .dll files
 **/oi/*
+oi
+oi/unmanaged
