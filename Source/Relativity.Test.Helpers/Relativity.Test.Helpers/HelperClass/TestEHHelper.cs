@@ -27,6 +27,11 @@ namespace Relativity.Test.Helpers.HelperClasses
 			_helper = new TestHelper(username, password);
 		}
 
+		public TestEHHelper(string configSectionName)
+		{
+			_helper = new TestHelper(configSectionName);
+		}
+
 		public int GetActiveCaseID()
 		{
 			return WorkspaceID;
