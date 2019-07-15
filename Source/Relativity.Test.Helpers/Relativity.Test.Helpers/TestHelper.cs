@@ -1,5 +1,6 @@
 ﻿using DbContextHelper;
 using Relativity.API;
+using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
 using System;
 using System.Data.SqlClient;
@@ -59,10 +60,14 @@ namespace Relativity.Test.Helpers
 			throw new NotImplementedException();
 		}
 
+
 		public ILogFactory GetLoggerFactory()
 		{
-			throw new NotImplementedException();
+			var consoleLogger = new ConsoleLogger();
+			var factory = new TestLogFactory(consoleLogger);
+			return factory;
 		}
+
 
 		public string GetSchemalessResourceDataBasePrepend(IDBContext context)
 		{
