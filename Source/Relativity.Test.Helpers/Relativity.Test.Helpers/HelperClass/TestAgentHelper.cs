@@ -6,26 +6,21 @@ namespace Relativity.Test.Helpers.HelperClasses
 	public class TestAgentHelper : IAgentHelper
 	{
 		private IHelper _helper;
-		public int WorkspaceID { get; set; }
+		private int WorkspaceID { get; set; }
 		public string AdminUsername { get; set; }
 		public string AdminPassword { get; set; }
-		public string SQLServerAddress { get; set; }
-		public string SQLUserName { get; set; }
-		public string SQLPassword { get; set; }
-		public string SolutionSnapshotRAPUrl { get; set; }
-		public string ServerHostName { get; set; }
-		public string ServerHostBinding { get; set; }
-		public string RAPFilesDirectory { get; set; }
+		private string SQLServerAddress { get; set; }
+		private string SQLUserName { get; set; }
+		private string SQLPassword { get; set; }
+		private string SolutionSnapshotRAPUrl { get; set; }
+		private string ServerHostName { get; set; }
+		private string ServerHostBinding { get; set; }
+		private string RAPFilesDirectory { get; set; }
 
 		public TestAgentHelper()
 		{
 			this._helper = new TestHelper(AdminUsername, AdminPassword);
 		}
-
-		//public TestAgentHelper(string username, string password)
-		//{
-		//	this._helper = new TestHelper(username, password);
-		//}
 
 		void IDisposable.Dispose()
 		{

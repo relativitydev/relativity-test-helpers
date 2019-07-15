@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Relativity.API;
+﻿using Relativity.API;
+using System;
 
 namespace Relativity.Test.Helpers.Authentication
 {
@@ -14,6 +10,10 @@ namespace Relativity.Test.Helpers.Authentication
 
 		public AuthenticationManager(IUserInfo userinfo, string authToken = null)
 		{
+			if (userinfo == null)
+			{
+				throw new Exception("UserInfo cannot be null");
+			}
 			UserInfo = userinfo;
 			AuthToken = authToken;
 		}
