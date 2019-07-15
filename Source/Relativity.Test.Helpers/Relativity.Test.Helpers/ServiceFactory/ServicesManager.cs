@@ -1,6 +1,7 @@
 ﻿using Relativity.API;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
+using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 
 namespace Relativity.Test.Helpers.ServiceFactory
@@ -9,6 +10,7 @@ namespace Relativity.Test.Helpers.ServiceFactory
 	{
 		private readonly string _username;
 		private readonly string _password;
+		private readonly AppConfigSettings _alternateConfig;
 
 		public ServicesManager(string username, string password)
 		{
@@ -16,42 +18,85 @@ namespace Relativity.Test.Helpers.ServiceFactory
 			_password = password;
 		}
 
+		public ServicesManager(AppConfigSettings alternateConfig)
+		{
+			this._alternateConfig = alternateConfig;
+		}
+
 		public T CreateProxy<T>(ExecutionIdentity ident) where T : IDisposable
 		{
 			Credentials creds = null;
-			if (ident == ExecutionIdentity.CurrentUser)
+
+			if (this._alternateConfig != null)
 			{
-				creds = new UsernamePasswordCredentials(_username, _password);
+				creds = new UsernamePasswordCredentials(_alternateConfig.AdminUserName, _alternateConfig.AdminPassword);
 			}
-			else if (ident == ExecutionIdentity.System)
+			else
 			{
-				var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
-				var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
-				creds = new UsernamePasswordCredentials(username, password);
+				if (ident == ExecutionIdentity.CurrentUser)
+				{
+					creds = new UsernamePasswordCredentials(_username, _password);
+				}
+				else if (ident == ExecutionIdentity.System)
+				{
+					var username = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME;
+					var password = SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD;
+					creds = new UsernamePasswordCredentials(username, password);
+				}
 			}
 
 			if (creds == null)
 			{
-				throw new NotSupportedException($"{ident} is not supported in the Test Service Mangager.");
+				throw new NotSupportedException($"{ident} is not supported in the Test Service Manager.");
 			}
 
-			var serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), creds);
-			var serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
+			ServiceFactorySettings serviceFactorySettings;
+			Relativity.Services.ServiceProxy.ServiceFactory serviceFactory;
+
+			if (this._alternateConfig != null)
+			{
+				serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(this._alternateConfig), creds);
+				serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
+			}
+			else
+			{
+				serviceFactorySettings = new ServiceFactorySettings(GetServicesURL(), this.GetKeplerUrl(), creds);
+				serviceFactory = new Relativity.Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
+			}
 			T proxy = serviceFactory.CreateProxy<T>();
 			return proxy;
 		}
 
 		public Uri GetRESTServiceUrl()
 		{
-			Uri servicesUrl = new Uri(string.Format("{0}://{1}/relativity.rest", SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE, SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS));
-			return servicesUrl;
+			Uri servicesUri;
+			// Get Services URL
+			if (this._alternateConfig != null)
+			{
+				string serviceEndpoint = $"{this._alternateConfig.ServerBindingType}://{this._alternateConfig.RelativityInstanceAddress}/relativity.services";
+				servicesUri = new Uri(serviceEndpoint);
+			}
+			else
+			{
+				servicesUri = new Uri($"{SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE}://{SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS}/relativity.services");
+			}
+			return servicesUri;
 		}
 
 
 		public Uri GetServicesURL()
 		{
+			Uri servicesUri;
 			// Get Services URL
-			var servicesUri = new Uri(string.Format("{0}://{1}/relativity.services", SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE, SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS));
+			if (this._alternateConfig != null)
+			{
+				string serviceEndpoint = $"{this._alternateConfig.ServerBindingType}://{this._alternateConfig.RelativityInstanceAddress}/relativity.services";
+				servicesUri = new Uri(serviceEndpoint);
+			}
+			else
+			{
+				servicesUri = new Uri($"{SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE}://{SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS}/relativity.services");
+			}
 			return servicesUri;
 		}
 	}
