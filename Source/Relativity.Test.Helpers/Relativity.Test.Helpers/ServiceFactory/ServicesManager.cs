@@ -70,11 +70,11 @@ namespace Relativity.Test.Helpers.ServiceFactory
 		public Uri GetRESTServiceUrl()
 		{
 			Uri servicesUri;
-			string relativityInstance = (string.IsNullOrEmpty(this._alternateConfig.RestServerAddress) ? this._alternateConfig.RelativityInstanceAddress : this._alternateConfig.RestServerAddress);
 
 			// Get Services URL
 			if (this._alternateConfig != null)
 			{
+				string relativityInstance = (string.IsNullOrEmpty(this._alternateConfig.RestServerAddress) ? this._alternateConfig.RelativityInstanceAddress : this._alternateConfig.RestServerAddress);
 				string serviceEndpoint = $"{this._alternateConfig.ServerBindingType}://{relativityInstance}/relativity.services";
 				servicesUri = new Uri(serviceEndpoint);
 			}
@@ -89,11 +89,11 @@ namespace Relativity.Test.Helpers.ServiceFactory
 		public Uri GetServicesURL()
 		{
 			Uri servicesUri;
-			string relativityInstance = (string.IsNullOrEmpty(this._alternateConfig.RsapiServerAddress) ? this._alternateConfig.RelativityInstanceAddress : this._alternateConfig.RsapiServerAddress);
 
 			// Get Services URL
 			if (this._alternateConfig != null)
 			{
+				string relativityInstance = (string.IsNullOrEmpty(this._alternateConfig.RsapiServerAddress) ? this._alternateConfig.RelativityInstanceAddress : this._alternateConfig.RsapiServerAddress);
 				string serviceEndpoint = $"{this._alternateConfig.ServerBindingType}://{relativityInstance}/relativity.services";
 				servicesUri = new Uri(serviceEndpoint);
 			}
