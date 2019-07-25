@@ -60,7 +60,7 @@
       <HintPath>..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
     </Reference>
     <Reference Include="DbContextHelper, Version=3.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RelativityDev.DbContextHelper.3.0.0.2\lib\DbContextHelper.dll</HintPath>
+      <HintPath>..\packages\RelativityDev.DbContextHelper.4.0.0.1\lib\net462\DbContextHelper.dll</HintPath>
     </Reference>
     <Reference Include="FreeImageNET, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Import.Client.10.1.116.12\lib\net462\FreeImageNET.dll</HintPath>
@@ -277,7 +277,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
   </ItemGroup>

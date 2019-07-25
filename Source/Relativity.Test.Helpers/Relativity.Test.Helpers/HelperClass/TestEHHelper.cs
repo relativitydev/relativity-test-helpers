@@ -1,5 +1,9 @@
-﻿using Relativity.API;
+﻿using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
+using Relativity.API;
+using Relativity.Test.Helpers.Authentication;
 using System;
+using System.Linq;
 
 namespace Relativity.Test.Helpers.HelperClasses
 {
@@ -17,6 +21,7 @@ namespace Relativity.Test.Helpers.HelperClasses
 		private string ServerHostName { get; set; }
 		private string ServerHostBinding { get; set; }
 		private string RAPFilesDirectory { get; set; }
+		private int UserId { get; set; }
 
 		private IHelper _helper;
 
@@ -39,7 +44,43 @@ namespace Relativity.Test.Helpers.HelperClasses
 
 		public IAuthenticationMgr GetAuthenticationManager()
 		{
-			throw new NotImplementedException();
+			if (UserId <= 0)
+			{
+				try
+				{
+					using (IRSAPIClient rsapiClient = this.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+					{
+						rsapiClient.APIOptions.WorkspaceID = -1;
+						Query<kCura.Relativity.Client.DTOs.User> userQuery = new Query<kCura.Relativity.Client.DTOs.User>()
+						{
+							Condition = new TextCondition()
+							{
+								Field = UserFieldNames.EmailAddress,
+								Operator = TextConditionEnum.EqualTo,
+								Value = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME
+							},
+							Fields = FieldValue.NoFields
+						};
+						QueryResultSet<kCura.Relativity.Client.DTOs.User> result = rsapiClient.Repositories.User.Query(userQuery);
+						UserId = result.Results.First().Artifact.ArtifactID;
+					}
+				}
+				catch (Exception ex)
+				{
+					throw ex;
+				}
+			}
+
+			UserInfo userInfo = new UserInfo
+			{
+				FirstName = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME,
+				ArtifactID = UserId,
+				EmailAddress = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME
+			};
+
+			AuthenticationManager authManager = new AuthenticationManager(userInfo);
+
+			return authManager;
 		}
 
 		public IDBContext GetDBContext(int caseID)
