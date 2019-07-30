@@ -10,9 +10,14 @@
     <iconUrl>https://bit.ly/2qFJQzk</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>This NuGet package contains a helper library to write integration tests for testing Relativity applications. This is a community supported implementation. If this does not meet your needs for your implementation you are invited to contribute to the project.</description>
-    <releaseNotes>Initial version.</releaseNotes>
+    <releaseNotes>https://github.com/relativitydev/relativity-test-helpers</releaseNotes>
     <copyright></copyright>
     <tags>relativity-test-helpers relativity test helpers relativity test helpers test helpers integration tests relativity integration tests </tags>
+	<dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="Relativity.DataExchange.Client.SDK" version="1.4.0" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
     <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\Relativity.Test.Helpers.dll" target="lib\net462\" />
