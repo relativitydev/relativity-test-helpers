@@ -34,26 +34,98 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="kCura.Relativity.Client, Version=10.2.170.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.10.2.170.2\lib\net462\kCura.Relativity.Client.dll</HintPath>
+    <Reference Include="FaspManager, Version=3.7.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.6.0.16\lib\net462\FaspManager.dll</HintPath>
+    </Reference>
+    <Reference Include="FreeImageNET, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.4.0\lib\net462\FreeImageNET.dll</HintPath>
+    </Reference>
+    <Reference Include="kCura.Relativity.Client, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.10.3.107.60\lib\net462\kCura.Relativity.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.API, Version=10.2.170.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Api.10.2.170.2\lib\net462\Relativity.API.dll</HintPath>
+    <Reference Include="oi, Version=2019.3.0.728, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.OutsideIn.2019.3.0\lib\net40\oi.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Kepler, Version=1.0.1.557, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.2.170.2\lib\net462\Relativity.Kepler.dll</HintPath>
+    <Reference Include="Polly, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.5.3.1\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.DataContracts, Version=10.2.170.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.2.170.2\lib\net462\Relativity.Services.DataContracts.dll</HintPath>
+    <Reference Include="Relativity.API, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.10.3.107.60\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.Interfaces, Version=10.2.170.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.2.170.2\lib\net462\Relativity.Services.Interfaces.dll</HintPath>
+    <Reference Include="Relativity.DataExchange.Client.SDK, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.4.0\lib\net462\Relativity.DataExchange.Client.SDK.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.557, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.2.170.2\lib\net462\Relativity.Services.ServiceProxy.dll</HintPath>
+    <Reference Include="Relativity.DataTransfer.MessageService, Version=10.2.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.4.0\lib\net462\Relativity.DataTransfer.MessageService.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Kepler, Version=1.0.1.627, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.107.60\lib\net462\Relativity.Kepler.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Logging, Version=2019.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Logging.2019.5.1\lib\net462\Relativity.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Logging.Interfaces, Version=2019.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Logging.2019.5.1\lib\net462\Relativity.Logging.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.OAuth2Client, Version=1.0.27.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.OAuth2.Client.1.0.27\lib\net462\Relativity.OAuth2Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.OAuth2Client.IdentityModel, Version=1.0.27.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.OAuth2.Client.1.0.27\lib\net462\Relativity.OAuth2Client.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.OAuth2Client.IdentityModel.Interfaces, Version=1.0.27.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.OAuth2.Client.1.0.27\lib\net462\Relativity.OAuth2Client.IdentityModel.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.OAuth2Client.Implicit, Version=1.0.27.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.OAuth2.Client.1.0.27\lib\net462\Relativity.OAuth2Client.Implicit.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.OAuth2Client.Interfaces, Version=1.0.27.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.OAuth2.Client.1.0.27\lib\net462\Relativity.OAuth2Client.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Services.DataContracts, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.107.60\lib\net462\Relativity.Services.DataContracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Services.Interfaces, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.107.60\lib\net462\Relativity.Services.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.627, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.107.60\lib\net462\Relativity.Services.ServiceProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Telemetry.APM, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.APM.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Telemetry.DataContracts.Shared, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.DataContracts.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Telemetry.MetricsCollection, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.MetricsCollection.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Telemetry.MetricsCollection.Interface, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.MetricsCollection.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Transfer.Client, Version=6.0.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.6.0.16\lib\net462\Relativity.Transfer.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Transfer.Client.Aspera, Version=6.0.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.6.0.16\lib\net462\Relativity.Transfer.Client.Aspera.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Transfer.Client.Core, Version=6.0.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.6.0.16\lib\net462\Relativity.Transfer.Client.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Transfer.Client.FileShare, Version=6.0.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.6.0.16\lib\net462\Relativity.Transfer.Client.FileShare.dll</HintPath>
+    </Reference>
+    <Reference Include="Relativity.Transfer.Client.Http, Version=6.0.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.6.0.16\lib\net462\Relativity.Transfer.Client.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet, Version=2016.0.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <HintPath>..\packages\SSH.NET.2016.0.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,15 +149,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZetaLongPaths, Version=1.0.0.16, Culture=neutral, PublicKeyToken=b764f59068f31f38, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZetaLongPaths.1.0.0.16\lib\net40-full\ZetaLongPaths.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestConstants.cs" />
     <Compile Include="TestEHHelperIntegrationTests.cs" />
     <Compile Include="TestHelperIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestImportApiHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -94,11 +171,32 @@
       <Name>Relativity.Test.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="oi\unmanaged\oilink.exe" />
+    <Content Include="oi\unmanaged\oilink.jar" />
+    <Content Include="oi\unmanaged\sccca-R1.dll" />
+    <Content Include="oi\unmanaged\sccch-R1.dll" />
+    <Content Include="oi\unmanaged\sccda-R1.dll" />
+    <Content Include="oi\unmanaged\sccex-R1.dll" />
+    <Content Include="oi\unmanaged\sccfa-R1.dll" />
+    <Content Include="oi\unmanaged\sccfi-R1.dll" />
+    <Content Include="oi\unmanaged\sccfmt-R1.dll" />
+    <Content Include="oi\unmanaged\sccfnt-R1.dll" />
+    <Content Include="oi\unmanaged\sccfut-R1.dll" />
+    <Content Include="oi\unmanaged\sccind-R1.dll" />
+    <Content Include="oi\unmanaged\scclo-R1.dll" />
+    <Content Include="oi\unmanaged\sccut-R1.dll" />
+    <Content Include="oi\unmanaged\wvcore-R1.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.12.0\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets'))" />
+    <Error Condition="!Exists('..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets'))" />
   </Target>
+  <Import Project="..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets" Condition="Exists('..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets')" />
+  <Import Project="..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets" Condition="Exists('..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets')" />
 </Project>
