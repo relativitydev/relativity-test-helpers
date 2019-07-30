@@ -33,8 +33,9 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		public void CreateDocumentsWithFolderName()
 		{
 			// Arrange
-			int workspaceId = ConfigurationHelper.WORKSPACEID;
+			int workspaceId;
 			int numberOfDocumentsToCreate = 5;
+			string sampleWorkspaceName = "Integration Test Workspace";
 			string folderName = "Sample Folder";
 			string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			string nativeName = @"\\\\FakeFilePath\Natives\SampleTextFile.txt";
@@ -46,18 +47,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			}
 
 			// Act
-			bool success = true;
 			try
 			{
-				Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(workspaceId, numberOfDocumentsToCreate, folderName, nativeFilePath);
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("An error occurred Creating Documents", ex);
-			}
+				workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(sampleWorkspaceName, ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, Sut.GetServicesManager(), ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD).Result;
 
-			try
-			{
+				Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(workspaceId, numberOfDocumentsToCreate, folderName, nativeFilePath);
+
 				Query<Document> query = new Query<Document>
 				{
 					Fields = new List<FieldValue> { new FieldValue("Control Number") }
@@ -68,20 +63,13 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 					rsapiClient.APIOptions.WorkspaceID = workspaceId;
 					QueryResultSet<Document> result = rsapiClient.Repositories.Document.Query(query, 0);
 					numberOfDocumentsCreated = result.TotalCount;
-					foreach (Result<Document> document in result.Results)
-					{
-						int artifactId = document.Artifact.ArtifactID;
-						WriteResultSet<Document> deleteResultSet = rsapiClient.Repositories.Document.Delete(artifactId);
-						if (!deleteResultSet.Success)
-						{
-							throw new Exception("An error occurred Deleting Documents");
-						}
-					}
 				}
+
+				WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(workspaceId, Sut.GetServicesManager(), ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("An error occurred Querying for Documents", ex);
+				throw new Exception("An error occurred", ex);
 			}
 
 			// Assert
