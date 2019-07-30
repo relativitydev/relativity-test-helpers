@@ -54,7 +54,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		{
 			//Setup for testing		
 			//var helper = new TestHelper();
-		    var helper = TestHelper.System();
+			var helper = TestHelper.System();
 			servicesManager = helper.GetServicesManager();
 			_eddsDbContext = helper.GetDBContext(-1);
 
@@ -75,7 +75,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			_client.APIOptions.WorkspaceID = _workspaceId;
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var nativeFilePath = "";
-			var nativeName = @"\\\\FakeFilePath\Natives\SampleTextFile.txt"; ;
+			var nativeName = @"\\\\FakeFilePath\Natives\SampleTextFile.txt";
 			if (executableLocation != null)
 			{
 				nativeFilePath = Path.Combine(executableLocation, nativeName);
