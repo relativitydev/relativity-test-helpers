@@ -13,6 +13,11 @@
     <releaseNotes>Initial version.</releaseNotes>
     <copyright></copyright>
     <tags>relativity-test-helpers relativity test helpers relativity test helpers test helpers integration tests relativity integration tests </tags>
+	<dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="Relativity.DataExchange.Client.SDK" version="1.4.0" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
     <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\Relativity.Test.Helpers.dll" target="lib\net462\" />
