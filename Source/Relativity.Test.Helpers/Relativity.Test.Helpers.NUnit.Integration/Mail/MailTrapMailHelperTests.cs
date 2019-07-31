@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 {
-	public class TestMailTrapHelper
+	public class MailTrapMailHelperTests
 	{
 		private IMailHelper SuT;
 
