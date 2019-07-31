@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 
 namespace Relativity.Test.Helpers.Mail
@@ -35,9 +36,16 @@ namespace Relativity.Test.Helpers.Mail
 				string apiEndpoint = "api/v1/inboxes/";
 
 				HttpResponseMessage response = client.GetAsync(apiEndpoint).Result;
-				string json = response.Content.ReadAsStringAsync().Result;
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					string json = response.Content.ReadAsStringAsync().Result;
 
-				inboxes.AddRange(JsonConvert.DeserializeObject<List<MailTrapInboxModel>>(json));
+					inboxes.AddRange(JsonConvert.DeserializeObject<List<MailTrapInboxModel>>(json));
+				}
+				else
+				{
+					throw new Exception($"Status Code: {response.StatusCode} - {nameof(GetInboxes)} was unsuccessful");
+				}
 			}
 
 			return inboxes;
@@ -64,9 +72,16 @@ namespace Relativity.Test.Helpers.Mail
 				string apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages";
 
 				HttpResponseMessage response = client.GetAsync(apiEndpoint).Result;
-				string json = response.Content.ReadAsStringAsync().Result;
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					string json = response.Content.ReadAsStringAsync().Result;
 
-				messages.AddRange(JsonConvert.DeserializeObject<List<MailTrapMessageModel>>(json));
+					messages.AddRange(JsonConvert.DeserializeObject<List<MailTrapMessageModel>>(json));
+				}
+				else
+				{
+					throw new Exception($"Status Code: {response.StatusCode} - {nameof(GetMessagesInInbox)} was unsuccessful");
+				}
 			}
 
 			return messages;
@@ -94,15 +109,21 @@ namespace Relativity.Test.Helpers.Mail
 				string apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}/body.html";
 
 				HttpResponseMessage response = client.GetAsync(apiEndpoint).Result;
-
-				string messageResult = response.Content.ReadAsStringAsync().Result;
-
-				message = new MailTrapMessageModel()
+				if (response.StatusCode == HttpStatusCode.OK)
 				{
-					Id = messageId,
-					InboxId = inbox.Id,
-					Message = messageResult
-				};
+					string messageResult = response.Content.ReadAsStringAsync().Result;
+
+					message = new MailTrapMessageModel()
+					{
+						Id = messageId,
+						InboxId = inbox.Id,
+						Message = messageResult
+					};
+				}
+				else
+				{
+					throw new Exception($"Status Code: {response.StatusCode} - {nameof(GetMessage)} was unsuccessful");
+				}
 			}
 
 			return message;
@@ -130,9 +151,16 @@ namespace Relativity.Test.Helpers.Mail
 				string apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}";
 
 				HttpResponseMessage response = client.DeleteAsync(apiEndpoint).Result;
-				string json = response.Content.ReadAsStringAsync().Result;
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					string json = response.Content.ReadAsStringAsync().Result;
 
-				message = JsonConvert.DeserializeObject<MailTrapMessageModel>(json);
+					message = JsonConvert.DeserializeObject<MailTrapMessageModel>(json);
+				}
+				else
+				{
+					throw new Exception($"Status Code: {response.StatusCode} - {nameof(DeleteMessage)} was unsuccessful");
+				}
 			}
 
 			return message;
