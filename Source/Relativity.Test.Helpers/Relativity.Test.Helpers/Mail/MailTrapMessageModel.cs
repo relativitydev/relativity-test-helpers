@@ -1,52 +1,68 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Relativity.Test.Helpers.Mail
 {
 	public class MailTrapMessageModel : IMailMessageModel
 	{
 		public int Id { get; set; }
-		public int InboxId
-		{
-			get => inbox_id;
-			set => inbox_id = value;
-		}
+		[JsonProperty("inbox_id")]
+		public int InboxId { get; set; }
 		public string Message { get; set; }
-		public int inbox_id { get; set; }
-		public string subject { get; set; }
-		public DateTime sent_at { get; set; }
-		public string from_email { get; set; }
-		public string from_name { get; set; }
-		public string to_email { get; set; }
-		public string to_name { get; set; }
-		public int email_size { get; set; }
-		public bool is_read { get; set; }
-		public DateTime created_at { get; set; }
-		public DateTime updated_at { get; set; }
-		public int html_body_size { get; set; }
-		public int text_body_size { get; set; }
-		public int sent_at_timestamp { get; set; }
-		public string human_size { get; set; }
-		public string html_path { get; set; }
-		public string txt_path { get; set; }
-		public string raw_path { get; set; }
-		public string download_path { get; set; }
-		public string html_source_path { get; set; }
-		public Blacklists_Report_Info blacklists_report_info { get; set; }
-
+		public string Subject { get; set; }
+		[JsonProperty("sent_at")]
+		public DateTime SentAt { get; set; }
+		[JsonProperty("from_email")]
+		public string FromEmail { get; set; }
+		[JsonProperty("from_name")]
+		public string FromName { get; set; }
+		[JsonProperty("to_email")]
+		public string ToEmail { get; set; }
+		[JsonProperty("to_name")]
+		public string ToName { get; set; }
+		[JsonProperty("email_size")]
+		public int EmailSize { get; set; }
+		[JsonProperty("is_read")]
+		public bool IsRead { get; set; }
+		[JsonProperty("created_at")]
+		public DateTime CreatedAt { get; set; }
+		[JsonProperty("updated_at")]
+		public DateTime UpdatedAt { get; set; }
+		[JsonProperty("html_body_size")]
+		public int HtmlBodySize { get; set; }
+		[JsonProperty("text_body_size")]
+		public int TextBodySize { get; set; }
+		[JsonProperty("sent_at_timestamp")]
+		public int SentAtTimestamp { get; set; }
+		[JsonProperty("human_size")]
+		public string HumanSize { get; set; }
+		[JsonProperty("html_path")]
+		public string HtmlPath { get; set; }
+		[JsonProperty("txt_path")]
+		public string TxtPath { get; set; }
+		[JsonProperty("raw_path")]
+		public string RawPath { get; set; }
+		[JsonProperty("download_path")]
+		public string DownloadPath { get; set; }
+		[JsonProperty("html_source_path")]
+		public string HtmlSourcePath { get; set; }
+		[JsonProperty("blacklists_report_info")]
+		public BlacklistsReportInfo BlacklistsReportInfo { get; set; }
 	}
 
-	public class Blacklists_Report_Info
+	public class BlacklistsReportInfo
 	{
-		public string result { get; set; }
-		public string domain { get; set; }
-		public string ip { get; set; }
-		public Report[] report { get; set; }
+		public string Result { get; set; }
+		public string Domain { get; set; }
+		public string Ip { get; set; }
+		public Report[] Report { get; set; }
 	}
 
 	public class Report
 	{
-		public string name { get; set; }
-		public string url { get; set; }
-		public bool in_black_list { get; set; }
+		public string Name { get; set; }
+		public string Url { get; set; }
+		[JsonProperty("in_black_list")]
+		public bool InBlackList { get; set; }
 	}
 }

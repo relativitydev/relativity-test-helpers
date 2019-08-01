@@ -1,27 +1,44 @@
-﻿namespace Relativity.Test.Helpers.Mail
+﻿using Newtonsoft.Json;
+
+namespace Relativity.Test.Helpers.Mail
 {
 	public class MailTrapInboxModel : IMailInboxModel
 	{
 		public int Id { get; set; }
-		public int company_id { get; set; }
+		[JsonProperty("company_id")]
+		public int CompanyId { get; set; }
 		public string Name { get; set; }
 		public string UserName { get; set; }
 		public string Password { get; set; }
-		public int max_size { get; set; }
-		public string status { get; set; }
-		public string email_username { get; set; }
-		public bool email_username_enabled { get; set; }
-		public int sent_messages_count { get; set; }
-		public int forwarded_messages_count { get; set; }
-		public string domain { get; set; }
-		public string pop3_domain { get; set; }
-		public string email_domain { get; set; }
-		public int emails_count { get; set; }
-		public int emails_unread_count { get; set; }
-		public int last_message_sent_at_timestamp { get; set; }
-		public int[] smtp_ports { get; set; }
-		public int[] pop3_ports { get; set; }
-		public int max_message_size { get; set; }
-		public bool has_inbox_address { get; set; }
+		[JsonProperty("max_size")]
+		public int MaxSize { get; set; }
+		public string Status { get; set; }
+		[JsonProperty("email_username")]
+		public string EmailUserName { get; set; }
+		[JsonProperty("email_username_enabled")]
+		public bool EmailUserNameEnabled { get; set; }
+		[JsonProperty("sent_messages_count")]
+		public int SentMessagesCount { get; set; }
+		[JsonProperty("forwarded_messages_count")]
+		public int ForwardedMessagesCount { get; set; }
+		public string Domain { get; set; }
+		[JsonProperty("pop3_domain")]
+		public string Pop3Domain { get; set; }
+		[JsonProperty("email_domain")]
+		public string EmailDomain { get; set; }
+		[JsonProperty("emails_count")]
+		public int EmailsCount { get; set; }
+		[JsonProperty("emails_unread_count")]
+		public int EmailsUnreadCount { get; set; }
+		[JsonProperty("last_message_sent_at_timestamp")]
+		public int LastMessageSentAtTimestamp { get; set; }
+		[JsonProperty("smtp_ports")]
+		public int[] SmtpPorts { get; set; }
+		[JsonProperty("pop3_ports")]
+		public int[] Pop3Ports { get; set; }
+		[JsonProperty("max_message_size")]
+		public int MaxMessageSize { get; set; }
+		[JsonProperty("has_inbox_address")]
+		public bool HasInboxAddress { get; set; }
 	}
 }
