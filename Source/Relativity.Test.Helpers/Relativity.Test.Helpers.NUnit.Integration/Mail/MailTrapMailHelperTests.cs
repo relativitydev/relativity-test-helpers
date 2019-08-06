@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Relativity.Test.Helpers.Mail;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,7 +39,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 
 			// Assert
 			Assert.Greater(inboxes.Count, 0);
-			Assert.Greater(inboxes.First().Id, 0);
+			Assert.IsFalse(string.IsNullOrEmpty(inboxes.First().Id));
 		}
 
 		[Test]
@@ -52,7 +53,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 
 			// Assert
 			Assert.Greater(messages.Count, 0);
-			Assert.Greater(messages.First().Id, 0);
+			Assert.IsFalse(string.IsNullOrEmpty(messages.First().Id));
 		}
 
 		[Test]
@@ -65,7 +66,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			IMailInboxModel inbox = inboxes.First();
 
 			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inbox);
-			int messageId = messages.First().Id;
+			string messageId = messages.First().Id;
 
 			// Act 
 			IMailMessageModel message = SuT.GetMessage(inbox, messageId);
@@ -82,13 +83,13 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			IMailInboxModel inbox = inboxes.First();
 
 			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inbox);
-			int messageId = messages.First().Id;
+			string messageId = messages.First().Id;
 
 			// Act 
 			IMailMessageModel message = SuT.DeleteMessage(inbox, messageId);
 
 			// Assert
-			Assert.IsTrue(message.Id == messageId);
+			Assert.IsTrue(message.Id.Equals(messageId, StringComparison.OrdinalIgnoreCase));
 		}
 	}
 }

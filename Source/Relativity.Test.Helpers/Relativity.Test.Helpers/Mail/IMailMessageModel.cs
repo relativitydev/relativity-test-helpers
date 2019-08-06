@@ -2,8 +2,8 @@
 {
 	public interface IMailMessageModel
 	{
-		int Id { get; set; }
-		int InboxId { get; set; }
+		string Id { get; set; }
+		string InboxId { get; set; }
 		string Message { get; set; }
 	}
 }

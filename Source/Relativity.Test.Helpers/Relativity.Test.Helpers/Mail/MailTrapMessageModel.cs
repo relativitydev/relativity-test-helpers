@@ -5,9 +5,9 @@ namespace Relativity.Test.Helpers.Mail
 {
 	public class MailTrapMessageModel : IMailMessageModel
 	{
-		public int Id { get; set; }
+		public string Id { get; set; }
 		[JsonProperty("inbox_id")]
-		public int InboxId { get; set; }
+		public string InboxId { get; set; }
 		public string Message { get; set; }
 		public string Subject { get; set; }
 		[JsonProperty("sent_at")]

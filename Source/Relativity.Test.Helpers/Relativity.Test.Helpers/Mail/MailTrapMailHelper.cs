@@ -93,7 +93,7 @@ namespace Relativity.Test.Helpers.Mail
 		/// <param name="inbox">Used to grab the Id to use in the URL for the API call</param>
 		/// <param name="messageId">MailTrapMessageModel.id is the source of this</param>
 		/// <returns></returns>
-		public IMailMessageModel GetMessage(IMailInboxModel inbox, int messageId)
+		public IMailMessageModel GetMessage(IMailInboxModel inbox, string messageId)
 		{
 			IMailMessageModel message;
 
@@ -135,7 +135,7 @@ namespace Relativity.Test.Helpers.Mail
 		/// <param name="inbox">Used to grab the Id to use in the URL for the API call</param>
 		/// <param name="messageId">The ID of the message that is being </param>
 		/// <returns></returns>
-		public IMailMessageModel DeleteMessage(IMailInboxModel inbox, int messageId)
+		public IMailMessageModel DeleteMessage(IMailInboxModel inbox, string messageId)
 		{
 			MailTrapMessageModel message;
 
