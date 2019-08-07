@@ -24,8 +24,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const int EmailPort = 587;
 		private const string EmailDomain = "smtp.gmail.com";
 
-		private const string EmailAddress = "relativitydevex@gmail.com";
-		private const string EmailPassword = "G2KPNa6nU8VhG^hTJk$D";
+		private const string EmailAddress = "@gmail.com";
+		private const string EmailPassword = "";
 
 		[OneTimeSetUp]
 		public void SetUp()

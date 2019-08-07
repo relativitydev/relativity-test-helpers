@@ -18,16 +18,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		/// https://mailtrap.io/signin
 		/// Also this test assumes you have an email already in the MailTrap Inbox
 		/// </summary>
-		private const string ApiKey = "454cbdf354d2af4e0af208f2756a189f";
+		private const string ApiKey = "";
 		private const string EmailTestSubject = "Relativity Integration Test";
 		private const string EmailTestBody = "Relativity test email for integration tests";
 		private const string EmailTestDisplayName = "Relativity ODA";
 		private const int EmailPort = 2525;
 		private const string EmailDomain = "smtp.mailtrap.io";
 
-		private const string EmailAddress = "relativitydevex@gmail.com";
-		private const string EmailUsername = "4ab04ab73a744c";
-		private const string EmailPassword = "00ac7fcd731e11";
+		private const string EmailAddress = "@gmail.com";
+		private const string EmailUsername = "";
+		private const string EmailPassword = "";
 		private const int SleepTimerInSeconds = 5; //Sleep because MailTraip limits actions per second
 
 		[OneTimeSetUp]
