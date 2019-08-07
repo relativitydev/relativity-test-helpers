@@ -25,7 +25,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const int EmailPort = 2525;
 		private const string EmailDomain = "smtp.mailtrap.io";
 
-		private const string EmailAddress = "@gmail.com";
+		private const string EmailAddress = ""; // Can really be any address since MailTrap will capture it
 		private const string EmailUsername = "";
 		private const string EmailPassword = "";
 		private const int SleepTimerInSeconds = 5; //Sleep because MailTraip limits actions per second

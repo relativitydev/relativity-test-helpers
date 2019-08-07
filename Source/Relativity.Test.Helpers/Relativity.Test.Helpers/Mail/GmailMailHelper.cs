@@ -12,6 +12,12 @@ namespace Relativity.Test.Helpers.Mail
 		public string BaseApiUrl => $"https://www.googleapis.com/gmail/v1/users/{GmailEmail}/messages";
 		private readonly MailRepository _gmailRepository;
 
+		/// <summary>
+		/// With IMAP setup, you should pass in the email and password to this helper to allow it access to your account.
+		/// It is recommended to use a separate fake account for testing.
+		/// </summary>
+		/// <param name="gmailEmail"></param>
+		/// <param name="gmailPassword"></param>
 		public GmailMailHelper(string gmailEmail, string gmailPassword)
 		{
 			RequestHeaders = new Dictionary<string, string>();
@@ -42,7 +48,7 @@ namespace Relativity.Test.Helpers.Mail
 		/// <summary>
 		/// Returns a small subset of the latest emails (only their ids) in the inbox
 		/// </summary>
-		/// <param name="inbox"></param>
+		/// <param name="inbox">Inbox is the user's email address</param>
 		/// <returns></returns>
 		public List<IMailMessageModel> GetMessagesInInbox(IMailInboxModel inbox)
 		{
@@ -67,8 +73,8 @@ namespace Relativity.Test.Helpers.Mail
 		/// <summary>
 		/// Returns a message with text inside.
 		/// </summary>
-		/// <param name="inbox"></param>
-		/// <param name="messageId"></param>
+		/// <param name="inbox">Inbox is the user's email address</param>
+		/// <param name="messageId">MailTrapMessageModel.id is the source of this</param>
 		/// <returns></returns>
 		public IMailMessageModel GetMessage(IMailInboxModel inbox, string messageId)
 		{
@@ -86,6 +92,12 @@ namespace Relativity.Test.Helpers.Mail
 			return message;
 		}
 
+		/// <summary>
+		/// Deletes the selected message
+		/// </summary>
+		/// <param name="inbox">/// <param name="inbox">Inbox is the user's email address</param></param>
+		/// <param name="messageId">MailTrapMessageModel.id is the source of this</param>
+		/// <returns></returns>
 		public IMailMessageModel DeleteMessage(IMailInboxModel inbox, string messageId)
 		{
 			_gmailRepository.DeleteMail(messageId);

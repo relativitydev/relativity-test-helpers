@@ -11,6 +11,10 @@ namespace Relativity.Test.Helpers.Mail
 		public Dictionary<string, string> RequestHeaders { get; set; }
 		public string BaseApiUrl => "https://mailtrap.io/";
 
+		/// <summary>
+		/// Pass in the API Key given to you by your MailTrap account.
+		/// </summary>
+		/// <param name="apiKey"></param>
 		public MailTrapMailHelper(string apiKey)
 		{
 			RequestHeaders = new Dictionary<string, string> { { "Api-Token", apiKey } };
@@ -144,7 +148,7 @@ namespace Relativity.Test.Helpers.Mail
 		/// Simply deletes a message from an inbox, but returns the message before deleting it.
 		/// </summary>
 		/// <param name="inbox">Used to grab the Id to use in the URL for the API call</param>
-		/// <param name="messageId">The ID of the message that is being </param>
+		/// <param name="messageId">The ID (MailTrapMessageModel.id) of the message that is being deleted</param>
 		/// <returns></returns>
 		public IMailMessageModel DeleteMessage(IMailInboxModel inbox, string messageId)
 		{

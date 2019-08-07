@@ -24,7 +24,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const int EmailPort = 587;
 		private const string EmailDomain = "smtp.gmail.com";
 
-		private const string EmailAddress = "@gmail.com";
+		private const string EmailAddress = "";
 		private const string EmailPassword = "";
 
 		[OneTimeSetUp]

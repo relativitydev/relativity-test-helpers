@@ -31,3 +31,12 @@ Under "relativity-integration-test-helpers\Source\Relativity.Test.Helpers\" you 
 • Relativity.Services.ServiceProxy.dll
 
 
+
+# Utilizing MailHelper for tests
+## Gmail
+With gmail, you will need to allow IMAP on your account.  It is recommended to make an alternate fake account just for testing.  With that, you will just need to use your gmail and gmail password in the GmailMailHelper constructor.
+## MailTrap
+[MailTrap Site]([https://mailtrap.io/inboxes](https://mailtrap.io/inboxes))
+You will need at least a free account with MailTrap to utilize these helpers.  The free account grants you a username, password, and Api Key.  The API Key is used to access your inbox which MailTrapMailHelper takes in from its constructor.
+## Licensing
+[MailKit NuGet](https://github.com/jstedfast/MailKit)
