@@ -11,7 +11,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 {
 	public class MailTrapMailHelperTests
 	{
-		private IMailHelper SuT;
+		private IMailHelper Sut;
 
 		/// <summary>
 		/// You will need to have a MailTrap account setup and will need set ApiKey to the key given to you by the site.
@@ -25,22 +25,22 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const string EmailDomain = "smtp.mailtrap.io";
 
 		// The following below should be changed for this test
-		private const string ApiKey = "";
-		private const string EmailAddress = ""; // Can really be any address since MailTrap will capture it
-		private const string EmailUsername = "";
-		private const string EmailPassword = "";
+		private const string ApiKey = "<YOUR_API_KEY>";
+		private const string EmailAddress = "<YOUR_TARGET_EMAIL>"; // Can really be any address since MailTrap will capture it
+		private const string EmailUsername = "<YOUR_USERNAME>";
+		private const string EmailPassword = "<YOUR_PASSWORD>";
 		private const int SleepTimerInSeconds = 5; //Sleep because MailTraip limits actions per second
 
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			SuT = new MailTrapMailHelper(ApiKey);
+			Sut = new MailTrapMailHelper(ApiKey);
 		}
 
 		[OneTimeTearDown]
 		public void TearDown()
 		{
-			SuT = null;
+			Sut = null;
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			Thread.Sleep(TimeSpan.FromSeconds(SleepTimerInSeconds));
 
 			// Act 
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 
 			// Assert
 			Assert.Greater(inboxes.Count, 0);
@@ -63,16 +63,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			// Arrange
 			Thread.Sleep(TimeSpan.FromSeconds(SleepTimerInSeconds));
 			SendMail();
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 
 			// Act 
-			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inboxes.First());
+			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inboxes.First());
 
 			// Assert
 			Assert.Greater(messages.Count, 0);
 			Assert.IsFalse(string.IsNullOrEmpty(messages.First().Id));
 
-			SuT.DeleteMessage(inboxes.First(), messages.First().Id);
+			Sut.DeleteMessage(inboxes.First(), messages.First().Id);
 		}
 
 		[Test]
@@ -84,19 +84,19 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			string textToFind = EmailTestBody.ToLower();
 
 
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 			IMailInboxModel inbox = inboxes.First();
 
-			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inbox);
+			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inbox);
 			string messageId = messages.First().Id;
 
 			// Act 
-			IMailMessageModel message = SuT.GetMessage(inbox, messageId);
+			IMailMessageModel message = Sut.GetMessage(inbox, messageId);
 
 			// Assert
 			Assert.IsTrue(message.Message.ToLower().Contains(textToFind));
 
-			SuT.DeleteMessage(inbox, messageId);
+			Sut.DeleteMessage(inbox, messageId);
 		}
 
 		[Test]
@@ -105,14 +105,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			// Arrange
 			Thread.Sleep(TimeSpan.FromSeconds(SleepTimerInSeconds));
 			SendMail();
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 			IMailInboxModel inbox = inboxes.First();
 
-			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inbox);
+			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inbox);
 			string messageId = messages.First().Id;
 
 			// Act 
-			IMailMessageModel message = SuT.DeleteMessage(inbox, messageId);
+			IMailMessageModel message = Sut.DeleteMessage(inbox, messageId);
 
 			// Assert
 			Assert.IsTrue(message.Id.Equals(messageId, StringComparison.OrdinalIgnoreCase));
@@ -125,7 +125,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			const string subject = EmailTestSubject;
 			const string body = EmailTestBody;
 
-			SmtpClient smtp = new SmtpClient
+			SmtpClient smtpClient = new SmtpClient
 			{
 				Host = EmailDomain,
 				Port = EmailPort,
@@ -140,7 +140,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 				Body = body
 			})
 			{
-				smtp.Send(message);
+				smtpClient.Send(message);
 			}
 		}
 	}

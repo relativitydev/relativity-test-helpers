@@ -6,10 +6,9 @@ namespace Relativity.Test.Helpers.Mail
 {
 	public class GmailMailHelper : IMailHelper
 	{
-		public Dictionary<string, string> RequestHeaders { get; set; }
 		public string GmailEmail { get; set; }
 		public string GmailPassword { get; set; }
-		public string BaseApiUrl => $"https://www.googleapis.com/gmail/v1/users/{GmailEmail}/messages";
+
 		private readonly MailRepository _gmailRepository;
 
 		/// <summary>
@@ -20,8 +19,6 @@ namespace Relativity.Test.Helpers.Mail
 		/// <param name="gmailPassword"></param>
 		public GmailMailHelper(string gmailEmail, string gmailPassword)
 		{
-			RequestHeaders = new Dictionary<string, string>();
-
 			GmailEmail = gmailEmail;
 			GmailPassword = gmailPassword;
 

@@ -9,7 +9,7 @@ namespace Relativity.Test.Helpers.Mail
 	public class MailTrapMailHelper : IMailHelper
 	{
 		public Dictionary<string, string> RequestHeaders { get; set; }
-		public string BaseApiUrl => "https://mailtrap.io/";
+		public readonly string BaseApiUrl = "https://mailtrap.io/";
 
 		/// <summary>
 		/// Pass in the API Key given to you by your MailTrap account.

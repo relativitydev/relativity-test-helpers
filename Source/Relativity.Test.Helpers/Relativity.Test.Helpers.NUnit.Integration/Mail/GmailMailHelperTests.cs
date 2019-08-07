@@ -10,7 +10,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 {
 	public class GmailMailHelperTests
 	{
-		private IMailHelper SuT;
+		private IMailHelper Sut;
 
 		/// <summary>
 		/// You will need to have a Gmail account setup with IMAP
@@ -22,19 +22,19 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const string EmailDomain = "smtp.gmail.com";
 
 		// The following below should be changed for this test
-		private const string EmailAddress = "";
-		private const string EmailPassword = "";
+		private const string EmailAddress = "<YOUR_GMAIL_ADDRESS>";
+		private const string EmailPassword = "<YOUR_GMAIL_PASSWORD>";
 
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			SuT = new GmailMailHelper(EmailAddress, EmailPassword);
+			Sut = new GmailMailHelper(EmailAddress, EmailPassword);
 		}
 
 		[OneTimeTearDown]
 		public void TearDown()
 		{
-			SuT = null;
+			Sut = null;
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			// Arrange
 
 			// Act 
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 
 			// Assert
 			Assert.Greater(inboxes.Count, 0);
@@ -54,18 +54,18 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		public void GetMessages()
 		{
 			// Arrange
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 
 			SendMail();
 
 			// Act 
-			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inboxes.First());
+			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inboxes.First());
 
 			// Assert
 			Assert.Greater(messages.Count, 0);
 			Assert.IsFalse(string.IsNullOrEmpty(messages.First().Id));
 
-			IMailMessageModel message = SuT.DeleteMessage(inboxes.First(), messages.First().Id);
+			IMailMessageModel message = Sut.DeleteMessage(inboxes.First(), messages.First().Id);
 		}
 
 		[Test]
@@ -74,12 +74,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			// Arrange
 			string textToFind = EmailTestBody.ToLower();
 
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 			IMailInboxModel inbox = inboxes.First();
 
 			SendMail();
 
-			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inbox);
+			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inbox);
 			string messageId = messages.First().Id;
 
 			// Act 
@@ -87,7 +87,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 
 			try
 			{
-				message = SuT.GetMessage(inbox, messageId);
+				message = Sut.GetMessage(inbox, messageId);
 			}
 			catch (Exception ex)
 			{
@@ -100,7 +100,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 
 			// Assert
 			Assert.IsTrue(message.Message.ToLower().Contains(textToFind));
-			message = SuT.DeleteMessage(inbox, messageId);
+			message = Sut.DeleteMessage(inbox, messageId);
 		}
 
 		[Test]
@@ -108,16 +108,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		public void DeleteMessage()
 		{
 			// Arrange
-			List<IMailInboxModel> inboxes = SuT.GetInboxes();
+			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 			IMailInboxModel inbox = inboxes.First();
 
 			SendMail();
 
-			List<IMailMessageModel> messages = SuT.GetMessagesInInbox(inbox);
+			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inbox);
 			string messageId = messages.First().Id;
 
 			// Act 
-			IMailMessageModel message = SuT.DeleteMessage(inbox, messageId);
+			IMailMessageModel message = Sut.DeleteMessage(inbox, messageId);
 
 			// Assert
 			Assert.IsTrue(message.Id == messageId);
@@ -130,7 +130,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			const string subject = EmailTestSubject;
 			const string body = EmailTestBody;
 
-			SmtpClient smtp = new SmtpClient
+			SmtpClient smtpClient = new SmtpClient
 			{
 				Host = EmailDomain,
 				Port = EmailPort,
@@ -145,7 +145,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 				Body = body
 			})
 			{
-				smtp.Send(message);
+				smtpClient.Send(message);
 			}
 		}
 	}
