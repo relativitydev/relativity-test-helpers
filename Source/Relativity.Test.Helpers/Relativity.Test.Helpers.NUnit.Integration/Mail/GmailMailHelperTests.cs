@@ -13,17 +13,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private IMailHelper SuT;
 
 		/// <summary>
-		/// You will need to have a Gmail account setup with API permissions and oAuth
-		/// 
-		/// Also this test assumes you have an email already in the MailTrap Inbox
+		/// You will need to have a Gmail account setup with IMAP
 		/// </summary>
-		private const string ApiKey = "";
 		private const string EmailTestSubject = "Relativity Integration Test";
 		private const string EmailTestBody = "Relativity test email for integration tests";
 		private const string EmailTestDisplayName = "Relativity ODA";
 		private const int EmailPort = 587;
 		private const string EmailDomain = "smtp.gmail.com";
 
+		// The following below should be changed for this test
 		private const string EmailAddress = "";
 		private const string EmailPassword = "";
 
