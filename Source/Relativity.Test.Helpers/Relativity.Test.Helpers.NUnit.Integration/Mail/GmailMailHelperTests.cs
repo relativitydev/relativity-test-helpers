@@ -18,19 +18,19 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		/// Also this test assumes you have an email already in the MailTrap Inbox
 		/// </summary>
 		private const string ApiKey = "";
-		private const string TestBody = "Relativity test email for integration tests";
+		private const string EmailTestSubject = "Relativity Integration Test";
+		private const string EmailTestBody = "Relativity test email for integration tests";
+		private const string EmailTestDisplayName = "Relativity ODA";
+		private const int EmailPort = 587;
+		private const string EmailDomain = "smtp.gmail.com";
 
-		private const string GmailAccount = "";
-		private const string GmailPassword = "";
-		private const string GmailClientId = "";
-		private const string GmailProjectId = "";
-		private const string GmailClientSecret = "";
-		private const string GmailRedirectUri = "http://localhost";
+		private const string EmailAddress = "relativitydevex@gmail.com";
+		private const string EmailPassword = "G2KPNa6nU8VhG^hTJk$D";
 
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			SuT = new GmailMailHelper(GmailAccount, GmailClientId, GmailClientSecret, GmailProjectId, GmailRedirectUri);
+			SuT = new GmailMailHelper(EmailAddress, EmailPassword);
 		}
 
 		[OneTimeTearDown]
@@ -67,14 +67,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			Assert.Greater(messages.Count, 0);
 			Assert.IsFalse(string.IsNullOrEmpty(messages.First().Id));
 
-			//IMailMessageModel message = SuT.DeleteMessage(inboxes.First(), messages.First().Id);
+			IMailMessageModel message = SuT.DeleteMessage(inboxes.First(), messages.First().Id);
 		}
 
 		[Test]
 		public void GetMessage()
 		{
 			// Arrange
-			string textToFind = TestBody.ToLower();
+			string textToFind = EmailTestBody.ToLower();
 
 			List<IMailInboxModel> inboxes = SuT.GetInboxes();
 			IMailInboxModel inbox = inboxes.First();
@@ -102,10 +102,11 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 
 			// Assert
 			Assert.IsTrue(message.Message.ToLower().Contains(textToFind));
-			//message = SuT.DeleteMessage(inbox, messageId);
+			message = SuT.DeleteMessage(inbox, messageId);
 		}
 
-		[Test, Ignore("Ignored for now until Google consents to full API access.  Fun stuff")]
+		[Test]
+		//[Test, Ignore("Ignored for now until Google consents to full API access.  Fun stuff")]
 		public void DeleteMessage()
 		{
 			// Arrange
@@ -124,24 +125,23 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			Assert.IsTrue(message.Id == messageId);
 		}
 
-		[Test]
 		public void SendMail()
 		{
-			var fromAddress = new MailAddress(GmailAccount, "Relativity ODA");
-			var toAddress = new MailAddress(GmailAccount, "Relativity ODA");
-			const string subject = "Test Email";
-			const string body = "Relativity test email for integration tests";
+			MailAddress fromAddress = new MailAddress(EmailAddress, EmailTestDisplayName);
+			MailAddress toAddress = new MailAddress(EmailAddress, EmailTestDisplayName);
+			const string subject = EmailTestSubject;
+			const string body = EmailTestBody;
 
-			var smtp = new SmtpClient
+			SmtpClient smtp = new SmtpClient
 			{
-				Host = "smtp.gmail.com",
-				Port = 587,
+				Host = EmailDomain,
+				Port = EmailPort,
 				EnableSsl = true,
 				DeliveryMethod = SmtpDeliveryMethod.Network,
 				UseDefaultCredentials = false,
-				Credentials = new NetworkCredential(fromAddress.Address, GmailPassword)
+				Credentials = new NetworkCredential(fromAddress.Address, EmailPassword)
 			};
-			using (var message = new MailMessage(fromAddress, toAddress)
+			using (MailMessage message = new MailMessage(fromAddress, toAddress)
 			{
 				Subject = subject,
 				Body = body

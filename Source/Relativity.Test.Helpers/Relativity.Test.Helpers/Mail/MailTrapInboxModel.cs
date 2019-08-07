@@ -31,7 +31,7 @@ namespace Relativity.Test.Helpers.Mail
 		[JsonProperty("emails_unread_count")]
 		public int EmailsUnreadCount { get; set; }
 		[JsonProperty("last_message_sent_at_timestamp")]
-		public int LastMessageSentAtTimestamp { get; set; }
+		public int? LastMessageSentAtTimestamp { get; set; }
 		[JsonProperty("smtp_ports")]
 		public int[] SmtpPorts { get; set; }
 		[JsonProperty("pop3_ports")]

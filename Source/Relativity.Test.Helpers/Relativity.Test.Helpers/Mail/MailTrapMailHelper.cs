@@ -95,7 +95,7 @@ namespace Relativity.Test.Helpers.Mail
 		/// <returns></returns>
 		public IMailMessageModel GetMessage(IMailInboxModel inbox, string messageId)
 		{
-			IMailMessageModel message;
+			MailTrapMessageModel message;
 
 			using (HttpClient client = new HttpClient())
 			{
@@ -106,9 +106,20 @@ namespace Relativity.Test.Helpers.Mail
 					client.DefaultRequestHeaders.Add(header.Key, header.Value);
 				}
 
-				string apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}/body.html";
-
+				string apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}";
 				HttpResponseMessage response = client.GetAsync(apiEndpoint).Result;
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					string json = response.Content.ReadAsStringAsync().Result;
+
+					message = JsonConvert.DeserializeObject<MailTrapMessageModel>(json);
+
+					//Determine if message is html or txt, and hit the appropriate endpoint
+					string bodyExtension = (message.HtmlBodySize > message.TextBodySize) ? "html" : "txt";
+					apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}/body.{bodyExtension}";
+				}
+
+				response = client.GetAsync(apiEndpoint).Result;
 				if (response.StatusCode == HttpStatusCode.OK)
 				{
 					string messageResult = response.Content.ReadAsStringAsync().Result;
