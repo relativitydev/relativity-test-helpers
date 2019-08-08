@@ -9,8 +9,12 @@ namespace Relativity.Test.Helpers.Mail
 	public class MailTrapMailHelper : IMailHelper
 	{
 		public Dictionary<string, string> RequestHeaders { get; set; }
-		public string BaseApiUrl => "https://mailtrap.io/";
+		public readonly string BaseApiUrl = "https://mailtrap.io/";
 
+		/// <summary>
+		/// Pass in the API Key given to you by your MailTrap account.
+		/// </summary>
+		/// <param name="apiKey"></param>
 		public MailTrapMailHelper(string apiKey)
 		{
 			RequestHeaders = new Dictionary<string, string> { { "Api-Token", apiKey } };
@@ -93,9 +97,9 @@ namespace Relativity.Test.Helpers.Mail
 		/// <param name="inbox">Used to grab the Id to use in the URL for the API call</param>
 		/// <param name="messageId">MailTrapMessageModel.id is the source of this</param>
 		/// <returns></returns>
-		public IMailMessageModel GetMessage(IMailInboxModel inbox, int messageId)
+		public IMailMessageModel GetMessage(IMailInboxModel inbox, string messageId)
 		{
-			IMailMessageModel message;
+			MailTrapMessageModel message;
 
 			using (HttpClient client = new HttpClient())
 			{
@@ -106,9 +110,24 @@ namespace Relativity.Test.Helpers.Mail
 					client.DefaultRequestHeaders.Add(header.Key, header.Value);
 				}
 
-				string apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}/body.html";
-
+				string apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}";
 				HttpResponseMessage response = client.GetAsync(apiEndpoint).Result;
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					string json = response.Content.ReadAsStringAsync().Result;
+
+					message = JsonConvert.DeserializeObject<MailTrapMessageModel>(json);
+
+					//Determine if message is html or txt, and hit the appropriate endpoint
+					string bodyExtension = (message.HtmlBodySize > message.TextBodySize) ? "html" : "txt";
+					apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}/body.{bodyExtension}";
+				}
+				else
+				{
+					throw new Exception($"Status Code: {response.StatusCode} - {nameof(GetMessage)} was unsuccessful");
+				}
+
+				response = client.GetAsync(apiEndpoint).Result;
 				if (response.StatusCode == HttpStatusCode.OK)
 				{
 					string messageResult = response.Content.ReadAsStringAsync().Result;
@@ -117,7 +136,10 @@ namespace Relativity.Test.Helpers.Mail
 					{
 						Id = messageId,
 						InboxId = inbox.Id,
-						Message = messageResult
+						Subject = message.Subject,
+						FromEmail = message.FromEmail,
+						ToEmail = message.ToEmail,
+						Body = messageResult
 					};
 				}
 				else
@@ -133,9 +155,9 @@ namespace Relativity.Test.Helpers.Mail
 		/// Simply deletes a message from an inbox, but returns the message before deleting it.
 		/// </summary>
 		/// <param name="inbox">Used to grab the Id to use in the URL for the API call</param>
-		/// <param name="messageId">The ID of the message that is being </param>
+		/// <param name="messageId">The ID (MailTrapMessageModel.id) of the message that is being deleted</param>
 		/// <returns></returns>
-		public IMailMessageModel DeleteMessage(IMailInboxModel inbox, int messageId)
+		public IMailMessageModel DeleteMessage(IMailInboxModel inbox, string messageId)
 		{
 			MailTrapMessageModel message;
 
