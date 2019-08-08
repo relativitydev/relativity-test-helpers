@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Relativity.Test.Helpers.Mail;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -46,6 +45,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 
 			// Assert
+			Assert.NotNull(inboxes.First());
 			Assert.Greater(inboxes.Count, 0);
 			Assert.IsFalse(string.IsNullOrEmpty(inboxes.First().Id));
 		}
@@ -62,6 +62,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inboxes.First());
 
 			// Assert
+			Assert.NotNull(inboxes.First());
+			Assert.NotNull(messages.First());
 			Assert.Greater(messages.Count, 0);
 			Assert.IsFalse(string.IsNullOrEmpty(messages.First().Id));
 
@@ -83,22 +85,10 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			string messageId = messages.First().Id;
 
 			// Act 
-			IMailMessageModel message;
-
-			try
-			{
-				message = Sut.GetMessage(inbox, messageId);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex);
-				message = new GmailMessageModel()
-				{
-					Message = "Failed to parse body"
-				};
-			}
+			IMailMessageModel message = Sut.GetMessage(inbox, messageId);
 
 			// Assert
+			Assert.NotNull(message.Message);
 			Assert.IsTrue(message.Message.ToLower().Contains(textToFind));
 			message = Sut.DeleteMessage(inbox, messageId);
 		}
@@ -120,6 +110,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			IMailMessageModel message = Sut.DeleteMessage(inbox, messageId);
 
 			// Assert
+			Assert.NotNull(message.Id);
 			Assert.IsTrue(message.Id == messageId);
 		}
 

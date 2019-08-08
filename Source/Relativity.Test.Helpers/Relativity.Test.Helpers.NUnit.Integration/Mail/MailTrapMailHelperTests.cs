@@ -53,6 +53,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			List<IMailInboxModel> inboxes = Sut.GetInboxes();
 
 			// Assert
+			Assert.NotNull(inboxes.First());
 			Assert.Greater(inboxes.Count, 0);
 			Assert.IsFalse(string.IsNullOrEmpty(inboxes.First().Id));
 		}
@@ -69,6 +70,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			List<IMailMessageModel> messages = Sut.GetMessagesInInbox(inboxes.First());
 
 			// Assert
+			Assert.NotNull(inboxes.First());
+			Assert.NotNull(messages.First());
 			Assert.Greater(messages.Count, 0);
 			Assert.IsFalse(string.IsNullOrEmpty(messages.First().Id));
 
@@ -94,6 +97,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			IMailMessageModel message = Sut.GetMessage(inbox, messageId);
 
 			// Assert
+			Assert.NotNull(message.Message);
 			Assert.IsTrue(message.Message.ToLower().Contains(textToFind));
 
 			Sut.DeleteMessage(inbox, messageId);
@@ -115,6 +119,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			IMailMessageModel message = Sut.DeleteMessage(inbox, messageId);
 
 			// Assert
+			Assert.NotNull(message.Id);
 			Assert.IsTrue(message.Id.Equals(messageId, StringComparison.OrdinalIgnoreCase));
 		}
 

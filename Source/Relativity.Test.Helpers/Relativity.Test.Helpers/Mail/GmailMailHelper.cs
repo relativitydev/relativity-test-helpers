@@ -6,6 +6,10 @@ namespace Relativity.Test.Helpers.Mail
 {
 	public class GmailMailHelper : IMailHelper
 	{
+		private const string Domain = "imap.gmail.com";
+		private const int Port = 993;
+		private const bool UseSsl = true;
+
 		public string GmailEmail { get; set; }
 		public string GmailPassword { get; set; }
 
@@ -22,7 +26,7 @@ namespace Relativity.Test.Helpers.Mail
 			GmailEmail = gmailEmail;
 			GmailPassword = gmailPassword;
 
-			_gmailRepository = new MailRepository("imap.gmail.com", 993, true, GmailEmail, GmailPassword);
+			_gmailRepository = new MailRepository(Domain, Port, UseSsl, GmailEmail, GmailPassword);
 		}
 
 		/// <summary>
