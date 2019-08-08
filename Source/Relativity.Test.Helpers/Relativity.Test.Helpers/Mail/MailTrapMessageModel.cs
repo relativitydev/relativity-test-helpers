@@ -8,7 +8,7 @@ namespace Relativity.Test.Helpers.Mail
 		public string Id { get; set; }
 		[JsonProperty("inbox_id")]
 		public string InboxId { get; set; }
-		public string Message { get; set; }
+		public string Body { get; set; }
 		public string Subject { get; set; }
 		[JsonProperty("sent_at")]
 		public DateTime SentAt { get; set; }

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Relativity.Test.Helpers.Mail;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -88,8 +89,11 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 			IMailMessageModel message = Sut.GetMessage(inbox, messageId);
 
 			// Assert
-			Assert.NotNull(message.Message);
-			Assert.IsTrue(message.Message.ToLower().Contains(textToFind));
+			Assert.NotNull(message.Body);
+			Assert.IsTrue(message.Body.ToLower().Contains(textToFind));
+			Assert.IsTrue(message.Subject.Equals(EmailTestSubject, StringComparison.OrdinalIgnoreCase));
+			Assert.IsTrue(message.FromEmail.Contains(EmailAddress));
+			Assert.IsTrue(message.ToEmail.Contains(EmailAddress));
 			message = Sut.DeleteMessage(inbox, messageId);
 		}
 

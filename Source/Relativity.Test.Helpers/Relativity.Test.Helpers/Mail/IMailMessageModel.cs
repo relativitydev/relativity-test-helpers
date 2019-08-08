@@ -4,6 +4,9 @@
 	{
 		string Id { get; set; }
 		string InboxId { get; set; }
-		string Message { get; set; }
+		string Subject { get; set; }
+		string FromEmail { get; set; }
+		string ToEmail { get; set; }
+		string Body { get; set; }
 	}
 }

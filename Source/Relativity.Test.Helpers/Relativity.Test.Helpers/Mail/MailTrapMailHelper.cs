@@ -122,6 +122,10 @@ namespace Relativity.Test.Helpers.Mail
 					string bodyExtension = (message.HtmlBodySize > message.TextBodySize) ? "html" : "txt";
 					apiEndpoint = $"api/v1/inboxes/{inbox.Id}/messages/{messageId}/body.{bodyExtension}";
 				}
+				else
+				{
+					throw new Exception($"Status Code: {response.StatusCode} - {nameof(GetMessage)} was unsuccessful");
+				}
 
 				response = client.GetAsync(apiEndpoint).Result;
 				if (response.StatusCode == HttpStatusCode.OK)
@@ -132,7 +136,10 @@ namespace Relativity.Test.Helpers.Mail
 					{
 						Id = messageId,
 						InboxId = inbox.Id,
-						Message = messageResult
+						Subject = message.Subject,
+						FromEmail = message.FromEmail,
+						ToEmail = message.ToEmail,
+						Body = messageResult
 					};
 				}
 				else

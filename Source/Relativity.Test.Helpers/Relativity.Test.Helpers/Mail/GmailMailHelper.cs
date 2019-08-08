@@ -63,7 +63,9 @@ namespace Relativity.Test.Helpers.Mail
 				{
 					Id = email.MessageId,
 					InboxId = inbox.Id,
-					Message = (email.HtmlBody ?? email.TextBody)
+					FromEmail = email.From.ToString(),
+					ToEmail = email.To.ToString(),
+					Body = (email.HtmlBody ?? email.TextBody)
 				};
 				messages.Add(message);
 			}
@@ -87,7 +89,10 @@ namespace Relativity.Test.Helpers.Mail
 			{
 				Id = email.MessageId,
 				InboxId = inbox.Id,
-				Message = (email.HtmlBody ?? email.TextBody)
+				Subject = email.Subject,
+				FromEmail = email.From.ToString(),
+				ToEmail = email.To.ToString(),
+				Body = (email.HtmlBody ?? email.TextBody)
 			};
 
 			return message;
