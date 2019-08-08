@@ -16,6 +16,8 @@
 	<dependencies>
       <group targetFramework=".NETFramework4.6.2">
         <dependency id="Relativity.DataExchange.Client.SDK" version="1.4.0" />
+        <dependency id="MailKit" version="2.2.0" />
+        <dependency id="MimeKit" version="2.2.0" />
       </group>
     </dependencies>
   </metadata>
