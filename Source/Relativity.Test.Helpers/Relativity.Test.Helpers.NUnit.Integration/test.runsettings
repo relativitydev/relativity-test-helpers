@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<!-- Parameters used by tests at run time -->
+	<TestRunParameters>
+		<Parameter name="WorkspaceID" value="" />
+		<Parameter name="TestWorkspaceName" value="" />
+		<Parameter name="TestWorkspaceTemplateName" value="" />
+		<Parameter name="AdminUsername" value="" />
+		<Parameter name="AdminPassword" value="" />
+		<Parameter name="SQLUserName" value="" />
+		<Parameter name="SQLPassword" value="" />
+		<Parameter name="SQLServerAddress" value="" />
+		<Parameter name="TestingServiceRapPath" value="" />
+		<Parameter name="UploadTestingServiceRap" value="" />
+		<Parameter name="EmailTo" value="" />
+		<Parameter name="RSAPIServerAddress" value="" />
+		<Parameter name="RESTServerAddress" value="" />
+		<Parameter name="ServerBindingType" value="" />
+		<Parameter name="RelativityInstanceAddress" value="" />
+	</TestRunParameters>
+</RunSettings>

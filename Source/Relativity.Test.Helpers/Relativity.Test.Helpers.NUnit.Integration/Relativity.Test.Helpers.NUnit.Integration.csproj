@@ -157,15 +157,21 @@
     <Compile Include="Mail\GmailMailHelperTests.cs" />
     <Compile Include="TestConstants.cs" />
     <Compile Include="TestEHHelperIntegrationTests.cs" />
+    <Compile Include="TestHelperRunSettingsIntegrationTests.cs" />
     <Compile Include="TestHelperIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestImportApiHelper.cs" />
     <Compile Include="Mail\MailTrapMailHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
+    <None Include="test.runsettings">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Relativity.Test.Helpers\Relativity.Test.Helpers.csproj">

@@ -4,6 +4,7 @@ using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 
@@ -26,6 +27,13 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
+		}
+
+		public TestHelper(Dictionary<string, string> configDictionary)
+		{
+			ConfigurationHelper.SetupConfiguration(configDictionary);
+			_username = ConfigurationHelper.ADMIN_USERNAME;
+			_password = ConfigurationHelper.DEFAULT_PASSWORD;
 		}
 
 		public static IHelper ForUser(string username, string password)

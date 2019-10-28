@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 
@@ -17,6 +18,16 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 		public AppConfigSettings(string configSectionName)
 		{
 			_appSettings = (NameValueCollection)ConfigurationManager.GetSection(configSectionName);
+		}
+
+		public AppConfigSettings(Dictionary<string, string> configDictionary)
+		{
+			_appSettings = new NameValueCollection();
+
+			foreach (var keyValuePair in configDictionary)
+			{
+				_appSettings.Add(keyValuePair.Key, keyValuePair.Value);
+			}
 		}
 
 		public override string TestDataLocation
