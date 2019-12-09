@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Relativity.API;
 using System;
-using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
@@ -13,13 +12,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
-			foreach (string testParameterName in TestContext.Parameters.Names)
-			{
-				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
-			}
 
-			SuT = new TestHelper(configDictionary);
+			SuT = new TestHelper(TestContext.CurrentContext);
 		}
 
 		[OneTimeTearDown]

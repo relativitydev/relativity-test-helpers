@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -27,6 +28,16 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			foreach (var keyValuePair in configDictionary)
 			{
 				_appSettings.Add(keyValuePair.Key, keyValuePair.Value);
+			}
+		}
+
+		public AppConfigSettings(TestContext testContext)
+		{
+			_appSettings = new NameValueCollection();
+
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				_appSettings.Add(testParameterName, TestContext.Parameters[testParameterName]);
 			}
 		}
 

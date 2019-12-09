@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.SharedTestHelpers
 {
@@ -26,6 +27,10 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			_settings = new AppConfigSettings(configDictionary);
 		}
 
+		public static void SetupConfiguration(TestContext testContext)
+		{
+			_settings = new AppConfigSettings(testContext);
+		}
 
 		public static string TEST_DATA_LOCATION
 		{
