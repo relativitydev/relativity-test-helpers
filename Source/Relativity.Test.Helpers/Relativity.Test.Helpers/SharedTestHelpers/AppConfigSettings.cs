@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 
@@ -17,6 +19,26 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 		public AppConfigSettings(string configSectionName)
 		{
 			_appSettings = (NameValueCollection)ConfigurationManager.GetSection(configSectionName);
+		}
+
+		public AppConfigSettings(Dictionary<string, string> configDictionary)
+		{
+			_appSettings = new NameValueCollection();
+
+			foreach (var keyValuePair in configDictionary)
+			{
+				_appSettings.Add(keyValuePair.Key, keyValuePair.Value);
+			}
+		}
+
+		public AppConfigSettings(TestContext testContext)
+		{
+			_appSettings = new NameValueCollection();
+
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				_appSettings.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
 		}
 
 		public override string TestDataLocation

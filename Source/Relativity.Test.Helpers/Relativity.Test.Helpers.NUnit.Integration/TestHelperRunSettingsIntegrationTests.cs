@@ -1,18 +1,19 @@
 ﻿using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
-	public class TestHelperIntegrationTests
+	[TestFixture]
+	public class TestHelperRunSettingsIntegrationTests
 	{
 		private IHelper SuT;
 
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			SuT = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+
+			SuT = new TestHelper(TestContext.CurrentContext);
 		}
 
 		[OneTimeTearDown]
