@@ -2,20 +2,20 @@
 <RunSettings>
 	<!-- Parameters used by tests at run time -->
 	<TestRunParameters>
-		<Parameter name="WorkspaceID" value="" />
-		<Parameter name="TestWorkspaceName" value="" />
-		<Parameter name="TestWorkspaceTemplateName" value="" />
-		<Parameter name="AdminUsername" value="" />
-		<Parameter name="AdminPassword" value="" />
-		<Parameter name="SQLUserName" value="" />
-		<Parameter name="SQLPassword" value="" />
-		<Parameter name="SQLServerAddress" value="" />
-		<Parameter name="TestingServiceRapPath" value="" />
-		<Parameter name="UploadTestingServiceRap" value="" />
-		<Parameter name="EmailTo" value="" />
-		<Parameter name="RSAPIServerAddress" value="" />
-		<Parameter name="RESTServerAddress" value="" />
-		<Parameter name="ServerBindingType" value="" />
-		<Parameter name="RelativityInstanceAddress" value="" />
+		<Parameter name="WorkspaceID" value="-1" />
+		<Parameter name="TestWorkspaceName" value="Test Workspace Name" />
+		<Parameter name="TestWorkspaceTemplateName" value="New Case Template" />
+		<Parameter name="AdminUsername" value="your.admin.account@relativity.com" />
+		<Parameter name="AdminPassword" value="somepassword" />
+		<Parameter name="SQLUserName" value="eddsdbo" />
+		<Parameter name="SQLPassword" value="somepassword" />
+		<Parameter name="SQLServerAddress" value="172.99.99.99" />
+		<Parameter name="TestingServiceRapPath" value="C:\Users\user.name\Downloads" />
+		<Parameter name="UploadTestingServiceRap" value="MyApp.rap" />
+		<Parameter name="EmailTo" value="your.email.account@relativity.com" />
+		<Parameter name="RSAPIServerAddress" value="172.99.99.99" />
+		<Parameter name="RESTServerAddress" value="172.99.99.99" />
+		<Parameter name="ServerBindingType" value="http" />
+		<Parameter name="RelativityInstanceAddress" value="172.99.99.99" />
 	</TestRunParameters>
 </RunSettings>
