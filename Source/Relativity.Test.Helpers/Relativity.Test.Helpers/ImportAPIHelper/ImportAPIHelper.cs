@@ -26,7 +26,7 @@ namespace Relativity.Test.Helpers.ImportAPIHelper
 
 		#endregion
 
-		private static readonly string IMPORT_API_ENDPOINT = $"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativitywebapi/";
+		private static readonly string IMPORT_API_ENDPOINT = $"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS}/Relativitywebapi/";
 
 		public static ImportBulkArtifactJob GetImportApi(int workspaceId)
 		{
