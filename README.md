@@ -40,3 +40,70 @@ With gmail, you will need to allow IMAP on your account.  It is recommended to m
 You will need at least a free account with MailTrap to utilize these helpers.  The free account grants you a username, password, and Api Key.  The API Key is used to access your inbox which MailTrapMailHelper takes in from its constructor.
 ## Licensing
 [MailKit NuGet](https://github.com/jstedfast/MailKit)
+
+# Runsettings vs App.config
+As of update 7.1.0.X of Test Helpers, you can utilize Runsettings instead of being stuck to just app.config for your testing. To quickly describe Runsettings, it's just an XML file with data to be used only when a test is being run.  Azure and other CI/CD pipelines use it to supply parameters during the test.  Normally, this would be done via an app.config file, but cloud pipelines do not allow the use these, so the switch to Runsettings is necessary.
+
+## Configuring Runsettings in Visual Studio
+While in a testing project, you can simply utilize the Test dropdown menu at the top of Visual studio.  You can checkout [Microsoft's documentation on how to setup a Runsettings file](https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file?view=vs-2019) for more details.
+
+## Setting up Test Helpers with Runsettings
+The gist of the new setup is the new Runsettings file you will need in the project, and the new overloaded constructor for Test Helpers.  There are two overloads, one that takes in your Current TestContext, and one that takes in a Dictionary of values.  Both will be used to automatically map values to the static ConfigurationHelper TestHelpers creates.  You can view samples below for Runsettings files and Constructors.
+
+**Note: For ease of use, TestHelpers expects the same parameter keys in Runsettings as it does with app.config**.
+
+### Sample Runsettings file
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<!-- Parameters used by tests at run time -->
+	<TestRunParameters>
+		<Parameter name="WorkspaceID" value="-1" />
+		<Parameter name="TestWorkspaceName" value="Test Workspace Name" />
+		<Parameter name="TestWorkspaceTemplateName" value="New Case Template" />
+		<Parameter name="AdminUsername" value="your.admin.account@relativity.com" />
+		<Parameter name="AdminPassword" value="somepassword" />
+		<Parameter name="SQLUserName" value="eddsdbo" />
+		<Parameter name="SQLPassword" value="somepassword" />
+		<Parameter name="SQLServerAddress" value="172.99.99.99" />
+		<Parameter name="TestingServiceRapPath" value="C:\Users\user.name\Downloads" />
+		<Parameter name="UploadTestingServiceRap" value="MyApp.rap" />
+		<Parameter name="EmailTo" value="your.email.account@relativity.com" />
+		<Parameter name="RSAPIServerAddress" value="172.99.99.99" />
+		<Parameter name="RESTServerAddress" value="172.99.99.99" />
+		<Parameter name="ServerBindingType" value="http" />
+		<Parameter name="RelativityInstanceAddress" value="172.99.99.99" />
+	</TestRunParameters>
+</RunSettings>
+```
+
+### Sample TestHelper Constructor 1
+```cs
+[TestFixture]
+public class TestHelperRunSettingsIntegrationTests
+{
+	private IHelper SuT;
+	[OneTimeSetUp]
+	public void SetUp()
+	{
+		SuT = new TestHelper(TestContext.CurrentContext);
+	}
+````
+
+### Sample TestHelper Constructor 2
+```cs
+[TestFixture]
+public class TestHelperRunSettingsIntegrationTests
+{
+	private IHelper SuT;
+	[OneTimeSetUp]
+	public void SetUp()
+	{
+		Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+		foreach (string testParameterName in TestContext.Parameters.Names)
+		{
+			configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+		}
+		SuT = new TestHelper(configDictionary);
+	}
+```
