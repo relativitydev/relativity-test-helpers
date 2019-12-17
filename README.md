@@ -41,8 +41,12 @@ You will need at least a free account with MailTrap to utilize these helpers.  T
 ## Licensing
 [MailKit NuGet](https://github.com/jstedfast/MailKit)
 
-# Runsettings vs App.config
-As of update 7.1.0.X of Test Helpers, you can utilize Runsettings instead of being stuck to just app.config for your testing. To quickly describe Runsettings, it's just an XML file with data to be used only when a test is being run.  Azure and other CI/CD pipelines use it to supply parameters during the test.  Normally, this would be done via an app.config file, but cloud pipelines do not allow the use these, so the switch to Runsettings is necessary.
+
+# New Runsettings option within TestHelpers
+As of update 7.1.0.X of Test Helpers, you can optionally utilize Runsettings instead of app.config for your testing.  Both can still be used, but just not within the same Test Fixture, as the code does a hard swap of the value collection after the TestHelpers constructor.
+
+## Runsettings vs App.config
+To quickly describe Runsettings, it's just an XML file with data to be used only when a test is being run.  Azure and other CI/CD pipelines use it to supply parameters during the test.  Normally, this would be done via an app.config file, but cloud pipelines do not allow the use of these config files, so the switch to Runsettings is necessary.
 
 ## Configuring Runsettings in Visual Studio
 While in a testing project, you can simply utilize the Test dropdown menu at the top of Visual studio.  You can checkout [Microsoft's documentation on how to setup a Runsettings file](https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file?view=vs-2019) for more details.
