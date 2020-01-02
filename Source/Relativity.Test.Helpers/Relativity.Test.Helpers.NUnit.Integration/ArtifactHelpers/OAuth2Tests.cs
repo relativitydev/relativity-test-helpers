@@ -12,20 +12,17 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 	[TestFixture]
 	public class OAuth2Tests
 	{
-		//private OAuth2 Sut;
 		private TestHelper _testHelper;
 		private string oAuthName = "TestOAuth2";
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			//Sut = new OAuth2();
 			_testHelper = new TestHelper(TestContext.CurrentContext);
 		}
 
 		[OneTimeTearDown]
 		public void TearDown()
 		{
-			//	Sut = null;
 			_testHelper = null;
 		}
 
@@ -77,13 +74,5 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			Assert.IsTrue(bearerToken.Length > 10);
 			await OAuth2.DeleteOAuth2ClientAsync(oAuth2ClientManager, oAuth2Client.Id);
 		}
-
-		//[Test]
-		//public void Test()
-		//{
-		//	// Arrange
-		//	// Act
-		//	// Assert
-		//}
 	}
 }
