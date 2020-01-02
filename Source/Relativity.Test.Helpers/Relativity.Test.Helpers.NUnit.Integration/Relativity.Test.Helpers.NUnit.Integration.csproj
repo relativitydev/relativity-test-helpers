@@ -155,7 +155,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArtifactHelpers\OAuth2Tests.cs" />
+    <Compile Include="Kepler\OAuth2HelperTests.cs" />
     <Compile Include="Mail\GmailMailHelperTests.cs" />
     <Compile Include="TestConstants.cs" />
     <Compile Include="TestEHHelperIntegrationTests.cs" />

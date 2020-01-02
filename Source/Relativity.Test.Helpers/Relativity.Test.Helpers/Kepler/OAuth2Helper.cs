@@ -10,23 +10,30 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using DTOs = kCura.Relativity.Client.DTOs;
 
-namespace Relativity.Test.Helpers.ArtifactHelpers
+namespace Relativity.Test.Helpers.Kepler
 {
-	public class OAuth2
+	public class OAuth2Helper : IOAuth2Helper
 	{
+		private readonly IOAuth2ClientManager _oAuth2ClientManager;
+		private readonly IRSAPIClient _rsapiClient;
+
+		public OAuth2Helper(IOAuth2ClientManager oAuth2ClientManager, IRSAPIClient rsapiClient)
+		{
+			_oAuth2ClientManager = oAuth2ClientManager;
+			_rsapiClient = rsapiClient;
+		}
+
 		/// <summary>
 		/// Use this to create an OAuth2 authentication for Relativity, which will allow you to get a Bearer Token and gain access to Relativity
 		/// </summary>
-		/// <param name="oAuth2ClientManager"></param>
-		/// <param name="rsapiClient"></param>
 		/// <param name="username"></param>
 		/// <param name="oAuth2Name"></param>
 		/// <returns></returns>
-		public static async Task<Services.Security.Models.OAuth2Client> CreateOAuth2ClientAsync(IOAuth2ClientManager oAuth2ClientManager, IRSAPIClient rsapiClient, string username, string oAuth2Name)
+		public async Task<Services.Security.Models.OAuth2Client> CreateOAuth2ClientAsync(string username, string oAuth2Name)
 		{
-			DTOs.User user = GetUser(rsapiClient, username);
+			DTOs.User user = GetUser(username);
 
-			List<Services.Security.Models.OAuth2Client> oAuth = await oAuth2ClientManager.ReadAllAsync();
+			List<Services.Security.Models.OAuth2Client> oAuth = await _oAuth2ClientManager.ReadAllAsync();
 			if (oAuth.Exists(x => x.Name.Equals(oAuth2Name)))
 			{
 				if (oAuth.Exists(x => x.Name.Equals(oAuth2Name) && x.ContextUser == user.ArtifactID))
@@ -38,7 +45,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception($"A different user was has OAuth2 Credentials within ({oAuth2Name})");
 			}
 
-			Services.Security.Models.OAuth2Client oAuthResult = await oAuth2ClientManager.CreateAsync(oAuth2Name, OAuth2Flow.ClientCredentials, new List<Uri>(), user.ArtifactID);
+			Services.Security.Models.OAuth2Client oAuthResult = await _oAuth2ClientManager.CreateAsync(oAuth2Name, OAuth2Flow.ClientCredentials, new List<Uri>(), user.ArtifactID);
 			if (oAuthResult != null)
 			{
 				Console.WriteLine($"Created OAuth2 Client Credentials for ({user.EmailAddress}) within ({oAuthResult.Name})");
@@ -60,7 +67,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		/// <param name="scope"></param>
 		/// <param name="grantType"></param>
 		/// <returns></returns>
-		public static async Task<string> GetBearerTokenAsync(string protocol, string serverAddress, string clientId, string clientSecret, string scope = "SystemUserInfo", string grantType = "client_credentials")
+		public async Task<string> GetBearerTokenAsync(string protocol, string serverAddress, string clientId, string clientSecret, string scope = "SystemUserInfo", string grantType = "client_credentials")
 		{
 			string tokenUrl = GetTokenUrl(protocol, serverAddress);
 			string tokenResponse = await GetTokenAsync(tokenUrl, clientId, clientSecret, scope, grantType);
@@ -73,12 +80,11 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		/// <summary>
 		/// Use this to cleanup OAuth2 during tests
 		/// </summary>
-		/// <param name="oAuth2ClientManager"></param>
 		/// <param name="clientId"></param>
 		/// <returns></returns>
-		public static async Task DeleteOAuth2ClientAsync(IOAuth2ClientManager oAuth2ClientManager, string clientId)
+		public async Task DeleteOAuth2ClientAsync(string clientId)
 		{
-			await oAuth2ClientManager.DeleteAsync(clientId);
+			await _oAuth2ClientManager.DeleteAsync(clientId);
 		}
 
 		/// <summary>
@@ -86,9 +92,9 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		/// </summary>
 		/// <param name="email"></param>
 		/// <returns></returns>
-		private static DTOs.User GetUser(IRSAPIClient rsapiClient, string email)
+		private DTOs.User GetUser(string email)
 		{
-			rsapiClient.APIOptions = new APIOptions { WorkspaceID = -1 };
+			_rsapiClient.APIOptions = new APIOptions { WorkspaceID = -1 };
 
 			DTOs.User user;
 
@@ -96,7 +102,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			DTOs.Query<DTOs.User> userQuery = new DTOs.Query<DTOs.User>(DTOs.FieldValue.AllFields, userQueryCondition, new List<Sort>());
 
-			DTOs.QueryResultSet<DTOs.User> resultSet = rsapiClient.Repositories.User.Query(userQuery);
+			DTOs.QueryResultSet<DTOs.User> resultSet = _rsapiClient.Repositories.User.Query(userQuery);
 
 			if (resultSet.Success && resultSet.TotalCount > 0)
 			{
@@ -119,7 +125,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		/// <param name="scope"></param>
 		/// <param name="grantType"></param>
 		/// <returns></returns>
-		private static async Task<string> GetTokenAsync(string tokenUrl, string clientId, string clientSecret, string scope, string grantType)
+		private async Task<string> GetTokenAsync(string tokenUrl, string clientId, string clientSecret, string scope, string grantType)
 		{
 			HttpClient client = new HttpClient();
 			var httpContent = new HttpRequestMessage(HttpMethod.Post, tokenUrl);
@@ -150,7 +156,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		/// Returns the URL for Token generation for oAuth
 		/// </summary>
 		/// <returns></returns>
-		private static string GetTokenUrl(string protocol, string serverAddress)
+		private string GetTokenUrl(string protocol, string serverAddress)
 		{
 			return $"{protocol}://{serverAddress.ToLower().Replace("-services", "")}/Relativity/Identity/connect/token";
 		}

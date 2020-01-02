@@ -196,7 +196,8 @@
     <Compile Include="ArtifactHelpers\Client.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
-    <Compile Include="ArtifactHelpers\OAuth2.cs" />
+    <Compile Include="Kepler\IOAuth2Helper.cs" />
+    <Compile Include="Kepler\OAuth2Helper.cs" />
     <Compile Include="ArtifactHelpers\Request\FieldRequest.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthenticationProvider.cs" />
@@ -280,6 +281,7 @@
     <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
