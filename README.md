@@ -111,3 +111,45 @@ public class TestHelperRunSettingsIntegrationTests
 		SuT = new TestHelper(configDictionary);
 	}
 ```
+
+# OAuth2Helper
+As of update 7.2.0.X of Test Helpers, you will have access to the OAuth2Helper object which has simple functionaliy to create and delete OAuth2 Client Credentials, as well as getting the bearer token for the created OAuth2 credential.  This should help save some time and simplify code for anything that is externally facing from a Relativity instance, such as hitting Custom Page Endpoints or Kepler Endpoints.  Admin credentials are required.
+
+## Setup
+This is easiest used in conjuction with the TestHelper object.  See the below sample code
+```cs
+TestHelper _testHelper = new TestHelper(TestContext.CurrentContext);
+
+IOAuth2ClientManager oAuth2ClientManager = _testHelper.GetServicesManager().CreateProxy<IOAuth2ClientManager>(ExecutionIdentity.System);
+IRSAPIClient rsapiClient = _testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System);
+
+OAuth2Helper oAuth2Helper = new OAuth2Helper(oAuth2ClientManager, rsapiClient);
+````
+
+## Usage
+### Create
+```cs
+string oAuthName = "TestOAuth2Name";
+Services.Security.Models.OAuth2Client oAuth2Client = await oAuth2Helper.CreateOAuth2ClientAsync(ConfigurationHelper.ADMIN_USERNAME, oAuthName);
+````
+### Delete
+```cs
+Services.Security.Models.OAuth2Client oAuth2Client = await oAuth2Helper.CreateOAuth2ClientAsync(ConfigurationHelper.ADMIN_USERNAME, oAuthName);
+// Other code in-between here...
+await oAuth2Helper.DeleteOAuth2ClientAsync(oAuth2Client.Id);
+````
+### Bearer Token
+```cs
+Services.Security.Models.OAuth2Client oAuth2Client = await oAuth2Helper.CreateOAuth2ClientAsync(ConfigurationHelper.ADMIN_USERNAME, oAuthName);
+
+string bearerToken = await oAuth2Helper.GetBearerTokenAsync(ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, oAuth2Client.Id, oAuth2Client.Secret);
+
+// Other code in-between here...
+
+HttpClient httpClient = new HttpClient();
+httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+// Other HttpClient setup and overhead here...
+
+HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+````
