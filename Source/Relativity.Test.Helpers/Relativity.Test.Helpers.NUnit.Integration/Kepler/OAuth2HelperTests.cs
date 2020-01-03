@@ -5,6 +5,9 @@ using Relativity.Services.Security;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
@@ -68,13 +71,24 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 		public async Task GetBearerTokenAsyncTest()
 		{
 			// Arrange
+			Services.Security.Models.OAuth2Client oAuth2Client = await Sut.CreateOAuth2ClientAsync(ConfigurationHelper.ADMIN_USERNAME, oAuthName);
+			string url = $"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS}//Relativity.REST/api/RA.Services.Interfaces.IAnalysisModule/AnalysisService/GetKeplerStatusAsync";
 
 			// Act
-			Services.Security.Models.OAuth2Client oAuth2Client = await Sut.CreateOAuth2ClientAsync(ConfigurationHelper.ADMIN_USERNAME, oAuthName);
 			string bearerToken = await Sut.GetBearerTokenAsync(ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, oAuth2Client.Id, oAuth2Client.Secret);
 
-			// Assert
-			Assert.IsTrue(bearerToken.Length > 10);
+			using (HttpClient httpClient = new HttpClient())
+			{
+				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+				httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", " ");
+
+				HttpResponseMessage result = await httpClient.GetAsync(url);
+
+				// Assert
+				Assert.IsTrue(bearerToken.Length > 10);
+				Assert.IsTrue(result.StatusCode == HttpStatusCode.OK);
+			}
+
 			await Sut.DeleteOAuth2ClientAsync(oAuth2Client.Id);
 		}
 	}
