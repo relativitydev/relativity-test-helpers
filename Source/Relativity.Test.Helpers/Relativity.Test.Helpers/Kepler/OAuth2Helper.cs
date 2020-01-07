@@ -19,8 +19,8 @@ namespace Relativity.Test.Helpers.Kepler
 
 		public OAuth2Helper(IOAuth2ClientManager oAuth2ClientManager, IRSAPIClient rsapiClient)
 		{
-			_oAuth2ClientManager = oAuth2ClientManager ?? throw new Exception($"Parameter ({nameof(oAuth2ClientManager)}) cannot be null");
-			_rsapiClient = rsapiClient ?? throw new Exception($"Parameter ({nameof(rsapiClient)}) cannot be null");
+			_oAuth2ClientManager = oAuth2ClientManager ?? throw new ArgumentNullException($"Parameter ({nameof(oAuth2ClientManager)}) cannot be null");
+			_rsapiClient = rsapiClient ?? throw new ArgumentNullException($"Parameter ({nameof(rsapiClient)}) cannot be null");
 		}
 
 		/// <summary>
@@ -34,6 +34,7 @@ namespace Relativity.Test.Helpers.Kepler
 			try
 			{
 				DTOs.User user = GetUser(username);
+				Services.Security.Models.OAuth2Client oAuth2Client;
 
 				List<Services.Security.Models.OAuth2Client> oAuth = await _oAuth2ClientManager.ReadAllAsync();
 				if (oAuth.Exists(x => x.Name.Equals(oAuth2Name)))
@@ -41,22 +42,29 @@ namespace Relativity.Test.Helpers.Kepler
 					if (oAuth.Exists(x => x.ContextUser == user.ArtifactID))
 					{
 						Console.WriteLine($"User ({user.EmailAddress}) already has OAuth2 Credentials within ({oAuth2Name})");
-						return oAuth.Find(x => x.Name.Equals(oAuth2Name) && x.ContextUser == user.ArtifactID);
+
+						oAuth2Client = oAuth.Find(x => x.Name.Equals(oAuth2Name) && x.ContextUser == user.ArtifactID);
 					}
-
-					throw new Exception($"A different user was has OAuth2 Credentials within ({oAuth2Name})");
-				}
-
-				Services.Security.Models.OAuth2Client oAuthResult = await _oAuth2ClientManager.CreateAsync(oAuth2Name, OAuth2Flow.ClientCredentials, new List<Uri>(), user.ArtifactID);
-				if (oAuthResult != null)
-				{
-					Console.WriteLine($"Created OAuth2 Client Credentials for ({user.EmailAddress}) within ({oAuthResult.Name})");
-					return oAuthResult;
+					else
+					{
+						throw new Exception($"A different user was has OAuth2 Credentials within ({oAuth2Name})");
+					}
 				}
 				else
 				{
-					throw new Exception($"Failed to create OAuth2 Client Credentials for ({user.EmailAddress}) within ({oAuth2Name})");
+					Services.Security.Models.OAuth2Client oAuthResult = await _oAuth2ClientManager.CreateAsync(oAuth2Name, OAuth2Flow.ClientCredentials, new List<Uri>(), user.ArtifactID);
+					if (oAuthResult != null)
+					{
+						Console.WriteLine($"Created OAuth2 Client Credentials for ({user.EmailAddress}) within ({oAuthResult.Name})");
+						oAuth2Client = oAuthResult;
+					}
+					else
+					{
+						throw new Exception($"Failed to create OAuth2 Client Credentials for ({user.EmailAddress}) within ({oAuth2Name})");
+					}
 				}
+
+				return oAuth2Client;
 			}
 			catch (Exception ex)
 			{
