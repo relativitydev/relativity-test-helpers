@@ -23,8 +23,12 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		private Mock<HttpMessageHandler> _mockHttpMessageHandler;
 		private IOAuth2Helper Sut;
 
-		private const string BearerToken =
-			"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IndrdTdRcWd5NTRXbGM4eW1weVY5NzJlRnpSVSIsImtpZCI6IkMyNEJCQjQyQTgzMkU3ODVBNTczQ0NBNkE3MjU3REVGNjc4NUNEMTUifQ.eyJpc3MiOiJSZWxhdGl2aXR5IiwiYXVkIjoiUmVsYXRpdml0eS9yZXNvdXJjZXMiLCJleHAiOjE1NzgzNTEwNjAsIm5iZiI6MTU3ODMyMjI2MCwiY2xpZW50X2lkIjoiOWExMmVjMDdiZDg5MzVhMzM4NTNhOWYyZDciLCJvcl9sYiI6IlRydWUiLCJyZWxfaW5zIjoiQThGNkI2NjItRTFCQi00QTYzLTk1NEUtMDFCOEFCNjVCMDM0IiwicmVsX3VhaSI6IjkiLCJyZWxfdWZuIjoiUmVsYXRpdml0eSIsInJlbF91bG4iOiJBZG1pbiIsInJlbF91biI6InJlbGF0aXZpdHkuYWRtaW5AcmVsYXRpdml0eS5jb20iLCJzY29wZSI6IlN5c3RlbVVzZXJJbmZvIiwicmVsX29yaWdpbiI6IjE3Mi4yNS4xMzguMTYxIn0.jkcYA_1qXduGkrNUoO09P-WwGLjfvzhEZ3NUx07loColQWDhhU7yWPNSyxgLzTRBb5NLDM3qWzuuJoXy-NKcdeDYFC8VMZgE-IRR2zTRUbOJFuj2gGdFuEEIBnLik6_80lyvWdVcNHBybFt35KqFy9tvpkboXxciUlFFkA2Y-JAgzJYzxHj7bmNw6Q_0uxQLZ75Vg_lgw80kJokBQ5Dc-3oICMbbu5pS5-YNE3iz6BlcW5FC4Cm-291CJI_QUV6hgK3pk4KygPQTsunHWM60nQSbh7zguc2N9aJnx9lXWEQ6tOKpc-xXKJVgRxH9B6BdOf93V31Jy92udSz2f6AL6w";
+		private const string Username = "test@test.com";
+		private const string OAuth2Id = "OAuth2Id";
+		private const string OAuth2Name = "OAuth2Name";
+		private const string OAuth2Secret = "OAuth2Secret";
+		private const int ContextUser = 999;
+		private const string BearerToken = "abc1234567890.abc1234567890abc1234567890";
 
 		private string _jsonBearer = @"{
     ""access_token"": ""@bearerToken"",
@@ -52,14 +56,12 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		public async Task CreateOAuth2ClientAsyncTest()
 		{
 			// Arrange
-			string username = "test@test.com";
-			string oAuth2Name = "OAuth2Name";
 
 			// Act
-			Services.Security.Models.OAuth2Client result = await Sut.CreateOAuth2ClientAsync(username, oAuth2Name);
+			Services.Security.Models.OAuth2Client result = await Sut.CreateOAuth2ClientAsync(Username, OAuth2Name);
 
 			// Assert
-			Assert.IsTrue(result.Id.Equals("OAuth2Id"));
+			Assert.IsTrue(result.Id.Equals(OAuth2Id));
 		}
 
 		[Test]
@@ -78,23 +80,21 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		public async Task ReadOAuth2ClientAsyncTest()
 		{
 			// Arrange
-			string oAuth2Name = "OAuth2Name";
 
 			// Act
-			Services.Security.Models.OAuth2Client result = await Sut.ReadOAuth2ClientAsync(oAuth2Name);
+			Services.Security.Models.OAuth2Client result = await Sut.ReadOAuth2ClientAsync(OAuth2Name);
 
 			// Assert
-			Assert.IsTrue(result.Id.Equals("OAuth2Id"));
+			Assert.IsTrue(result.Id.Equals(OAuth2Id));
 		}
 
 		[Test]
 		public async Task DoesOAuth2ClientExistAsyncTest()
 		{
 			// Arrange
-			string oAuth2Name = "OAuth2Name";
 
 			// Act
-			bool result = await Sut.DoesOAuth2ClientExistAsync(oAuth2Name);
+			bool result = await Sut.DoesOAuth2ClientExistAsync(OAuth2Name);
 
 			// Assert
 			Assert.IsTrue(result);
@@ -123,10 +123,10 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 			Mock<IOAuth2ClientManager> mockOAuth2ClientManager = new Mock<IOAuth2ClientManager>();
 			Services.Security.Models.OAuth2Client oAuth2Client = new Services.Security.Models.OAuth2Client()
 			{
-				Id = "OAuth2Id",
-				Name = "OAuth2Name",
-				Secret = "OAuth2Secret",
-				ContextUser = 999
+				Id = OAuth2Id,
+				Name = OAuth2Name,
+				Secret = OAuth2Secret,
+				ContextUser = ContextUser
 			};
 			List<Services.Security.Models.OAuth2Client> oAuth2Clients = new List<Services.Security.Models.OAuth2Client>() { oAuth2Client };
 
