@@ -13,6 +13,8 @@ namespace Relativity.Test.Helpers.Kepler
 {
 	public class ApplicationInstallHelper : IApplicationInstallHelper, IDisposable
 	{
+		private const int AdminWorkspaceId = -1;
+
 		private readonly IApplicationInstallManager _applicationInstallManager;
 		private readonly ILibraryApplicationManager _libraryApplicationManager;
 		private readonly IRSAPIClient _rsapiClient;
@@ -48,17 +50,22 @@ namespace Relativity.Test.Helpers.Kepler
 					};
 
 					int libraryApplicationInstallId;
+					InstallStatusCode status;
 
-					if (!await DoesApplicationExistAsync(-1, rapFileName))
+					if (!await DoesLibraryApplicationExistAsync(rapFileName))
 					{
 						libraryApplicationInstallId = await CreateLibraryApplicationAsync(rapFilePath);
+
+						// The following function will poll for the installation status until the installation reaches a terminal state.
+						status = PollForTerminalStatusAsync(async () => await _libraryApplicationManager.GetLibraryInstallStatusAsync(AdminWorkspaceId, libraryApplicationInstallId)).Result;
+						Console.WriteLine($@"Library Installation has terminated with the following status: {status}.");
 					}
 					else
 					{
-						libraryApplicationInstallId = await GetLibraryApplicationIdAsync(applicationName);
+						libraryApplicationInstallId = await GetLibraryApplicationIdAsync(rapFileName);
 					}
 
-					InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(-1, libraryApplicationInstallId, request);
+					InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(AdminWorkspaceId, libraryApplicationInstallId, request);
 
 					if (response.Results.Count == workspaces.Count)
 					{
@@ -74,11 +81,7 @@ namespace Relativity.Test.Helpers.Kepler
 
 					workspaceApplicationInstallId = response.Results.First().ApplicationInstallID;
 
-					// The following function will poll for the installation status until the installation reaches a terminal state.
-					InstallStatusCode status = PollForTerminalStatusAsync(async () => await _libraryApplicationManager.GetLibraryInstallStatusAsync(-1, libraryApplicationInstallId)).Result;
-					Console.WriteLine($@"Library Installation has terminated with the following status: {status}.");
-
-					status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(-1, libraryApplicationInstallId, workspaceApplicationInstallId)).Result;
+					status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, libraryApplicationInstallId, workspaceApplicationInstallId)).Result;
 					Console.WriteLine($@"Workspace Installation has terminated with the following status: {status}.");
 				}
 				else
@@ -97,17 +100,22 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
-		private async Task<int> CreateLibraryApplicationAsync(string rapFilePath)
+		public async Task DeleteApplicationFromLibraryAsync(string rapFileName)
 		{
 			try
 			{
-				using (Stream stream = File.OpenRead(rapFilePath))
+				if (await DoesLibraryApplicationExistAsync(rapFileName))
 				{
-					CreateLibraryApplicationResponse response = await _libraryApplicationManager.CreateAsync(-1, new KeplerStream(stream));
-					string info = string.Format($"The file located at {rapFilePath} is uploading to the application library.");
-					Console.WriteLine(info);
+					int applicationId = await GetLibraryApplicationIdAsync(rapFileName);
 
-					return response.ApplicationInstallID;
+					await _libraryApplicationManager.DeleteAsync(AdminWorkspaceId, applicationId);
+					string info = string.Format($"Library Application with ArtifactID ({applicationId}) and rapFileName ({rapFileName}) is being deleted.");
+					Console.WriteLine(info);
+				}
+				else
+				{
+					string info = string.Format($"Library Application with rapFileName ({rapFileName}) does not exist");
+					Console.WriteLine(info);
 				}
 			}
 			catch (Exception ex)
@@ -118,22 +126,60 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
-		public async Task<bool> DoesApplicationExistAsync(int workspaceId, string rapFileName)
+		private async Task<int> CreateLibraryApplicationAsync(string rapFilePath)
 		{
 			try
 			{
-				List<LibraryApplicationResponse> allApps;
+				using (Stream stream = File.OpenRead(rapFilePath))
+				{
+					CreateLibraryApplicationResponse response = await _libraryApplicationManager.CreateAsync(AdminWorkspaceId, new KeplerStream(stream));
+					string info = string.Format($"The file located at {rapFilePath} is uploading to the application library.");
+					Console.WriteLine(info);
+
+					//return response.ApplicationInstallID;
+					return response.ApplicationIdentifier.ArtifactID;
+				}
+			}
+			catch (Exception ex)
+			{
+				string exception = $"An error occurred: {ex.Message}";
+				Console.WriteLine(exception);
+				throw;
+			}
+		}
+
+		public async Task<bool> DoesLibraryApplicationExistAsync(string rapFileName)
+		{
+			try
+			{
+				List<LibraryApplicationResponse> allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
+				bool result = allApps.Exists(x => x.FileName.Equals(rapFileName));
+
+				return result;
+			}
+			catch (Exception ex)
+			{
+				string exception = $"An error occurred in ({nameof(DoesLibraryApplicationExistAsync)}) | rapFileName: ({rapFileName}) : {ex.Message}";
+				Console.WriteLine(exception);
+				throw;
+			}
+		}
+
+		public async Task<bool> DoesWorkspaceApplicationExistAsync(string rapFileName, int workspaceId, int workspaceApplicationInstallId)
+		{
+			try
+			{
 				bool result;
 
-				if (workspaceId != -1)
+				if (workspaceId != AdminWorkspaceId)
 				{
-					allApps = await _libraryApplicationManager.ReadAllAsync(workspaceId);
+					List<LibraryApplicationResponse> allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
 
 					if (allApps.Exists(x => x.FileName.Equals(rapFileName)))
 					{
 						LibraryApplicationResponse app = allApps.Find(x => x.FileName.Equals(rapFileName));
 
-						GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(workspaceId, app.Guids.First(), app.ArtifactID);
+						GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.Guids.First(), workspaceApplicationInstallId);
 						result = appStatus.InstallStatus.Code == InstallStatusCode.Completed;
 					}
 					else
@@ -143,23 +189,46 @@ namespace Relativity.Test.Helpers.Kepler
 				}
 				else
 				{
-					allApps = await _libraryApplicationManager.ReadAllAsync(workspaceId);
-					result = allApps.Exists(x => x.FileName.Equals(rapFileName));
+					result = await DoesLibraryApplicationExistAsync(rapFileName);
 				}
 
 				return result;
 			}
 			catch (Exception ex)
 			{
-				string exception = $"An error occurred in ({nameof(DoesApplicationExistAsync)}) | workspaceId: ({workspaceId}) | rapFileName: ({rapFileName}) : {ex.Message}";
+				string exception = $"An error occurred in ({nameof(DoesWorkspaceApplicationExistAsync)}) | rapFileName: ({rapFileName}) | workspaceId: ({workspaceId}) | workspaceApplicationInstallId: ({workspaceApplicationInstallId}) : {ex.Message}";
 				Console.WriteLine(exception);
 				throw;
 			}
 		}
 
-		private async Task<int> GetLibraryApplicationIdAsync(string applicationName)
+		private async Task<int> GetLibraryApplicationIdAsync(string rapFileName)
 		{
-			return await Task.FromResult(0);
+			try
+			{
+				List<LibraryApplicationResponse> allApps;
+				int result;
+
+				allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
+				bool exists = allApps.Exists(x => x.FileName.Equals(rapFileName));
+
+				if (exists)
+				{
+					result = allApps.Find(x => x.FileName.Equals(rapFileName)).ArtifactID;
+				}
+				else
+				{
+					throw new Exception("Library Application does not exist");
+				}
+
+				return result;
+			}
+			catch (Exception ex)
+			{
+				string exception = $"An error occurred in ({nameof(GetLibraryApplicationIdAsync)}) | rapFileName: ({rapFileName}) : {ex.Message}";
+				Console.WriteLine(exception);
+				throw;
+			}
 		}
 
 		private async Task<bool> IsVersionKeplerCompatibleAsync()

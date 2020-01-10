@@ -16,11 +16,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 		private ApplicationInstallHelper Sut;
 
 		private int _workspaceId;
+		private string _applicationName = "FakeApp";
 		private string _rapFileName = "FakeApp.rap";
 		private string _rapFilePath;
 
 
-		[OneTimeSetUp]
+		[SetUp]
 		public void SetUp()
 		{
 			//executable location
@@ -36,12 +37,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			Sut = new ApplicationInstallHelper(rsapiClient, applicationInstallManager, libraryApplicationManager);
 
 			_workspaceId = WorkspaceHelpers.CreateWorkspace.Create(rsapiClient, ConfigurationHelper.TEST_WORKSPACE_NAME, ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME);
+
+			// Delete just in case it already exists
+			Sut.DeleteApplicationFromLibraryAsync(_rapFileName).Wait();
 		}
 
-		[OneTimeTearDown]
+		[TearDown]
 		public void TearDown()
 		{
 			WorkspaceHelpers.DeleteWorkspace.Delete(_testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System), _workspaceId);
+			Sut.DeleteApplicationFromLibraryAsync(_rapFileName).Wait();
 
 			_testHelper = null;
 			Sut = null;
@@ -53,61 +58,106 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			try
 			{
 				// Arrange
-				string applicationName = "";
-				//string rapFilePath = "";
 				bool unlockApps = true;
 
 				// Act
-				int result = await Sut.InstallApplicationAsync(applicationName, _rapFilePath, _workspaceId, unlockApps);
+				int result = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
 
 				// Assert
 				Assert.IsTrue(result > 0);
 			}
 			finally
 			{
-
+				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
 			}
 		}
 
 		[Test]
-		public async Task DoesApplicationExistAsyncTest_Valid()
+		public async Task DeleteApplicationFromLibraryAsyncTest()
 		{
 			try
 			{
 				// Arrange
-				//string rapFileName = ""; ;
+				bool unlockApps = true;
+				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
 
 				// Act
-				bool result = await Sut.DoesApplicationExistAsync(_workspaceId, _rapFileName);
-
-				// Assert
-				Assert.IsTrue(result);
-			}
-			finally
-			{
-
-			}
-		}
-
-		[Test]
-		public async Task DoesApplicationExistAsyncTest_Invalid()
-		{
-			try
-			{
-				// Arrange
-				//string rapFileName = "";
-
-				// Act
-				bool result = await Sut.DoesApplicationExistAsync(_workspaceId, _rapFileName);
+				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
+				bool result = await Sut.DoesLibraryApplicationExistAsync(_rapFileName);
 
 				// Assert
 				Assert.IsFalse(result);
 			}
 			finally
 			{
-
+				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
 			}
 		}
 
+		[Test]
+		public async Task DoesWorkspaceApplicationExistAsync_Valid()
+		{
+			try
+			{
+				// Arrange
+				bool unlockApps = true;
+				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
+
+				// Act
+				bool result = await Sut.DoesWorkspaceApplicationExistAsync(_rapFileName, _workspaceId, workspaceApplicationInstallId);
+
+				// Assert
+				Assert.IsTrue(result);
+			}
+			finally
+			{
+				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
+			}
+		}
+
+		[Test]
+		public async Task DoesWorkspaceApplicationExistAsync_Invalid()
+		{
+			// Arrange
+			int workspaceApplicationInstallId = 0;
+
+			// Act
+			bool result = await Sut.DoesWorkspaceApplicationExistAsync(_rapFileName, _workspaceId, workspaceApplicationInstallId);
+
+			// Assert
+			Assert.IsFalse(result);
+		}
+
+		[Test]
+		public async Task DoesLibraryApplicationExistAsync_Valid()
+		{
+			try
+			{
+				// Arrange
+				bool unlockApps = true;
+				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
+
+				// Act
+				bool result = await Sut.DoesLibraryApplicationExistAsync(_rapFileName);
+
+				// Assert
+				Assert.IsTrue(result);
+			}
+			finally
+			{
+				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
+			}
+		}
+
+		[Test]
+		public async Task DoesLibraryApplicationExistAsync_Invalid()
+		{
+			// Arrange
+			// Act
+			bool result = await Sut.DoesLibraryApplicationExistAsync(_rapFileName);
+
+			// Assert
+			Assert.IsFalse(result);
+		}
 	}
 }
