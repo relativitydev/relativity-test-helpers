@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Kepler
@@ -14,16 +17,39 @@ namespace Relativity.Test.Helpers.Kepler
 	public class ApplicationInstallHelper : IApplicationInstallHelper, IDisposable
 	{
 		private const int AdminWorkspaceId = -1;
+		private const string MinimumKeplerCompatibilityVersion = "10.3.170.1";
 
 		private readonly IApplicationInstallManager _applicationInstallManager;
 		private readonly ILibraryApplicationManager _libraryApplicationManager;
 		private readonly IRSAPIClient _rsapiClient;
+		private string _protocol;
+		private string _serverAddress;
+		private string _username;
+		private string _password;
+		private readonly HttpMessageHandler _httpMessageHandler;
 
-		public ApplicationInstallHelper(IRSAPIClient rsapiClient, IApplicationInstallManager applicationInstallManager, ILibraryApplicationManager libraryApplicationManager)
+		public ApplicationInstallHelper(IRSAPIClient rsapiClient, IApplicationInstallManager applicationInstallManager, ILibraryApplicationManager libraryApplicationManager, string protocol, string serverAddress, string username, string password, HttpMessageHandler httpMessageHandler = null)
 		{
 			_rsapiClient = rsapiClient ?? throw new ArgumentNullException($"Parameter ({nameof(rsapiClient)}) cannot be null");
 			_applicationInstallManager = applicationInstallManager ?? throw new ArgumentNullException($"Parameter ({nameof(applicationInstallManager)}) cannot be null");
 			_libraryApplicationManager = libraryApplicationManager ?? throw new ArgumentNullException($"Parameter ({nameof(libraryApplicationManager)}) cannot be null");
+			_protocol = protocol ?? throw new ArgumentNullException($"Parameter ({nameof(_protocol)}) cannot be null");
+			_serverAddress = serverAddress ?? throw new ArgumentNullException($"Parameter ({nameof(serverAddress)}) cannot be null");
+			_username = username ?? throw new ArgumentNullException($"Parameter ({nameof(username)}) cannot be null");
+			_password = password ?? throw new ArgumentNullException($"Parameter ({nameof(password)}) cannot be null");
+
+			if (httpMessageHandler == null)
+			{
+				_httpMessageHandler = new HttpClientHandler()
+				{
+					AllowAutoRedirect = false,
+					UseDefaultCredentials = true
+				};
+			}
+			else
+			{
+				_httpMessageHandler = httpMessageHandler;
+			}
 		}
 
 		public void Dispose()
@@ -126,28 +152,6 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
-		private async Task<int> CreateLibraryApplicationAsync(string rapFilePath)
-		{
-			try
-			{
-				using (Stream stream = File.OpenRead(rapFilePath))
-				{
-					CreateLibraryApplicationResponse response = await _libraryApplicationManager.CreateAsync(AdminWorkspaceId, new KeplerStream(stream));
-					string info = string.Format($"The file located at {rapFilePath} is uploading to the application library.");
-					Console.WriteLine(info);
-
-					//return response.ApplicationInstallID;
-					return response.ApplicationIdentifier.ArtifactID;
-				}
-			}
-			catch (Exception ex)
-			{
-				string exception = $"An error occurred: {ex.Message}";
-				Console.WriteLine(exception);
-				throw;
-			}
-		}
-
 		public async Task<bool> DoesLibraryApplicationExistAsync(string rapFileName)
 		{
 			try
@@ -202,6 +206,31 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+
+		#region private methods
+
+		private async Task<int> CreateLibraryApplicationAsync(string rapFilePath)
+		{
+			try
+			{
+				using (Stream stream = File.OpenRead(rapFilePath))
+				{
+					CreateLibraryApplicationResponse response = await _libraryApplicationManager.CreateAsync(AdminWorkspaceId, new KeplerStream(stream));
+					string info = string.Format($"The file located at {rapFilePath} is uploading to the application library.");
+					Console.WriteLine(info);
+
+					//return response.ApplicationInstallID;
+					return response.ApplicationIdentifier.ArtifactID;
+				}
+			}
+			catch (Exception ex)
+			{
+				string exception = $"An error occurred: {ex.Message}";
+				Console.WriteLine(exception);
+				throw;
+			}
+		}
+
 		private async Task<int> GetLibraryApplicationIdAsync(string rapFileName)
 		{
 			try
@@ -237,12 +266,37 @@ namespace Relativity.Test.Helpers.Kepler
 			//  relativity.rest/api/Relativity.Services.InstanceDetails.IInstanceDetailsModule/InstanceDetailsService/GetRelativityVersionAsync
 			// https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
 
-			return await Task.FromResult(true);
+			string currentInstanceRelativity = await GetInstanceRelativityVersionAsync();
+
+			Version minVersion = new Version(MinimumKeplerCompatibilityVersion);
+			Version currentInstanceVersion = new Version(currentInstanceRelativity);
+
+			int result = currentInstanceVersion.CompareTo(minVersion);
+
+			return result >= 0;
 		}
 
+		private async Task<string> GetInstanceRelativityVersionAsync()
+		{
 
+			using (HttpClient httpClient = new HttpClient(_httpMessageHandler))
+			{
+				httpClient.BaseAddress = new Uri($"{_protocol}://{_serverAddress}/Relativity");
+				string encoded = System.Convert.ToBase64String(Encoding.ASCII.GetBytes(_username + ":" + _password));
+				httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
+				httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {encoded}");
+				StringContent content = new StringContent("");
+				content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-		public async Task<InstallStatusCode> PollForTerminalStatusAsync(Func<Task<GetInstallStatusResponse>> func)
+				string url = "/relativity.rest/api/Relativity.Services.InstanceDetails.IInstanceDetailsModule/InstanceDetailsService/GetRelativityVersionAsync";
+				HttpResponseMessage httpResponse = await httpClient.PostAsync(url, content);
+				string instanceRelativityVersion = await httpResponse.Content.ReadAsStringAsync();
+				instanceRelativityVersion = instanceRelativityVersion.Replace("\"", "");
+				return instanceRelativityVersion;
+			}
+		}
+
+		private async Task<InstallStatusCode> PollForTerminalStatusAsync(Func<Task<GetInstallStatusResponse>> func)
 		{
 			GetInstallStatusResponse result;
 			Stopwatch watch = new Stopwatch();
@@ -283,6 +337,6 @@ namespace Relativity.Test.Helpers.Kepler
 			return result.InstallStatus.Code;
 		}
 
-
+		#endregion
 	}
 }
