@@ -5,8 +5,8 @@ namespace Relativity.Test.Helpers.Kepler
 	public interface IApplicationInstallHelper
 	{
 		Task<int> InstallApplicationAsync(string applicationName, string rapFilePath, int workspaceId, bool unlockApps);
-		Task DeleteApplicationFromLibraryAsync(string rapFileName);
-		Task<bool> DoesLibraryApplicationExistAsync(string rapFileName);
-		Task<bool> DoesWorkspaceApplicationExistAsync(string rapFileName, int workspaceId, int workspaceApplicationInstallId);
+		Task DeleteApplicationFromLibraryIfItExistsAsync(string applicationName);
+		Task<bool> DoesLibraryApplicationExistAsync(string applicationName);
+		Task<bool> DoesWorkspaceApplicationExistAsync(string applicationName, int workspaceId, int workspaceApplicationInstallId);
 	}
 }

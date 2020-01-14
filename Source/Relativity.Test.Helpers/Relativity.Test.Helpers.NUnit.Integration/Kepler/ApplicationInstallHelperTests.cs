@@ -4,6 +4,7 @@ using Relativity.API;
 using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -20,7 +21,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 		private string _rapFileName = "FakeApp.rap";
 		private string _rapFilePath;
 
-
 		[SetUp]
 		public void SetUp()
 		{
@@ -36,17 +36,17 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 
 			Sut = new ApplicationInstallHelper(rsapiClient, applicationInstallManager, libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
-			_workspaceId = WorkspaceHelpers.CreateWorkspace.Create(rsapiClient, ConfigurationHelper.TEST_WORKSPACE_NAME, ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME);
+			_workspaceId = WorkspaceHelpers.CreateWorkspace.Create(rsapiClient, "Test-" + Guid.NewGuid().ToString(), ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME);
 
 			// Delete just in case it already exists
-			Sut.DeleteApplicationFromLibraryAsync(_rapFileName).Wait();
+			Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName).Wait();
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
 			WorkspaceHelpers.DeleteWorkspace.Delete(_testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System), _workspaceId);
-			Sut.DeleteApplicationFromLibraryAsync(_rapFileName).Wait();
+			Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName).Wait();
 
 			_testHelper = null;
 			Sut = null;
@@ -68,12 +68,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			}
 			finally
 			{
-				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
+				await Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName);
 			}
 		}
 
 		[Test]
-		public async Task DeleteApplicationFromLibraryAsyncTest()
+		public async Task DeleteApplicationFromLibraryIfItExistsAsyncTest()
 		{
 			try
 			{
@@ -82,15 +82,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
 
 				// Act
-				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
-				bool result = await Sut.DoesLibraryApplicationExistAsync(_rapFileName);
+				await Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName);
+				bool result = await Sut.DoesLibraryApplicationExistAsync(_applicationName);
 
 				// Assert
 				Assert.IsFalse(result);
 			}
 			finally
 			{
-				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
+				await Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName);
 			}
 		}
 
@@ -104,14 +104,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
 
 				// Act
-				bool result = await Sut.DoesWorkspaceApplicationExistAsync(_rapFileName, _workspaceId, workspaceApplicationInstallId);
+				bool result = await Sut.DoesWorkspaceApplicationExistAsync(_applicationName, _workspaceId, workspaceApplicationInstallId);
 
 				// Assert
 				Assert.IsTrue(result);
 			}
 			finally
 			{
-				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
+				await Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName);
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			int workspaceApplicationInstallId = 0;
 
 			// Act
-			bool result = await Sut.DoesWorkspaceApplicationExistAsync(_rapFileName, _workspaceId, workspaceApplicationInstallId);
+			bool result = await Sut.DoesWorkspaceApplicationExistAsync(_applicationName, _workspaceId, workspaceApplicationInstallId);
 
 			// Assert
 			Assert.IsFalse(result);
@@ -138,14 +138,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
 
 				// Act
-				bool result = await Sut.DoesLibraryApplicationExistAsync(_rapFileName);
+				bool result = await Sut.DoesLibraryApplicationExistAsync(_applicationName);
 
 				// Assert
 				Assert.IsTrue(result);
 			}
 			finally
 			{
-				await Sut.DeleteApplicationFromLibraryAsync(_rapFileName);
+				await Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName);
 			}
 		}
 
@@ -154,7 +154,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 		{
 			// Arrange
 			// Act
-			bool result = await Sut.DoesLibraryApplicationExistAsync(_rapFileName);
+			bool result = await Sut.DoesLibraryApplicationExistAsync(_applicationName);
 
 			// Assert
 			Assert.IsFalse(result);
