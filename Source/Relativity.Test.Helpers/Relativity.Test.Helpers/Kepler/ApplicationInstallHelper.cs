@@ -23,6 +23,7 @@ namespace Relativity.Test.Helpers.Kepler
 		private const string MinimumKeplerCompatibilityVersion = "10.3.170.1";
 		private const int LibraryApplicationTypeId = 34;
 		private const int WorkspaceApplicationTypeId = 1000011;
+		private const int TimeInMinutesToWaitForInstall = 5;
 
 		private readonly IApplicationInstallManager _applicationInstallManager;
 		private readonly ILibraryApplicationManager _libraryApplicationManager;
@@ -34,6 +35,17 @@ namespace Relativity.Test.Helpers.Kepler
 		private readonly HttpMessageHandler _httpMessageHandler;
 		private string _relativityVersion;
 
+		/// <summary>
+		/// The ApplicationInstallHelper takes in the 3 proxies as required and will use them depending on if your Relativity Instance is 10.3.170.1 or greater.
+		/// </summary>
+		/// <param name="rsapiClient"></param>
+		/// <param name="applicationInstallManager"></param>
+		/// <param name="libraryApplicationManager"></param>
+		/// <param name="protocol"></param>
+		/// <param name="serverAddress"></param>
+		/// <param name="username"></param>
+		/// <param name="password"></param>
+		/// <param name="httpMessageHandler"></param>
 		public ApplicationInstallHelper(IRSAPIClient rsapiClient, IApplicationInstallManager applicationInstallManager, ILibraryApplicationManager libraryApplicationManager, string protocol, string serverAddress, string username, string password, HttpMessageHandler httpMessageHandler = null)
 		{
 			_rsapiClient = rsapiClient ?? throw new ArgumentNullException($"Parameter ({nameof(rsapiClient)}) cannot be null");
@@ -67,6 +79,14 @@ namespace Relativity.Test.Helpers.Kepler
 			_libraryApplicationManager.Dispose();
 		}
 
+		/// <summary>
+		/// Installs the application into a workspace.  Will install the application into the Library if it does not exist there already
+		/// </summary>
+		/// <param name="applicationName"></param>
+		/// <param name="rapFilePath"></param>
+		/// <param name="workspaceId"></param>
+		/// <param name="unlockApps"></param>
+		/// <returns></returns>
 		public async Task<int> InstallApplicationAsync(string applicationName, string rapFilePath, int workspaceId, bool unlockApps)
 		{
 			try
@@ -132,6 +152,11 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// Deletes the application from the Library if it exists.
+		/// </summary>
+		/// <param name="applicationName"></param>
+		/// <returns></returns>
 		public async Task DeleteApplicationFromLibraryIfItExistsAsync(string applicationName)
 		{
 			try
@@ -191,6 +216,11 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// Checks if the application exists in the Library
+		/// </summary>
+		/// <param name="applicationName"></param>
+		/// <returns></returns>
 		public async Task<bool> DoesLibraryApplicationExistAsync(string applicationName)
 		{
 			try
@@ -231,6 +261,13 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// Checks if the application exists in the given workspace
+		/// </summary>
+		/// <param name="applicationName"></param>
+		/// <param name="workspaceId"></param>
+		/// <param name="workspaceApplicationInstallId"></param>
+		/// <returns></returns>
 		public async Task<bool> DoesWorkspaceApplicationExistAsync(string applicationName, int workspaceId, int workspaceApplicationInstallId)
 		{
 			try
@@ -291,6 +328,11 @@ namespace Relativity.Test.Helpers.Kepler
 
 		#region private methods
 
+		/// <summary>
+		/// New API Kepler calls to install the application into the library.  Will error if it already exists
+		/// </summary>
+		/// <param name="rapFilePath"></param>
+		/// <returns></returns>
 		private async Task<int> CreateLibraryApplicationAsync(string rapFilePath)
 		{
 			try
@@ -312,6 +354,11 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// Gets the ArtifactId for the Library Application, but will error if it does not exist
+		/// </summary>
+		/// <param name="applicationName"></param>
+		/// <returns></returns>
 		private async Task<int> GetLibraryApplicationIdAsync(string applicationName)
 		{
 			try
@@ -341,6 +388,10 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// Checks to see if the Relativity Instance is >= the version that has the new Install APIs
+		/// </summary>
+		/// <returns></returns>
 		private async Task<bool> IsVersionKeplerCompatibleAsync()
 		{
 			try
@@ -362,6 +413,10 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// The REST call to get the Relativity Version.
+		/// </summary>
+		/// <returns></returns>
 		private async Task<string> GetInstanceRelativityVersionAsync()
 		{
 			try
@@ -398,6 +453,11 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// This is used while installing in the new API to determine when the application is done installing
+		/// </summary>
+		/// <param name="func"></param>
+		/// <returns></returns>
 		private async Task<InstallStatusCode> PollForTerminalStatusAsync(Func<Task<GetInstallStatusResponse>> func)
 		{
 			try
@@ -410,10 +470,10 @@ namespace Relativity.Test.Helpers.Kepler
 
 				do
 				{
-					if (watch.Elapsed.TotalMinutes > 2)
+					if (watch.Elapsed.TotalMinutes > TimeInMinutesToWaitForInstall)
 					{
 						throw new System.Exception($"The terminal status for this application installation could not be obtained. " +
-																			 $"Total polling time exceeded timeout value of {2} minutes.");
+																			 $"Total polling time exceeded timeout value of {TimeInMinutesToWaitForInstall} minutes.");
 					}
 
 					result = await func.Invoke();
@@ -448,6 +508,15 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
+		/// <summary>
+		/// This is the old way of installing an application (IRsapi)
+		/// </summary>
+		/// <param name="workspaceId"></param>
+		/// <param name="forceFlag"></param>
+		/// <param name="filePath"></param>
+		/// <param name="applicationName"></param>
+		/// <param name="appArtifactId"></param>
+		/// <returns></returns>
 		private async Task<int> ImportApplication(int workspaceId, bool forceFlag, string filePath, string applicationName, int appArtifactId = -1)
 		{
 			try
