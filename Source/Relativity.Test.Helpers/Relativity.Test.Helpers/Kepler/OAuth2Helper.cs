@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Relativity.Services.Security;
 using Relativity.Services.Security.Models;
+using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace Relativity.Test.Helpers.Kepler
 					}
 					else
 					{
-						throw new Exception($"A different user was has OAuth2 Credentials within ({oAuth2Name})");
+						throw new TestHelpersOAuth2Exception($"A different user was has OAuth2 Credentials within ({oAuth2Name})");
 					}
 				}
 				else
@@ -60,7 +61,7 @@ namespace Relativity.Test.Helpers.Kepler
 					}
 					else
 					{
-						throw new Exception($"Failed to create OAuth2 Client Credentials for ({user.EmailAddress}) within ({oAuth2Name})");
+						throw new TestHelpersOAuth2Exception($"Failed to create OAuth2 Client Credentials for ({user.EmailAddress}) within ({oAuth2Name})");
 					}
 				}
 
@@ -68,7 +69,7 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 			catch (Exception ex)
 			{
-				throw new Exception($"Exception occurred in ({nameof(CreateOAuth2ClientAsync)})", ex);
+				throw new TestHelpersOAuth2Exception($"Exception occurred in ({nameof(CreateOAuth2ClientAsync)})", ex);
 			}
 		}
 
@@ -107,7 +108,7 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 			catch (Exception ex)
 			{
-				throw new Exception($"Exception occurred in ({nameof(GetBearerTokenAsync)})", ex);
+				throw new TestHelpersOAuth2Exception($"Exception occurred in ({nameof(GetBearerTokenAsync)})", ex);
 			}
 		}
 
@@ -124,7 +125,7 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 			catch (Exception ex)
 			{
-				throw new Exception($"Exception occurred in ({nameof(DeleteOAuth2ClientAsync)})", ex);
+				throw new TestHelpersOAuth2Exception($"Exception occurred in ({nameof(DeleteOAuth2ClientAsync)})", ex);
 			}
 		}
 
@@ -144,11 +145,11 @@ namespace Relativity.Test.Helpers.Kepler
 					return oAuth.Find(x => x.Name.Equals(oAuth2Name));
 				}
 
-				throw new Exception($"Could not find an OAuth2 Client named ({oAuth2Name})");
+				throw new TestHelpersOAuth2Exception($"Could not find an OAuth2 Client named ({oAuth2Name})");
 			}
 			catch (Exception ex)
 			{
-				throw new Exception($"Error reading OAuth2Client in {nameof(DoesOAuth2ClientExistAsync)}", ex);
+				throw new TestHelpersOAuth2Exception($"Error reading OAuth2Client in {nameof(DoesOAuth2ClientExistAsync)}", ex);
 			}
 		}
 
@@ -166,7 +167,7 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 			catch (Exception ex)
 			{
-				throw new Exception($"Failed to check for OAuth2 Clients existence in {nameof(DoesOAuth2ClientExistAsync)}", ex);
+				throw new TestHelpersOAuth2Exception($"Failed to check for OAuth2 Clients existence in {nameof(DoesOAuth2ClientExistAsync)}", ex);
 			}
 		}
 
@@ -195,14 +196,14 @@ namespace Relativity.Test.Helpers.Kepler
 				}
 				else
 				{
-					throw new Exception($"Error finding user {email}: {resultSet.Message}");
+					throw new TestHelpersOAuth2Exception($"Error finding user {email}: {resultSet.Message}");
 				}
 
 				return user;
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Exception occurred in when attempting to retrieve a user by email", ex);
+				throw new TestHelpersOAuth2Exception("Exception occurred in when attempting to retrieve a user by email", ex);
 			}
 		}
 
@@ -240,11 +241,11 @@ namespace Relativity.Test.Helpers.Kepler
 					return await response.Content.ReadAsStringAsync();
 				}
 
-				throw new Exception("Token Generation failed.");
+				throw new TestHelpersOAuth2Exception("Token Generation failed.");
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Exception occurred in when attempting to generate the bearer token", ex);
+				throw new TestHelpersOAuth2Exception("Exception occurred in when attempting to generate the bearer token", ex);
 			}
 		}
 

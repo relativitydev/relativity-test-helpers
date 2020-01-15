@@ -11,14 +11,24 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 {
 	public static class MockRsapiClientHelper
 	{
-		public static void SetupIRsapiClientBehavior(this Mock<IRSAPIClient> mockRsapiClient, int workspaceId = -1)
+		public static Mock<IRSAPIClient> GetMockRsapiClient()
+		{
+			Mock<IRSAPIClient> mockRsapiClient = new Mock<IRSAPIClient>();
+
+			mockRsapiClient.SetupIRsapiClientBehavior();
+			mockRsapiClient.SetupQueryBehavior();
+
+			return mockRsapiClient;
+		}
+
+		private static void SetupIRsapiClientBehavior(this Mock<IRSAPIClient> mockRsapiClient, int workspaceId = -1)
 		{
 			mockRsapiClient.Setup(p => p.APIOptions).Returns(new APIOptions(workspaceId));
 			var repoGroup = ForceRepositoryGroupMock(mockRsapiClient.Object);
 			mockRsapiClient.SetupGet(p => p.Repositories).Returns(repoGroup);
 		}
 
-		internal static RepositoryGroup ForceRepositoryGroupMock(IRSAPIClient helper)
+		private static RepositoryGroup ForceRepositoryGroupMock(IRSAPIClient helper)
 		{
 			var repoGroupType = typeof(RepositoryGroup);
 			var repositoryCtor = repoGroupType.GetConstructors(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).First();
@@ -26,7 +36,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			return repoGroup;
 		}
 
-		public static void SetupQueryBehavior(this Mock<IRSAPIClient> mockRsapiClient)
+		private static void SetupQueryBehavior(this Mock<IRSAPIClient> mockRsapiClient)
 		{
 			Artifact userArtifact = new User()
 			{

@@ -4,6 +4,7 @@ using Relativity.Kepler.Transport;
 using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Services.Interfaces.LibraryApplication.Models;
 using Relativity.Test.Helpers.Application;
+using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -148,7 +149,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred: {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -212,7 +213,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred: {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -257,7 +258,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred in ({nameof(DoesLibraryApplicationExistAsync)}) | applicationName: ({applicationName}) : {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -321,7 +322,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred in ({nameof(DoesWorkspaceApplicationExistAsync)}) | applicationName: ({applicationName}) | workspaceId: ({workspaceId}) | workspaceApplicationInstallId: ({workspaceApplicationInstallId}) : {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -350,7 +351,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred: {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -375,7 +376,7 @@ namespace Relativity.Test.Helpers.Kepler
 				}
 				else
 				{
-					throw new Exception("Library Application does not exist");
+					throw new TestHelpersApplicationInstallException("Library Application does not exist");
 				}
 
 				return result;
@@ -384,7 +385,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred in ({nameof(GetLibraryApplicationIdAsync)}) | applicationName: ({applicationName}) : {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -409,7 +410,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred in ({nameof(IsVersionKeplerCompatibleAsync)}) : {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -449,7 +450,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred in ({nameof(GetInstanceRelativityVersionAsync)}) : {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -504,7 +505,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred in ({nameof(PollForTerminalStatusAsync)}) : {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 
@@ -595,7 +596,7 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				string exception = $"An error occurred in ({nameof(ImportApplication)}) | workspaceId: ({workspaceId}) | forceFlag: ({forceFlag}) | filePath: ({filePath}) | applicationName: ({applicationName}) | appArtifactId: ({appArtifactId}) : {ex.Message}";
 				Console.WriteLine(exception);
-				throw new Exception(exception, ex);
+				throw new TestHelpersApplicationInstallException(exception, ex);
 			}
 		}
 		#endregion

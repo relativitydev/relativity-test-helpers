@@ -1,16 +1,10 @@
 ﻿using kCura.Relativity.Client;
 using Moq;
-using Moq.Protected;
 using NUnit.Framework;
 using Relativity.Services.Security;
-using Relativity.Services.Security.Models;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Tests.Helpers.Tests.Unit.MockHelpers;
-using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
@@ -30,18 +24,12 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		private const int ContextUser = 999;
 		private const string BearerToken = "abc1234567890.abc1234567890abc1234567890";
 
-		private string _jsonBearer = @"{
-    ""access_token"": ""@bearerToken"",
-    ""expires_in"": 28800,
-    ""token_type"": ""Bearer""
-}";
-
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			_mockOAuth2ClientManager = GetMockOAuth2ClientManager();
-			_mockRsapiClient = GetMockRsapiClient();
-			_mockHttpMessageHandler = GetMockHttpMessageHandler();
+			_mockOAuth2ClientManager = MockOAuth2ClientManagerHelper.GetMockOAuth2ClientManager(OAuth2Id, OAuth2Name, OAuth2Secret, ContextUser);
+			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClient();
+			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandler(BearerToken);
 
 			Sut = new OAuth2Helper(_mockOAuth2ClientManager.Object, _mockRsapiClient.Object);
 		}
@@ -116,59 +104,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 
 			// Assert
 			Assert.IsTrue(result.Equals(BearerToken));
-		}
-
-		private Mock<IOAuth2ClientManager> GetMockOAuth2ClientManager()
-		{
-			Mock<IOAuth2ClientManager> mockOAuth2ClientManager = new Mock<IOAuth2ClientManager>();
-			Services.Security.Models.OAuth2Client oAuth2Client = new Services.Security.Models.OAuth2Client()
-			{
-				Id = OAuth2Id,
-				Name = OAuth2Name,
-				Secret = OAuth2Secret,
-				ContextUser = ContextUser
-			};
-			List<Services.Security.Models.OAuth2Client> oAuth2Clients = new List<Services.Security.Models.OAuth2Client>() { oAuth2Client };
-
-			mockOAuth2ClientManager
-				.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<OAuth2Flow>(), It.IsAny<IEnumerable<Uri>>(), It.IsAny<int>()))
-				.Returns(Task.FromResult(oAuth2Client));
-
-			mockOAuth2ClientManager
-				.Setup(x => x.DeleteAsync(It.IsAny<string>()))
-				.Returns(Task.CompletedTask);
-
-			mockOAuth2ClientManager
-				.Setup(x => x.ReadAllAsync())
-				.Returns(Task.FromResult(oAuth2Clients));
-
-			return mockOAuth2ClientManager;
-		}
-
-		private Mock<IRSAPIClient> GetMockRsapiClient()
-		{
-			Mock<IRSAPIClient> mockRsapiClient = new Mock<IRSAPIClient>();
-
-			mockRsapiClient.SetupIRsapiClientBehavior();
-			mockRsapiClient.SetupQueryBehavior();
-
-			return mockRsapiClient;
-		}
-
-		private Mock<HttpMessageHandler> GetMockHttpMessageHandler()
-		{
-			Mock<HttpMessageHandler> mockHttpMessageHandler = new Mock<HttpMessageHandler>();
-
-			_jsonBearer = _jsonBearer.Replace("@bearerToken", BearerToken);
-			mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-				.ReturnsAsync(new HttpResponseMessage
-				{
-					StatusCode = HttpStatusCode.OK,
-					Content = new StringContent(_jsonBearer)
-				});
-
-
-			return mockHttpMessageHandler;
 		}
 	}
 }
