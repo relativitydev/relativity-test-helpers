@@ -11,7 +11,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 {
 	public static class MockLibraryApplicationManagerHelper
 	{
-		public static Mock<ILibraryApplicationManager> GetMockLibraryApplicationManager(string applicationName, Guid applicationGuid, int libraryApplicationId)
+		public static Mock<ILibraryApplicationManager> GetMockLibraryApplicationManager(string applicationName, Guid applicationGuid, int libraryApplicationId, bool isApplicationAlreadyInstalled)
 		{
 			Mock<ILibraryApplicationManager> mockLibraryApplicationManager = new Mock<ILibraryApplicationManager>();
 
@@ -23,25 +23,43 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			createLibraryApplicationResponse.ApplicationIdentifier = new ObjectIdentifier();
 			createLibraryApplicationResponse.ApplicationIdentifier.ArtifactID = libraryApplicationId;
 
-			List<LibraryApplicationResponse> allApps = new List<LibraryApplicationResponse>();
-			allApps.Add(new LibraryApplicationResponse()
+			List<LibraryApplicationResponse> allAppsInstalled = new List<LibraryApplicationResponse>();
+			allAppsInstalled.Add(new LibraryApplicationResponse()
 			{
 				Name = applicationName,
 				Guids = new List<Guid>() { applicationGuid }
 			});
 
+			List<LibraryApplicationResponse> allAppsNotInstalled = new List<LibraryApplicationResponse>();
+			allAppsNotInstalled.Add(new LibraryApplicationResponse()
+			{
+				Name = string.Empty,
+				Guids = new List<Guid>() { Guid.Empty }
+			});
+
 			mockLibraryApplicationManager
 				.Setup(x => x.GetLibraryInstallStatusAsync(It.IsAny<int>(), It.IsAny<int>()))
-				.Returns(Task.FromResult(getInstallStatusResponse));
+				.ReturnsAsync(getInstallStatusResponse);
 			mockLibraryApplicationManager
 				.Setup(x => x.CreateAsync(It.IsAny<int>(), It.IsAny<IKeplerStream>()))
-				.Returns(Task.FromResult(createLibraryApplicationResponse));
+				.ReturnsAsync(createLibraryApplicationResponse);
 			mockLibraryApplicationManager
 				.Setup(x => x.DeleteAsync(It.IsAny<int>(), It.IsAny<int>()))
 				.Returns(Task.CompletedTask);
-			mockLibraryApplicationManager
-				.Setup(x => x.ReadAllAsync(It.IsAny<int>()))
-				.Returns(Task.FromResult(allApps));
+
+			if (isApplicationAlreadyInstalled)
+			{
+				mockLibraryApplicationManager
+					.Setup(x => x.ReadAllAsync(It.IsAny<int>()))
+					.ReturnsAsync(allAppsInstalled);
+			}
+			else
+			{
+				mockLibraryApplicationManager
+					.SetupSequence(x => x.ReadAllAsync(It.IsAny<int>()))
+					.ReturnsAsync(allAppsNotInstalled)
+					.ReturnsAsync(allAppsInstalled);
+			}
 
 			return mockLibraryApplicationManager;
 		}

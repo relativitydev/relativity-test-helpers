@@ -23,13 +23,19 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		private const string OAuth2Secret = "OAuth2Secret";
 		private const int ContextUser = 999;
 		private const string BearerToken = "abc1234567890.abc1234567890abc1234567890";
+		private string _jsonBearer = @"{
+    ""access_token"": ""@bearerToken"",
+    ""expires_in"": 28800,
+    ""token_type"": ""Bearer""
+}";
 
 		[OneTimeSetUp]
 		public void SetUp()
 		{
+			_jsonBearer = _jsonBearer.Replace("@bearerToken", BearerToken);
 			_mockOAuth2ClientManager = MockOAuth2ClientManagerHelper.GetMockOAuth2ClientManager(OAuth2Id, OAuth2Name, OAuth2Secret, ContextUser);
-			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClient();
-			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandler(BearerToken);
+			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForUser();
+			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForBearerToken(_jsonBearer);
 
 			Sut = new OAuth2Helper(_mockOAuth2ClientManager.Object, _mockRsapiClient.Object);
 		}

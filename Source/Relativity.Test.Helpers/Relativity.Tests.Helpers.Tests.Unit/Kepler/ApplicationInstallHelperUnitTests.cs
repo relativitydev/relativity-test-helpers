@@ -21,20 +21,25 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		private const string Username = "eDiscovery";
 		private const string Password = "wordpass";
 		private const string ApplicationName = "FakeApp";
+		private const string RelativityVersionPreKeplerApi = "10.0.318.5";
+		private const string RelativityVersionPostKeplerApi = "10.3.170.1";
 		private readonly Guid ApplicationGuid = new Guid("884a7b32-1bfe-4d8d-8229-6e012bfc08ef");
 		private const int AdminWorkspaceId = -1;
 		private const int LibraryApplicationId = 111;
 		private const int WorkspaceApplicationId = 222;
+		private Mock<IApplicationInstallManager> _mockApplicationInstallManager;
+		private Mock<ILibraryApplicationManager> _mockLibraryApplicationManager;
+		private Mock<IRSAPIClient> _mockRsapiClient;
+		private Mock<HttpMessageHandler> _mockHttpMessageHandler;
+
 
 		[SetUp]
 		public void SetUp()
 		{
-			Mock<IApplicationInstallManager> mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId);
-			Mock<ILibraryApplicationManager> mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId);
-			Mock<IRSAPIClient> mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClient();
-			Mock<HttpMessageHandler> mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandler(BearerToken);
+			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId);
 
-			Sut = new ApplicationInstallHelper(mockRsapiClient.Object, mockApplicationInstallManager.Object, mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, mockHttpMessageHandler.Object);
+
+
 		}
 
 		[TearDown]
@@ -43,16 +48,24 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 			Sut = null;
 		}
 
-		[Test]
-		public async Task DoesLibraryApplicationExistAsyncTest()
+		[TestCase(RelativityVersionPreKeplerApi, true)]
+		[TestCase(RelativityVersionPreKeplerApi, false)]
+		[TestCase(RelativityVersionPostKeplerApi, true)]
+		[TestCase(RelativityVersionPostKeplerApi, false)]
+		public async Task DoesLibraryApplicationExistAsyncTest(string relativityVersion, bool isApplicationAlreadyInstalled)
 		{
 			// Arrange
+			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled);
+			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
+			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
+
+			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
 
 			// Act
 			bool result = await Sut.DoesLibraryApplicationExistAsync(ApplicationName);
 
 			// Assert
-			Assert.IsTrue(result);
+			Assert.AreEqual(isApplicationAlreadyInstalled, result);
 		}
 	}
 }

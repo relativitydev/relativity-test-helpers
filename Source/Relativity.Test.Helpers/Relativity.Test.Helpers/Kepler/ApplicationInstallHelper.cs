@@ -424,22 +424,21 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				if (string.IsNullOrEmpty(_relativityVersion))
 				{
-					using (HttpClient httpClient = new HttpClient(_httpMessageHandler))
-					{
-						httpClient.BaseAddress = new Uri($"{_protocol}://{_serverAddress}/Relativity");
-						string encoded = System.Convert.ToBase64String(Encoding.ASCII.GetBytes(_username + ":" + _password));
-						httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
-						httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {encoded}");
-						StringContent content = new StringContent("");
-						content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+					HttpClient httpClient = new HttpClient(_httpMessageHandler);
 
-						string url = "/relativity.rest/api/Relativity.Services.InstanceDetails.IInstanceDetailsModule/InstanceDetailsService/GetRelativityVersionAsync";
-						HttpResponseMessage httpResponse = await httpClient.PostAsync(url, content);
-						string instanceRelativityVersion = await httpResponse.Content.ReadAsStringAsync();
-						instanceRelativityVersion = instanceRelativityVersion.Replace("\"", "");
-						_relativityVersion = instanceRelativityVersion;
-						return instanceRelativityVersion;
-					}
+					httpClient.BaseAddress = new Uri($"{_protocol}://{_serverAddress}/Relativity");
+					string encoded = System.Convert.ToBase64String(Encoding.ASCII.GetBytes(_username + ":" + _password));
+					httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
+					httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {encoded}");
+					StringContent content = new StringContent("");
+					content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+					string url = "/relativity.rest/api/Relativity.Services.InstanceDetails.IInstanceDetailsModule/InstanceDetailsService/GetRelativityVersionAsync";
+					HttpResponseMessage httpResponse = await httpClient.PostAsync(url, content);
+					string instanceRelativityVersion = await httpResponse.Content.ReadAsStringAsync();
+					instanceRelativityVersion = instanceRelativityVersion.Replace("\"", "");
+					_relativityVersion = instanceRelativityVersion;
+					return instanceRelativityVersion;
 				}
 				else
 				{
