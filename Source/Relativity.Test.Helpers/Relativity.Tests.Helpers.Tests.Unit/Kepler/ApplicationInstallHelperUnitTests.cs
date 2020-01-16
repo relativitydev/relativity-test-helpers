@@ -6,7 +6,9 @@ using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Tests.Helpers.Tests.Unit.MockHelpers;
 using System;
+using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
@@ -36,7 +38,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		[SetUp]
 		public void SetUp()
 		{
-			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId);
+
 
 
 
@@ -55,7 +57,8 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		public async Task DoesLibraryApplicationExistAsyncTest(string relativityVersion, bool isApplicationAlreadyInstalled)
 		{
 			// Arrange
-			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled);
+			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
+			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
@@ -66,6 +69,82 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 
 			// Assert
 			Assert.AreEqual(isApplicationAlreadyInstalled, result);
+		}
+
+		[TestCase(RelativityVersionPreKeplerApi, true)]
+		[TestCase(RelativityVersionPreKeplerApi, false)]
+		[TestCase(RelativityVersionPostKeplerApi, true)]
+		[TestCase(RelativityVersionPostKeplerApi, false)]
+		public async Task DoesWorkspaceApplicationExistAsyncTest(string relativityVersion, bool isApplicationAlreadyInstalled)
+		{
+			// Arrange
+			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
+			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
+			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
+			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
+
+			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
+
+			int workspaceId = 100999;
+			int applicationId = 101010;
+
+			// Act
+			bool result = await Sut.DoesWorkspaceApplicationExistAsync(ApplicationName, workspaceId, applicationId);
+
+			// Assert
+			Assert.AreEqual(isApplicationAlreadyInstalled, result);
+		}
+
+		[TestCase(RelativityVersionPreKeplerApi, true)]
+		[TestCase(RelativityVersionPreKeplerApi, false)]
+		[TestCase(RelativityVersionPostKeplerApi, true)]
+		[TestCase(RelativityVersionPostKeplerApi, false)]
+		public async Task DeleteApplicationFromLibraryIfItExistsAsyncTest(string relativityVersion, bool isApplicationAlreadyInstalled)
+		{
+			// Arrange
+			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
+			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
+			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
+			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
+
+			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
+
+			// Act
+			await Sut.DeleteApplicationFromLibraryIfItExistsAsync(ApplicationName);
+			bool result = await Sut.DoesLibraryApplicationExistAsync(ApplicationName);
+
+			// Assert
+			Assert.IsTrue(result);
+		}
+
+		[TestCase(RelativityVersionPreKeplerApi, true)]
+		[TestCase(RelativityVersionPreKeplerApi, false)]
+		[TestCase(RelativityVersionPostKeplerApi, true)]
+		[TestCase(RelativityVersionPostKeplerApi, false)]
+		public async Task InstallApplicationAsyncTest(string relativityVersion, bool isApplicationAlreadyInstalled)
+		{
+			// Arrange
+			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
+			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
+			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
+			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
+
+			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
+
+			// bin location
+			string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			string rapFilePath = Path.Combine(executableLocation, "LICENSE.txt");
+			FileStream fileStream = File.OpenRead(rapFilePath);
+			int workspaceId = 100999;
+			bool unlockApps = true;
+
+			// Act
+			int applicationInstallId = await Sut.InstallApplicationAsync(ApplicationName, fileStream, workspaceId, unlockApps);
+			bool result = await Sut.DoesWorkspaceApplicationExistAsync(ApplicationName, workspaceId, applicationInstallId);
+
+			// Assert
+			Assert.IsTrue(result);
+			fileStream.Close();
 		}
 	}
 }

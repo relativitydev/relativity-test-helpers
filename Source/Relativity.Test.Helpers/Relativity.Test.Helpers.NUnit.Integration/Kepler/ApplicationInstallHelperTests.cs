@@ -20,13 +20,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 		private string _applicationName = "FakeApp";
 		private string _rapFileName = "FakeApp.rap";
 		private string _rapFilePath;
+		private FileStream _fileStream;
 
 		[SetUp]
 		public void SetUp()
 		{
-			//executable location
+			// bin location
 			string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			_rapFilePath = Path.Combine(executableLocation, $"Files/{_rapFileName}");
+			_fileStream = File.OpenRead(_rapFilePath);
 
 			_testHelper = new TestHelper(TestContext.CurrentContext);
 
@@ -48,6 +50,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			WorkspaceHelpers.DeleteWorkspace.Delete(_testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System), _workspaceId);
 			Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName).Wait();
 
+			_fileStream.Close();
 			_testHelper = null;
 			Sut = null;
 		}
@@ -61,7 +64,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 				bool unlockApps = true;
 
 				// Act
-				int result = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
+				int result = await Sut.InstallApplicationAsync(_applicationName, _fileStream, _workspaceId, unlockApps);
 
 				// Assert
 				Assert.IsTrue(result > 0);
@@ -79,7 +82,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			{
 				// Arrange
 				bool unlockApps = true;
-				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
+				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _fileStream, _workspaceId, unlockApps);
 
 				// Act
 				await Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName);
@@ -101,7 +104,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			{
 				// Arrange
 				bool unlockApps = true;
-				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
+				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _fileStream, _workspaceId, unlockApps);
 
 				// Act
 				bool result = await Sut.DoesWorkspaceApplicationExistAsync(_applicationName, _workspaceId, workspaceApplicationInstallId);
@@ -135,7 +138,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			{
 				// Arrange
 				bool unlockApps = true;
-				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _rapFilePath, _workspaceId, unlockApps);
+				int workspaceApplicationInstallId = await Sut.InstallApplicationAsync(_applicationName, _fileStream, _workspaceId, unlockApps);
 
 				// Act
 				bool result = await Sut.DoesLibraryApplicationExistAsync(_applicationName);

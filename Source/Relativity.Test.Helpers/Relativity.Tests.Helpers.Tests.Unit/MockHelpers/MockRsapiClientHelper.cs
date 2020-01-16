@@ -3,6 +3,7 @@ using kCura.Relativity.Client;
 using kCura.Relativity.Client.Repositories;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Field = kCura.Relativity.Client.Field;
 
@@ -23,12 +24,14 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			return mockRsapiClient;
 		}
 
-		public static Mock<IRSAPIClient> GetMockRsapiClientForInstall(bool isApplicationAlreadyInstalled)
+		public static Mock<IRSAPIClient> GetMockRsapiClientForInstall(bool isApplicationAlreadyInstalled, string applicationName)
 		{
 			Mock<IRSAPIClient> mockRsapiClient = new Mock<IRSAPIClient>();
 
 			mockRsapiClient.SetupIRsapiClientBehavior();
-			mockRsapiClient.SetupQueryBehaviorForInstall(isApplicationAlreadyInstalled);
+			mockRsapiClient.SetupQueryBehaviorForInstall(isApplicationAlreadyInstalled, applicationName);
+			mockRsapiClient.SetupDeleteBehaviorForInstall(isApplicationAlreadyInstalled, applicationName);
+			mockRsapiClient.SetupInstallBehavior();
 
 			return mockRsapiClient;
 		}
@@ -73,7 +76,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 				.Returns(userQueryResult);
 		}
 
-		private static void SetupQueryBehaviorForInstall(this Mock<IRSAPIClient> mockRsapiClient, bool isApplicationAlreadyInstalled)
+		private static void SetupQueryBehaviorForInstall(this Mock<IRSAPIClient> mockRsapiClient, bool isApplicationAlreadyInstalled, string applicationName)
 		{
 			QueryResult rdoQueryResultInstalled = new QueryResult()
 			{
@@ -90,7 +93,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			kCura.Relativity.Client.Artifact rdoResultArtifactInstalled = new kCura.Relativity.Client.Artifact(-1, (int)kCura.Relativity.Client.ArtifactType.ObjectType, 999)
 			{
 				ArtifactID = 999,
-				Name = "ApplicationName"
+				Name = applicationName
 			};
 
 			rdoQueryResultInstalled.QueryArtifacts.Add(rdoResultArtifactInstalled);
@@ -100,6 +103,9 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 				mockRsapiClient
 					.Setup(p => p.Query(It.IsAny<APIOptions>(), It.Is<kCura.Relativity.Client.Query>(q => q.ArtifactTypeID == LibraryApplicationTypeId), It.IsAny<int>()))
 					.Returns(rdoQueryResultInstalled);
+				mockRsapiClient
+					.Setup(p => p.Query(It.IsAny<APIOptions>(), It.Is<kCura.Relativity.Client.Query>(q => q.ArtifactTypeID == WorkspaceApplicationTypeId), It.IsAny<int>()))
+					.Returns(rdoQueryResultInstalled);
 			}
 			else
 			{
@@ -107,7 +113,66 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 					.SetupSequence(p => p.Query(It.IsAny<APIOptions>(), It.Is<kCura.Relativity.Client.Query>(q => q.ArtifactTypeID == LibraryApplicationTypeId), It.IsAny<int>()))
 					.Returns(rdoQueryResultNotInstalled)
 					.Returns(rdoQueryResultInstalled);
+				mockRsapiClient
+					.SetupSequence(p => p.Query(It.IsAny<APIOptions>(), It.Is<kCura.Relativity.Client.Query>(q => q.ArtifactTypeID == WorkspaceApplicationTypeId), It.IsAny<int>()))
+					.Returns(rdoQueryResultNotInstalled)
+					.Returns(rdoQueryResultInstalled)
+					.Returns(rdoQueryResultInstalled);
 			}
+		}
+
+		private static void SetupDeleteBehaviorForInstall(this Mock<IRSAPIClient> mockRsapiClient, bool isApplicationAlreadyInstalled, string applicationName)
+		{
+			ResultSet rdoDeleteResultInstalled = new ResultSet()
+			{
+				Success = true
+			};
+
+			ResultSet rdoDeleteResultNotInstalled = new ResultSet()
+			{
+				Success = false
+			};
+
+			kCura.Relativity.Client.Artifact rdoResultArtifactInstalled = new kCura.Relativity.Client.Artifact(-1, (int)kCura.Relativity.Client.ArtifactType.ObjectType, 999)
+			{
+				ArtifactID = 999,
+				Name = applicationName
+			};
+
+			if (isApplicationAlreadyInstalled)
+			{
+				mockRsapiClient
+					.Setup(p => p.Delete(It.IsAny<APIOptions>(), It.IsAny<List<ArtifactRequest>>()))
+					.Returns(rdoDeleteResultInstalled);
+			}
+			else
+			{
+				mockRsapiClient
+					.SetupSequence(p => p.Delete(It.IsAny<APIOptions>(), It.IsAny<List<ArtifactRequest>>()))
+					.Returns(rdoDeleteResultNotInstalled)
+					.Returns(rdoDeleteResultInstalled);
+			}
+		}
+
+		private static void SetupInstallBehavior(this Mock<IRSAPIClient> mockRsapiClient)
+		{
+			ProcessOperationResult processOperationResult = new ProcessOperationResult()
+			{
+				Success = true,
+				ProcessID = Guid.NewGuid()
+			};
+
+			ProcessInformation processInformation = new ProcessInformation()
+			{
+				State = ProcessStateValue.Completed
+			};
+
+			mockRsapiClient
+				.Setup(x => x.InstallApplication(It.IsAny<APIOptions>(), It.IsAny<AppInstallRequest>()))
+				.Returns(processOperationResult);
+			mockRsapiClient
+				.Setup(x => x.GetProcessState(It.IsAny<APIOptions>(), It.IsAny<Guid>()))
+				.Returns(processInformation);
 		}
 	}
 }

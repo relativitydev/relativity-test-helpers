@@ -88,7 +88,7 @@ namespace Relativity.Test.Helpers.Kepler
 		/// <param name="workspaceId"></param>
 		/// <param name="unlockApps"></param>
 		/// <returns></returns>
-		public async Task<int> InstallApplicationAsync(string applicationName, string rapFilePath, int workspaceId, bool unlockApps)
+		public async Task<int> InstallApplicationAsync(string applicationName, FileStream fileStream, int workspaceId, bool unlockApps)
 		{
 			try
 			{
@@ -108,7 +108,7 @@ namespace Relativity.Test.Helpers.Kepler
 
 					if (!await DoesLibraryApplicationExistAsync(applicationName))
 					{
-						libraryApplicationInstallId = await CreateLibraryApplicationAsync(rapFilePath);
+						libraryApplicationInstallId = await CreateLibraryApplicationAsync(fileStream);
 
 						// The following function will poll for the installation status until the installation reaches a terminal state.
 						status = PollForTerminalStatusAsync(async () => await _libraryApplicationManager.GetLibraryInstallStatusAsync(AdminWorkspaceId, libraryApplicationInstallId)).Result;
@@ -140,7 +140,14 @@ namespace Relativity.Test.Helpers.Kepler
 				}
 				else
 				{
-					workspaceApplicationInstallId = await ImportApplication(workspaceId, true, rapFilePath, applicationName);
+					if (!await DoesWorkspaceApplicationExistAsync(applicationName, workspaceId, 0))
+					{
+						workspaceApplicationInstallId = await ImportApplication(workspaceId, false, fileStream, applicationName);
+					}
+					else
+					{
+						workspaceApplicationInstallId = await ImportApplication(workspaceId, true, fileStream, applicationName);
+					}
 				}
 
 				return workspaceApplicationInstallId;
@@ -285,7 +292,8 @@ namespace Relativity.Test.Helpers.Kepler
 						{
 							LibraryApplicationResponse app = allApps.Find(x => x.Name.Equals(applicationName));
 
-							GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.Guids.First(), workspaceApplicationInstallId);
+							GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.ArtifactID, workspaceApplicationInstallId);
+							//GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.Guids.First(), workspaceApplicationInstallId);
 							result = appStatus.InstallStatus.Code == InstallStatusCode.Completed;
 						}
 						else
@@ -334,18 +342,15 @@ namespace Relativity.Test.Helpers.Kepler
 		/// </summary>
 		/// <param name="rapFilePath"></param>
 		/// <returns></returns>
-		private async Task<int> CreateLibraryApplicationAsync(string rapFilePath)
+		private async Task<int> CreateLibraryApplicationAsync(FileStream fileStream)
 		{
 			try
 			{
-				using (Stream stream = File.OpenRead(rapFilePath))
-				{
-					CreateLibraryApplicationResponse response = await _libraryApplicationManager.CreateAsync(AdminWorkspaceId, new KeplerStream(stream));
-					string info = string.Format($"The file located at {rapFilePath} is uploading to the application library.");
-					Console.WriteLine(info);
+				CreateLibraryApplicationResponse response = await _libraryApplicationManager.CreateAsync(AdminWorkspaceId, new KeplerStream(fileStream));
+				string info = string.Format($"The file located at {fileStream.Name} is uploading to the application library.");
+				Console.WriteLine(info);
 
-					return response.ApplicationIdentifier.ArtifactID;
-				}
+				return response.ApplicationIdentifier.ArtifactID;
 			}
 			catch (Exception ex)
 			{
@@ -517,7 +522,7 @@ namespace Relativity.Test.Helpers.Kepler
 		/// <param name="applicationName"></param>
 		/// <param name="appArtifactId"></param>
 		/// <returns></returns>
-		private async Task<int> ImportApplication(int workspaceId, bool forceFlag, string filePath, string applicationName, int appArtifactId = -1)
+		private async Task<int> ImportApplication(int workspaceId, bool forceFlag, FileStream fileStream, string applicationName, int appArtifactId = -1)
 		{
 			try
 			{
@@ -532,7 +537,7 @@ namespace Relativity.Test.Helpers.Kepler
 
 				AppInstallRequest appInstallRequest = new AppInstallRequest
 				{
-					FullFilePath = filePath,
+					FullFilePath = fileStream.Name,
 					ForceFlag = forceFlag
 				};
 				appInstallRequest.AppsToOverride.Add(appArtifactId);
@@ -593,7 +598,7 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 			catch (Exception ex)
 			{
-				string exception = $"An error occurred in ({nameof(ImportApplication)}) | workspaceId: ({workspaceId}) | forceFlag: ({forceFlag}) | filePath: ({filePath}) | applicationName: ({applicationName}) | appArtifactId: ({appArtifactId}) : {ex.Message}";
+				string exception = $"An error occurred in ({nameof(ImportApplication)}) | workspaceId: ({workspaceId}) | forceFlag: ({forceFlag}) | fileStream: ({fileStream.Name}) | applicationName: ({applicationName}) | appArtifactId: ({appArtifactId}) : {ex.Message}";
 				Console.WriteLine(exception);
 				throw new TestHelpersApplicationInstallException(exception, ex);
 			}

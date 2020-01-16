@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Kepler
 {
@@ -8,11 +9,11 @@ namespace Relativity.Test.Helpers.Kepler
 		/// Installs the application into a workspace.  Will install the application into the Library if it does not exist there already
 		/// </summary>
 		/// <param name="applicationName"></param>
-		/// <param name="rapFilePath"></param>
+		/// <param name="fileStream"></param>
 		/// <param name="workspaceId"></param>
 		/// <param name="unlockApps"></param>
 		/// <returns></returns>
-		Task<int> InstallApplicationAsync(string applicationName, string rapFilePath, int workspaceId, bool unlockApps);
+		Task<int> InstallApplicationAsync(string applicationName, FileStream fileStream, int workspaceId, bool unlockApps);
 
 		/// <summary>
 		/// Deletes the application from the Library if it exists.

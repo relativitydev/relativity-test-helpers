@@ -9,7 +9,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 {
 	public static class MockApplicationInstallManagerHelper
 	{
-		public static Mock<IApplicationInstallManager> GetMockApplicationInstallManager(int workspaceApplicationId)
+		public static Mock<IApplicationInstallManager> GetMockApplicationInstallManager(int workspaceApplicationId, bool isApplicationAlreadyInstalled)
 		{
 			Mock<IApplicationInstallManager> mockApplicationInstallManager = new Mock<IApplicationInstallManager>();
 
@@ -18,17 +18,39 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			installApplicationResponse.ApplicationIdentifier = new ObjectIdentifier();
 			installApplicationResponse.ApplicationIdentifier.ArtifactID = workspaceApplicationId;
 
-			GetInstallStatusResponse getInstallStatusResponse = new GetInstallStatusResponse();
-			getInstallStatusResponse.InstallStatus = new InstallStatus();
-			getInstallStatusResponse.InstallStatus.Code = InstallStatusCode.Completed;
+			GetInstallStatusResponse getInstallStatusResponseInstalled = new GetInstallStatusResponse();
+			getInstallStatusResponseInstalled.InstallStatus = new InstallStatus();
+			getInstallStatusResponseInstalled.InstallStatus.Code = InstallStatusCode.Completed;
+
+			GetInstallStatusResponse getInstallStatusResponseNotInstalled = new GetInstallStatusResponse();
+			getInstallStatusResponseNotInstalled.InstallStatus = new InstallStatus();
+			getInstallStatusResponseNotInstalled.InstallStatus.Code = InstallStatusCode.Failed;
 
 			mockApplicationInstallManager
 				.Setup(x => x.InstallApplicationAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<InstallApplicationRequest>()))
 				.Returns(Task.FromResult(installApplicationResponse));
 
-			mockApplicationInstallManager
-				.Setup(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
-				.Returns(Task.FromResult(getInstallStatusResponse));
+
+			if (isApplicationAlreadyInstalled)
+			{
+				mockApplicationInstallManager
+					.Setup(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+					.ReturnsAsync(getInstallStatusResponseInstalled);
+				//mockApplicationInstallManager
+				//	.Setup(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+				//	.ReturnsAsync(getInstallStatusResponseInstalled);
+			}
+			else
+			{
+				mockApplicationInstallManager
+					.SetupSequence(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+					.ReturnsAsync(getInstallStatusResponseNotInstalled)
+					.ReturnsAsync(getInstallStatusResponseInstalled);
+				//mockApplicationInstallManager
+				//	.Setup(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+				//	.ReturnsAsync(getInstallStatusResponseInstalled);
+			}
+
 
 			return mockApplicationInstallManager;
 		}
