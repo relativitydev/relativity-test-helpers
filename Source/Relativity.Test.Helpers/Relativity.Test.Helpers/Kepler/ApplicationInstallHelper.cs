@@ -84,7 +84,7 @@ namespace Relativity.Test.Helpers.Kepler
 		/// Installs the application into a workspace.  Will install the application into the Library if it does not exist there already
 		/// </summary>
 		/// <param name="applicationName"></param>
-		/// <param name="rapFilePath"></param>
+		/// <param name="fileStream"></param>
 		/// <param name="workspaceId"></param>
 		/// <param name="unlockApps"></param>
 		/// <returns></returns>
@@ -340,7 +340,7 @@ namespace Relativity.Test.Helpers.Kepler
 		/// <summary>
 		/// New API Kepler calls to install the application into the library.  Will error if it already exists
 		/// </summary>
-		/// <param name="rapFilePath"></param>
+		/// <param name="fileStream"></param>
 		/// <returns></returns>
 		private async Task<int> CreateLibraryApplicationAsync(FileStream fileStream)
 		{
@@ -518,7 +518,7 @@ namespace Relativity.Test.Helpers.Kepler
 		/// </summary>
 		/// <param name="workspaceId"></param>
 		/// <param name="forceFlag"></param>
-		/// <param name="filePath"></param>
+		/// <param name="fileStream"></param>
 		/// <param name="applicationName"></param>
 		/// <param name="appArtifactId"></param>
 		/// <returns></returns>

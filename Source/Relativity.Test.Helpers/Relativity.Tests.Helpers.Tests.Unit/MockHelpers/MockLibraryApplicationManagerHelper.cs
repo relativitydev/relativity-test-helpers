@@ -11,6 +11,14 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 {
 	public static class MockLibraryApplicationManagerHelper
 	{
+		/// <summary>
+		/// Creates some mock calls for basic use when installing an app.  Has SetupSequence for when isApplicationAlreadyInstalled is false in some cases.
+		/// </summary>
+		/// <param name="applicationName"></param>
+		/// <param name="applicationGuid"></param>
+		/// <param name="libraryApplicationId"></param>
+		/// <param name="isApplicationAlreadyInstalled"></param>
+		/// <returns></returns>
 		public static Mock<ILibraryApplicationManager> GetMockLibraryApplicationManager(string applicationName, Guid applicationGuid, int libraryApplicationId, bool isApplicationAlreadyInstalled)
 		{
 			Mock<ILibraryApplicationManager> mockLibraryApplicationManager = new Mock<ILibraryApplicationManager>();

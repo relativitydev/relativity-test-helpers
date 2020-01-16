@@ -14,6 +14,10 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 		private static int LibraryApplicationTypeId = 34;
 		private const int WorkspaceApplicationTypeId = 1000011;
 
+		/// <summary>
+		/// Mocks used for OAuth calls here.  Basic functionality
+		/// </summary>
+		/// <returns></returns>
 		public static Mock<IRSAPIClient> GetMockRsapiClientForUser()
 		{
 			Mock<IRSAPIClient> mockRsapiClient = new Mock<IRSAPIClient>();
@@ -24,6 +28,12 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			return mockRsapiClient;
 		}
 
+		/// <summary>
+		/// Creates some mock calls for basic use when installing an app.  Has SetupSequence for when isApplicationAlreadyInstalled is false in some cases.
+		/// </summary>
+		/// <param name="isApplicationAlreadyInstalled"></param>
+		/// <param name="applicationName"></param>
+		/// <returns></returns>
 		public static Mock<IRSAPIClient> GetMockRsapiClientForInstall(bool isApplicationAlreadyInstalled, string applicationName)
 		{
 			Mock<IRSAPIClient> mockRsapiClient = new Mock<IRSAPIClient>();
@@ -36,6 +46,11 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			return mockRsapiClient;
 		}
 
+		/// <summary>
+		/// Sets up IRsapi to be mocked when using Repositories (through BindingFlags and Reflection)
+		/// </summary>
+		/// <param name="mockRsapiClient"></param>
+		/// <param name="workspaceId"></param>
 		private static void SetupIRsapiClientBehavior(this Mock<IRSAPIClient> mockRsapiClient, int workspaceId = -1)
 		{
 			mockRsapiClient.Setup(p => p.APIOptions).Returns(new APIOptions(workspaceId));
@@ -43,6 +58,11 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			mockRsapiClient.SetupGet(p => p.Repositories).Returns(repoGroup);
 		}
 
+		/// <summary>
+		/// Sets up IRsapi to be mocked when using Repositories (through BindingFlags and Reflection)
+		/// </summary>
+		/// <param name="helper"></param>
+		/// <returns></returns>
 		private static RepositoryGroup ForceRepositoryGroupMock(IRSAPIClient helper)
 		{
 			var repoGroupType = typeof(RepositoryGroup);
@@ -51,6 +71,10 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			return repoGroup;
 		}
 
+		/// <summary>
+		/// Just setting up some basic mock calls for user queries
+		/// </summary>
+		/// <param name="mockRsapiClient"></param>
 		private static void SetupQueryBehaviorForUser(this Mock<IRSAPIClient> mockRsapiClient)
 		{
 			QueryResult userQueryResult = new QueryResult()
@@ -76,6 +100,12 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 				.Returns(userQueryResult);
 		}
 
+		/// <summary>
+		/// Setting up some install mock calls.  Has SetupSequence for when isApplicationAlreadyInstalled is false in some cases.
+		/// </summary>
+		/// <param name="mockRsapiClient"></param>
+		/// <param name="isApplicationAlreadyInstalled"></param>
+		/// <param name="applicationName"></param>
 		private static void SetupQueryBehaviorForInstall(this Mock<IRSAPIClient> mockRsapiClient, bool isApplicationAlreadyInstalled, string applicationName)
 		{
 			QueryResult rdoQueryResultInstalled = new QueryResult()
@@ -121,6 +151,12 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			}
 		}
 
+		/// <summary>
+		/// Basic setup for Delete mock calls. Has SetupSequence for when isApplicationAlreadyInstalled is false in some cases.
+		/// </summary>
+		/// <param name="mockRsapiClient"></param>
+		/// <param name="isApplicationAlreadyInstalled"></param>
+		/// <param name="applicationName"></param>
 		private static void SetupDeleteBehaviorForInstall(this Mock<IRSAPIClient> mockRsapiClient, bool isApplicationAlreadyInstalled, string applicationName)
 		{
 			ResultSet rdoDeleteResultInstalled = new ResultSet()
@@ -154,6 +190,10 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			}
 		}
 
+		/// <summary>
+		/// Mocks the direct install and process state functions for Rsapi.
+		/// </summary>
+		/// <param name="mockRsapiClient"></param>
 		private static void SetupInstallBehavior(this Mock<IRSAPIClient> mockRsapiClient)
 		{
 			ProcessOperationResult processOperationResult = new ProcessOperationResult()

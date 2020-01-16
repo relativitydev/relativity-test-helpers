@@ -9,6 +9,11 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 {
 	public static class MockHttpMessageHandlerHelper
 	{
+		/// <summary>
+		/// Simple GET call mocked here for bearer token
+		/// </summary>
+		/// <param name="jsonPayloadWithBearerToken"></param>
+		/// <returns></returns>
 		public static Mock<HttpMessageHandler> GetMockHttpMessageHandlerForBearerToken(string jsonPayloadWithBearerToken)
 		{
 			Mock<HttpMessageHandler> mockHttpMessageHandler = new Mock<HttpMessageHandler>();
@@ -24,6 +29,11 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 			return mockHttpMessageHandler;
 		}
 
+		/// <summary>
+		/// Simple POST call mocked here to get Relativity Version
+		/// </summary>
+		/// <param name="expectedRelativityVersion"></param>
+		/// <returns></returns>
 		public static Mock<HttpMessageHandler> GetMockHttpMessageHandlerForRelativityVersion(string expectedRelativityVersion)
 		{
 			Mock<HttpMessageHandler> mockHttpMessageHandler = new Mock<HttpMessageHandler>();

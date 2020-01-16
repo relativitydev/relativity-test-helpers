@@ -9,6 +9,14 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 {
 	public static class MockOAuth2ClientManagerHelper
 	{
+		/// <summary>
+		/// Basic mocks for OAuth2 manager
+		/// </summary>
+		/// <param name="oAuth2Id"></param>
+		/// <param name="oAuth2Name"></param>
+		/// <param name="oAuth2Secret"></param>
+		/// <param name="contextUser"></param>
+		/// <returns></returns>
 		public static Mock<IOAuth2ClientManager> GetMockOAuth2ClientManager(string oAuth2Id, string oAuth2Name, string oAuth2Secret, int contextUser)
 		{
 			Mock<IOAuth2ClientManager> mockOAuth2ClientManager = new Mock<IOAuth2ClientManager>();

@@ -13,7 +13,7 @@ using DTOs = kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.Kepler
 {
-	public class OAuth2Helper : IOAuth2Helper
+	public class OAuth2Helper : IOAuth2Helper, IDisposable
 	{
 		private readonly IOAuth2ClientManager _oAuth2ClientManager;
 		private readonly IRSAPIClient _rsapiClient;
@@ -22,6 +22,12 @@ namespace Relativity.Test.Helpers.Kepler
 		{
 			_oAuth2ClientManager = oAuth2ClientManager ?? throw new ArgumentNullException($"Parameter ({nameof(oAuth2ClientManager)}) cannot be null");
 			_rsapiClient = rsapiClient ?? throw new ArgumentNullException($"Parameter ({nameof(rsapiClient)}) cannot be null");
+		}
+
+		public void Dispose()
+		{
+			_rsapiClient.Dispose();
+			_oAuth2ClientManager.Dispose();
 		}
 
 		/// <summary>

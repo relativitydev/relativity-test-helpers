@@ -38,10 +38,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		[SetUp]
 		public void SetUp()
 		{
-
-
-
-
+			//Setup not directly done here for Sut since I use SetupSequence in the mocks and that changes per test case
 		}
 
 		[TearDown]

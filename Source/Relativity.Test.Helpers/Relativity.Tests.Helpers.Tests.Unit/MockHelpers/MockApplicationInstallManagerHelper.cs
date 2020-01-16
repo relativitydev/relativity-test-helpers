@@ -9,6 +9,12 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 {
 	public static class MockApplicationInstallManagerHelper
 	{
+		/// <summary>
+		/// Creates some mock calls for basic use when installing an app.  Has SetupSequence for when isApplicationAlreadyInstalled is false in some cases.
+		/// </summary>
+		/// <param name="workspaceApplicationId"></param>
+		/// <param name="isApplicationAlreadyInstalled"></param>
+		/// <returns></returns>
 		public static Mock<IApplicationInstallManager> GetMockApplicationInstallManager(int workspaceApplicationId, bool isApplicationAlreadyInstalled)
 		{
 			Mock<IApplicationInstallManager> mockApplicationInstallManager = new Mock<IApplicationInstallManager>();
@@ -36,9 +42,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 				mockApplicationInstallManager
 					.Setup(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
 					.ReturnsAsync(getInstallStatusResponseInstalled);
-				//mockApplicationInstallManager
-				//	.Setup(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
-				//	.ReturnsAsync(getInstallStatusResponseInstalled);
 			}
 			else
 			{
@@ -46,9 +49,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.MockHelpers
 					.SetupSequence(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
 					.ReturnsAsync(getInstallStatusResponseNotInstalled)
 					.ReturnsAsync(getInstallStatusResponseInstalled);
-				//mockApplicationInstallManager
-				//	.Setup(x => x.GetStatusAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
-				//	.ReturnsAsync(getInstallStatusResponseInstalled);
 			}
 
 
