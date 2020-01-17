@@ -293,7 +293,6 @@ namespace Relativity.Test.Helpers.Kepler
 							LibraryApplicationResponse app = allApps.Find(x => x.Name.Equals(applicationName));
 
 							GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.ArtifactID, workspaceApplicationInstallId);
-							//GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.Guids.First(), workspaceApplicationInstallId);
 							result = appStatus.InstallStatus.Code == InstallStatusCode.Completed;
 						}
 						else
