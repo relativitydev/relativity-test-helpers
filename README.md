@@ -155,7 +155,7 @@ HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
 ````
 
 # ApplicationInstallHelper
-As of update 7.2.0.X of Test Helpers, you will have access to the ApplicationInstallHelper object which combines both old and new ways of installing applications in one.  Based on the Relativity version of the instance you are running it against, it will either install through RSAPI or utilize the IApplicationInstallManager and ILibraryApplicationManager, but it will do it entirely on it's own, so you don't have to worry about it.  The minimum Relativity version for the new API is 10.3.170.1.
+As of update 7.3.0.X of Test Helpers, you will have access to the ApplicationInstallHelper object which combines both old and new ways of installing applications in one.  Based on the Relativity version of the instance you are running it against, it will either install through RSAPI or utilize the IApplicationInstallManager and ILibraryApplicationManager, but it will do it entirely on it's own, so you don't have to worry about it.  The minimum Relativity version for the new API is 10.3.170.1.
 
 The previous Test Helper install static object and function,  ApplicationHelper.ImportApplication will still exist for backward compatibility.  
 
