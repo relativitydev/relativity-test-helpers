@@ -55,7 +55,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Setup for testing
 			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			servicesManager = helper.GetServicesManager();
-			_eddsDbContext = helper.GetDBContext(-1);
+			//_eddsDbContext = helper.GetDBContext(-1);
 
 			// implement_IHelper
 			//create client
