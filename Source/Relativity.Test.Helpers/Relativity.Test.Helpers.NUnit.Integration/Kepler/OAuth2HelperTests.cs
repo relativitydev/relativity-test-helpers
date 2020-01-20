@@ -144,7 +144,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 				await CleanupExistingOAuth();
 				Services.Security.Models.OAuth2Client oAuth2Client = await Sut.CreateOAuth2ClientAsync(ConfigurationHelper.ADMIN_USERNAME, oAuthName);
 
-				string url = $"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS}//Relativity.REST/api/RA.Services.Interfaces.IAnalysisModule/AnalysisService/GetKeplerStatusAsync";
+				string url = $"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS}//Relativity.REST/api/Relativity.Services.User.IUserModule/User Manager/GetKeplerStatusAsync";
 
 				// Act
 				string bearerToken = await Sut.GetBearerTokenAsync(ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, oAuth2Client.Id, oAuth2Client.Secret);
