@@ -6,6 +6,9 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using Relativity.Services.ServiceProxy;
+using TestHelpersKepler.Interfaces.TestHelpersModule.v1;
+using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 
 
 namespace Relativity.Test.Helpers
@@ -62,10 +65,17 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-			var context = GetDBContext(workspaceID);
-			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactID));
-			return result;
+			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(new Uri(ConfigurationHelper.RSAPI_SERVER_ADDRESS), new Uri(ConfigurationHelper.REST_SERVER_ADDRESS), new UsernamePasswordCredentials(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD));
+			Services.ServiceProxy.ServiceFactory serviceFactory = new Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
+
+			Guid guid;
+			using (ITestHelpersService testHelperService = serviceFactory.CreateProxy<ITestHelpersService>())
+			{
+				GetGuidModel ggModel = testHelperService.GetGuidAsync(artifactID, workspaceID).Result;
+				guid = ggModel.Guid;
+			}
+
+			return guid;
 		}
 
 		public ISecretStore GetSecretStore()

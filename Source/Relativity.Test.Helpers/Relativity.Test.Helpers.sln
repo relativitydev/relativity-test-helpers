@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Tests.Helpers.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relativity.Test.Helpers.NUnit.Integration", "Relativity.Test.Helpers.NUnit.Integration\Relativity.Test.Helpers.NUnit.Integration.csproj", "{D1830FE3-416F-4368-BC9C-B230FEAE9172}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpersKepler.Services", "TestHelpersKepler\TestHelpersKepler.Services\TestHelpersKepler.Services.csproj", "{EF257F9D-9598-4CB1-8A7B-571364408C7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelpersKepler.Interfaces", "TestHelpersKepler\TestHelpersKepler.Interfaces\TestHelpersKepler.Interfaces.csproj", "{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,22 @@ Global
 		{D1830FE3-416F-4368-BC9C-B230FEAE9172}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1830FE3-416F-4368-BC9C-B230FEAE9172}.Release|x64.ActiveCfg = Release|Any CPU
 		{D1830FE3-416F-4368-BC9C-B230FEAE9172}.Release|x64.Build.0 = Release|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Debug|x64.Build.0 = Debug|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Release|x64.ActiveCfg = Release|Any CPU
+		{EF257F9D-9598-4CB1-8A7B-571364408C7A}.Release|x64.Build.0 = Release|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Debug|x64.Build.0 = Debug|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Release|x64.ActiveCfg = Release|Any CPU
+		{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
