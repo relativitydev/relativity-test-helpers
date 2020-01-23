@@ -6,9 +6,11 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using Newtonsoft.Json.Linq;
 using Relativity.Services.ServiceProxy;
-using TestHelpersKepler.Interfaces.TestHelpersModule.v1;
-using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 
 
 namespace Relativity.Test.Helpers
@@ -65,16 +67,29 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			string rsapiAddress = ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.RSAPI_SERVER_ADDRESS;
+			HttpClient httpClient = new HttpClient();
 			string restAddress = ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.REST_SERVER_ADDRESS;
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(new Uri(rsapiAddress), new Uri(restAddress), new UsernamePasswordCredentials(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD));
-			Services.ServiceProxy.ServiceFactory serviceFactory = new Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
+			string usernamePassword = string.Format("{0}:{1}", ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			string base64usernamePassword = Convert.ToBase64String(Encoding.ASCII.GetBytes(usernamePassword));
+			httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + base64usernamePassword);
+			httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
 
-			Guid guid;
-			ITestHelpersService testHelperService = serviceFactory.CreateProxy<ITestHelpersService>();
-			GetGuidResponseModel ggModel = testHelperService.GetGuidAsync(artifactID, workspaceID).Result;
-			guid = ggModel.Guid;
+			string request = "{\"artifactID\":\"@artifactID\",\"workspaceID\":\"@workspaceID\"}";
+			request = request.Replace("@artifactID", artifactID.ToString());
+			request = request.Replace("@workspaceID", workspaceID.ToString());
+			string endpointUrl = restAddress + "/Relativity.REST/api/TestHelpersModule/v1/TestHelpersService/GetGuid";
+			StringContent content = new StringContent(request);
+			content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+			HttpResponseMessage response = httpClient.PostAsync(endpointUrl, content).Result;
+			if (!response.IsSuccessStatusCode)
+			{
+				throw new Exception("Failed to Get Artifact Guid");
+			}
 
+			string result = response.Content.ReadAsStringAsync().Result;
+			JToken resultObject = JObject.Parse(result);
+			string guidString = resultObject["Guid"].Value<string>();
+			Guid guid = new Guid(guidString);
 			return guid;
 		}
 

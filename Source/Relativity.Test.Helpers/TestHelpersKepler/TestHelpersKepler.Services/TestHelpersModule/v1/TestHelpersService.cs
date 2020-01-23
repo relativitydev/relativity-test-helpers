@@ -139,11 +139,7 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 		{
 			try
 			{
-				//string sqlStatement = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-				//IDBContext dbContext = _helper.GetDBContext(workspaceID);
-				//Guid guid = dbContext.ExecuteSqlStatementAsScalar<Guid>(sqlStatement, new SqlParameter("artifactId", artifactID));
-
-				Guid guid = await _helper.GetDBContext(-1).ExecuteScalarAsync<Guid>(
+				Guid guid = await _helper.GetDBContext(workspaceID).ExecuteScalarAsync<Guid>(
 					new ContextQuery
 					{
 						SqlStatement = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId",

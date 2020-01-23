@@ -278,12 +278,6 @@
     <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Interfaces\TestHelpersKepler.Interfaces.csproj">
-      <Project>{0976bdeb-2534-490e-9ec0-7cad0411e1bc}</Project>
-      <Name>TestHelpersKepler.Interfaces</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
