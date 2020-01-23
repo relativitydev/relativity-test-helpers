@@ -9,7 +9,7 @@ namespace TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models
 	/// <summary>
 	/// GetGuidModel Data Model.
 	/// </summary>
-	public class GetGuidModel
+	public class GetGuidResponseModel
 	{
 		/// <summary>
 		/// Guid property.

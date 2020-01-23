@@ -55,7 +55,7 @@
     <Compile Include="TestHelpersModule\ITestHelpersModuleModule.cs" />
     <Compile Include="TestHelpersModule\v1\ITestHelpersService.cs" />
     <Compile Include="TestHelpersModule\v1\Exceptions\TestHelpersServiceException.cs" />
-    <Compile Include="TestHelpersModule\v1\Models\GetGuidModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\GetGuidResponseModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\TestHelpersServiceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

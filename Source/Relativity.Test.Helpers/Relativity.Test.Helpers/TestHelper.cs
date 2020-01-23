@@ -65,15 +65,15 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(new Uri(ConfigurationHelper.RSAPI_SERVER_ADDRESS), new Uri(ConfigurationHelper.REST_SERVER_ADDRESS), new UsernamePasswordCredentials(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD));
+			string rsapiAddress = ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.RSAPI_SERVER_ADDRESS;
+			string restAddress = ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.REST_SERVER_ADDRESS;
+			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(new Uri(rsapiAddress), new Uri(restAddress), new UsernamePasswordCredentials(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD));
 			Services.ServiceProxy.ServiceFactory serviceFactory = new Services.ServiceProxy.ServiceFactory(serviceFactorySettings);
 
 			Guid guid;
-			using (ITestHelpersService testHelperService = serviceFactory.CreateProxy<ITestHelpersService>())
-			{
-				GetGuidModel ggModel = testHelperService.GetGuidAsync(artifactID, workspaceID).Result;
-				guid = ggModel.Guid;
-			}
+			ITestHelpersService testHelperService = serviceFactory.CreateProxy<ITestHelpersService>();
+			GetGuidResponseModel ggModel = testHelperService.GetGuidAsync(artifactID, workspaceID).Result;
+			guid = ggModel.Guid;
 
 			return guid;
 		}

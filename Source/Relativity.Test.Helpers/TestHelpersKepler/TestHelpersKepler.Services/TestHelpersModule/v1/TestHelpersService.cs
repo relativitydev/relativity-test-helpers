@@ -135,7 +135,7 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 			return models;
 		}
 
-		public async Task<GetGuidModel> GetGuidAsync(int artifactID, int workspaceID)
+		public async Task<GetGuidResponseModel> GetGuidAsync(int artifactID, int workspaceID)
 		{
 			try
 			{
@@ -143,7 +143,7 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 				IDBContext dbContext = _helper.GetDBContext(workspaceID);
 				Guid guid = dbContext.ExecuteSqlStatementAsScalar<Guid>(sqlStatement, new SqlParameter("artifactId", workspaceID));
 
-				GetGuidModel ggModel = new GetGuidModel()
+				GetGuidResponseModel ggModel = new GetGuidResponseModel()
 				{
 					Guid = guid
 				};
