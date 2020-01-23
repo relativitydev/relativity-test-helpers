@@ -139,9 +139,19 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 		{
 			try
 			{
-				string sqlStatement = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-				IDBContext dbContext = _helper.GetDBContext(workspaceID);
-				Guid guid = dbContext.ExecuteSqlStatementAsScalar<Guid>(sqlStatement, new SqlParameter("artifactId", workspaceID));
+				//string sqlStatement = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
+				//IDBContext dbContext = _helper.GetDBContext(workspaceID);
+				//Guid guid = dbContext.ExecuteSqlStatementAsScalar<Guid>(sqlStatement, new SqlParameter("artifactId", artifactID));
+
+				Guid guid = await _helper.GetDBContext(-1).ExecuteScalarAsync<Guid>(
+					new ContextQuery
+					{
+						SqlStatement = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId",
+						Parameters = new[]
+						{
+							new SqlParameter("@artifactId", artifactID)
+						}
+					}).ConfigureAwait(false);
 
 				GetGuidResponseModel ggModel = new GetGuidResponseModel()
 				{
