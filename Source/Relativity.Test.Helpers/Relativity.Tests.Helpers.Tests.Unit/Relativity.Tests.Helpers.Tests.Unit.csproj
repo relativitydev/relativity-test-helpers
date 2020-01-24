@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpersTest.cs" />
+    <Compile Include="Kepler\GetGuidUnitTests.cs" />
     <Compile Include="Kepler\OAuth2HelperUnitTests.cs" />
     <Compile Include="ImportAPI\ImportAPIHelperTest.cs" />
     <Compile Include="MockHelpers\MockRsapiClientHelper.cs" />

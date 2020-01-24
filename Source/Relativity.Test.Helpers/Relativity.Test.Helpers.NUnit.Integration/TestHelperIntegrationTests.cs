@@ -2,6 +2,7 @@
 using Relativity.API;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
+using kCura.Relativity.Client;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
@@ -48,6 +49,27 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 
 			// Assert
 			Assert.IsTrue(logFactory != null);
+		}
+
+		[Test]
+		public void GetGuidTest()
+		{
+			// Arrange
+			string _workspaceName = $"IntTest_{Guid.NewGuid()}";
+			IServicesMgr servicesManager = SuT.GetServicesManager();
+			int _workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
+				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager,
+				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+
+			// Act
+			// Get the Guid of the workspace
+			Guid guid = SuT.GetGuid(-1, _workspaceId);
+
+			// Assert
+			Assert.That(guid != null);
+
+			//Delete Workspace
+			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 		}
 	}
 }
