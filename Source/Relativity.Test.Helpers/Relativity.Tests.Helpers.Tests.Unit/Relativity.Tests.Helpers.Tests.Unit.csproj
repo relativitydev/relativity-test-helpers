@@ -86,7 +86,7 @@
       <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.4.0\lib\net462\Relativity.DataTransfer.MessageService.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Kepler, Version=1.0.1.627, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.3.191.8\lib\net462\Relativity.Kepler.dll</HintPath>
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.170.1\lib\net462\Relativity.Kepler.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Logging, Version=2019.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Logging.2019.5.1\lib\net462\Relativity.Logging.dll</HintPath>
@@ -109,14 +109,14 @@
     <Reference Include="Relativity.OAuth2Client.Interfaces, Version=1.0.27.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.OAuth2.Client.1.0.27\lib\net462\Relativity.OAuth2Client.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.DataContracts, Version=10.3.191.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.3.191.8\lib\net462\Relativity.Services.DataContracts.dll</HintPath>
+    <Reference Include="Relativity.Services.DataContracts, Version=10.3.170.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.170.1\lib\net462\Relativity.Services.DataContracts.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Services.Interfaces, Version=10.3.191.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.3.191.8\lib\net462\Relativity.Services.Interfaces.dll</HintPath>
+    <Reference Include="Relativity.Services.Interfaces, Version=10.3.170.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.170.1\lib\net462\Relativity.Services.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.627, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.10.3.191.8\lib\net462\Relativity.Services.ServiceProxy.dll</HintPath>
+      <HintPath>..\packages\Relativity.ObjectManager.10.3.170.1\lib\net462\Relativity.Services.ServiceProxy.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Telemetry.APM, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.APM.dll</HintPath>
@@ -159,9 +159,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpersTest.cs" />
-    <Compile Include="Kepler\GetGuidUnitTests.cs" />
+    <Compile Include="Kepler\ApplicationInstallHelperUnitTests.cs" />
     <Compile Include="Kepler\OAuth2HelperUnitTests.cs" />
     <Compile Include="ImportAPI\ImportAPIHelperTest.cs" />
+    <Compile Include="MockHelpers\MockApplicationInstallManagerHelper.cs" />
+    <Compile Include="MockHelpers\MockHttpMessageHandlerHelper.cs" />
+    <Compile Include="MockHelpers\MockLibraryApplicationManagerHelper.cs" />
+    <Compile Include="MockHelpers\MockOAuth2ClientManagerHelper.cs" />
     <Compile Include="MockHelpers\MockRsapiClientHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -177,7 +181,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LICENSE.txt" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="oi\unmanaged\oilink.exe" />
     <Content Include="oi\unmanaged\oilink.jar" />
     <Content Include="oi\unmanaged\sccca-R1.dll" />
