@@ -193,6 +193,7 @@
     <Compile Include="ArtifactHelpers\Client.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
+    <Compile Include="Exceptions\RestResponseException.cs" />
     <Compile Include="Exceptions\TestHelpersApplicationInstallException.cs" />
     <Compile Include="Exceptions\TestHelpersOAuth2Exception.cs" />
     <Compile Include="Kepler\ApplicationInstallHelper.cs" />

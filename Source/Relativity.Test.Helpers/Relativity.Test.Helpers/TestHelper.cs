@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using Relativity.Services.ServiceProxy;
+using Relativity.Test.Helpers.Exceptions;
 
 
 namespace Relativity.Test.Helpers
@@ -75,7 +76,7 @@ namespace Relativity.Test.Helpers
 			HttpResponseMessage response = MakePostRequest(request, httpClient, endpointUrl);
 			if (!response.IsSuccessStatusCode)
 			{
-				throw new Exception("Failed to Get Artifact Guid");
+				throw new RestResponseException("Failed to Get Artifact Guid");
 			}
 
 			string result = response.Content.ReadAsStringAsync().Result;
