@@ -66,7 +66,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			Guid guid = SuT.GetGuid(-1, _workspaceId);
 
 			// Assert
-			Assert.That(guid != null);
+			Assert.NotNull(guid);
+			Assert.AreNotEqual(new Guid("00000000-0000-0000-0000-000000000000"), guid);
 
 			//Delete Workspace
 			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
