@@ -1,5 +1,4 @@
-﻿using DbContextHelper;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
@@ -7,6 +6,12 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using Newtonsoft.Json.Linq;
+using Relativity.Services.ServiceProxy;
+using Relativity.Test.Helpers.Exceptions;
 
 
 namespace Relativity.Test.Helpers
@@ -58,31 +63,47 @@ namespace Relativity.Test.Helpers
 
 		public IDBContext GetDBContext(int caseID)
 		{
-			//You can create a new DBcontext using kCura.Data.RowDataGeteway until Relativity versions lower than 9.6.85.9
-			//kCura.Data.RowDataGateway.Context context = new kCura.Data.RowDataGateway.Context(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, string.Format("EDDS{0}", caseID == -1 ? "" : caseID.ToString()), SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
-			//return new DBContext(context);
-
-			//You can create a new DBcontext using DBContextHelper for Relativity versions equal to or greater than 9.6.85.9
-			DbContext context;
-
-			if (_alternateConfig != null)
-			{
-				context = new DbContext(this._alternateConfig.SqlServerAddress, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", this._alternateConfig.SqlUserName, this._alternateConfig.SqlPassword);
-			}
-			else
-			{
-				context = new DbContext(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
-			}
-
-			return context;
+			throw new NotImplementedException();
 		}
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-			var context = GetDBContext(workspaceID);
-			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactID));
-			return result;
+			HttpClient httpClient = GetHttpClient(out var restAddress);
+			string request = "{\"artifactID\":\"@artifactID\",\"workspaceID\":\"@workspaceID\"}";
+			request = request.Replace("@artifactID", artifactID.ToString());
+			request = request.Replace("@workspaceID", workspaceID.ToString());
+			string endpointUrl = restAddress + "/Relativity.REST/api/TestHelpersModule/v1/TestHelpersService/GetGuid";
+			HttpResponseMessage response = MakePostRequest(request, httpClient, endpointUrl);
+			if (!response.IsSuccessStatusCode)
+			{
+				throw new TestHelpersException("Failed to Get Artifact Guid");
+			}
+
+			string result = response.Content.ReadAsStringAsync().Result;
+			JToken resultObject = JObject.Parse(result);
+			string guidString = resultObject["Guid"].Value<string>();
+			Guid guid = new Guid(guidString);
+			return guid;
+		}
+
+		private static HttpResponseMessage MakePostRequest(string request, HttpClient httpClient, string endpointUrl)
+		{
+			StringContent content = new StringContent(request);
+			content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+			HttpResponseMessage response = httpClient.PostAsync(endpointUrl, content).Result;
+			return response;
+		}
+
+		private static HttpClient GetHttpClient(out string restAddress)
+		{
+			HttpClient httpClient = new HttpClient();
+			restAddress = ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.REST_SERVER_ADDRESS;
+			string usernamePassword =
+				string.Format("{0}:{1}", ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			string base64usernamePassword = Convert.ToBase64String(Encoding.ASCII.GetBytes(usernamePassword));
+			httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + base64usernamePassword);
+			httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
+			return httpClient;
 		}
 
 		public ISecretStore GetSecretStore()

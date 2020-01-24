@@ -33,7 +33,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private const ExecutionIdentity EXECUTION_IDENTITY = ExecutionIdentity.CurrentUser;
 		private IDBContext dbContext;
 		private IServicesMgr servicesManager;
-		private IDBContext _eddsDbContext;
 		private Int32 _numberOfDocuments = 5;
 		private string _foldername = "Test Folder";
 		private string _groupName = "Test Group";
@@ -49,17 +48,16 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 		#region TestfixtureSetup
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Execute_TestFixtureSetup()
 		{
 			//Setup for testing
-			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			servicesManager = helper.GetServicesManager();
-			_eddsDbContext = helper.GetDBContext(-1);
+			var testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			servicesManager = testHelper.GetServicesManager();
 
 			// implement_IHelper
 			//create client
-			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			_client = testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			//Create new user 
 			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
@@ -70,7 +68,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			//Create workspace
 			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-			dbContext = helper.GetDBContext(_workspaceId);
 			_client.APIOptions.WorkspaceID = _workspaceId;
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var nativeFilePath = "";
@@ -95,6 +92,8 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Create Whole number field
 			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
 
+			//Get Workspace Guid
+			Guid guid = testHelper.GetGuid(-1, _workspaceId);
 		}
 
 		#endregion
@@ -102,7 +101,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		#region TestfixtureTeardown
 
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace
