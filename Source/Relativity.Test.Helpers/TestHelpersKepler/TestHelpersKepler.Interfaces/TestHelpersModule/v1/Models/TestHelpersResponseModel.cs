@@ -3,7 +3,7 @@
 	/// <summary>
 	/// TestHelpersServiceModel Data Model.
 	/// </summary>
-	public class TestHelpersServiceModel
+	public class TestHelpersResponseModel
 	{
 		/// <summary>
 		/// Name property.

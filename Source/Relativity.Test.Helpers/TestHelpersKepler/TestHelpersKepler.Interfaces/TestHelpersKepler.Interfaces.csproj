@@ -52,11 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestHelpersModule\ITestHelpersModuleModule.cs" />
+    <Compile Include="TestHelpersModule\ITestHelpersModule.cs" />
     <Compile Include="TestHelpersModule\v1\ITestHelpersService.cs" />
     <Compile Include="TestHelpersModule\v1\Exceptions\TestHelpersServiceException.cs" />
     <Compile Include="TestHelpersModule\v1\Models\GetGuidResponseModel.cs" />
-    <Compile Include="TestHelpersModule\v1\Models\TestHelpersServiceModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\TestHelpersResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

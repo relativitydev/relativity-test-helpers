@@ -67,20 +67,12 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			HttpClient httpClient = new HttpClient();
-			string restAddress = ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.REST_SERVER_ADDRESS;
-			string usernamePassword = string.Format("{0}:{1}", ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			string base64usernamePassword = Convert.ToBase64String(Encoding.ASCII.GetBytes(usernamePassword));
-			httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + base64usernamePassword);
-			httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
-
+			HttpClient httpClient = GetHttpClient(out var restAddress);
 			string request = "{\"artifactID\":\"@artifactID\",\"workspaceID\":\"@workspaceID\"}";
 			request = request.Replace("@artifactID", artifactID.ToString());
 			request = request.Replace("@workspaceID", workspaceID.ToString());
 			string endpointUrl = restAddress + "/Relativity.REST/api/TestHelpersModule/v1/TestHelpersService/GetGuid";
-			StringContent content = new StringContent(request);
-			content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-			HttpResponseMessage response = httpClient.PostAsync(endpointUrl, content).Result;
+			HttpResponseMessage response = MakePostRequest(request, httpClient, endpointUrl);
 			if (!response.IsSuccessStatusCode)
 			{
 				throw new Exception("Failed to Get Artifact Guid");
@@ -91,6 +83,26 @@ namespace Relativity.Test.Helpers
 			string guidString = resultObject["Guid"].Value<string>();
 			Guid guid = new Guid(guidString);
 			return guid;
+		}
+
+		private static HttpResponseMessage MakePostRequest(string request, HttpClient httpClient, string endpointUrl)
+		{
+			StringContent content = new StringContent(request);
+			content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+			HttpResponseMessage response = httpClient.PostAsync(endpointUrl, content).Result;
+			return response;
+		}
+
+		private static HttpClient GetHttpClient(out string restAddress)
+		{
+			HttpClient httpClient = new HttpClient();
+			restAddress = ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.REST_SERVER_ADDRESS;
+			string usernamePassword =
+				string.Format("{0}:{1}", ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			string base64usernamePassword = Convert.ToBase64String(Encoding.ASCII.GetBytes(usernamePassword));
+			httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + base64usernamePassword);
+			httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
+			return httpClient;
 		}
 
 		public ISecretStore GetSecretStore()

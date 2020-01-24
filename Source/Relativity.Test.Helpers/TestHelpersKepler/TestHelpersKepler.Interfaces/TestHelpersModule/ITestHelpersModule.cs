@@ -5,9 +5,9 @@ namespace TestHelpersKepler.Interfaces.TestHelpersModule
 	/// <summary>
 	/// TestHelpersModule Module Interface.
 	/// </summary>
-	[ServiceModule("TestHelpersModule Module")]
+	[ServiceModule("TestHelpersModule")]
 	[RoutePrefix("TestHelpersModule", VersioningStrategy.Namespace)]
-	public interface ITestHelpersModuleModule
+	public interface ITestHelpersModule
 	{
 	}
 }

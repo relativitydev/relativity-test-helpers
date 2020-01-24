@@ -2,7 +2,7 @@
 
 namespace TestHelpersKepler.Services.TestHelpersModule
 {
-	public class TestHelpersModuleModule : ITestHelpersModuleModule
+	public class TestHelpersModule : ITestHelpersModule
 	{
 	}
 }

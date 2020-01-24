@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestHelpersModule\TestHelpersModuleModule.cs" />
+    <Compile Include="TestHelpersModule\TestHelpersModule.cs" />
     <Compile Include="TestHelpersModule\v1\TestHelpersService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
