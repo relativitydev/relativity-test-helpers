@@ -30,5 +30,13 @@ namespace TestHelpersKepler.Interfaces.TestHelpersModule.v1
 		[HttpPost]
 		[Route("GetGuid")]
 		Task<GetGuidResponseModel> GetGuidAsync(int artifactID, int workspaceID);
+
+		[HttpPost]
+		[Route("GetFieldArtifactId")]
+		Task<FieldArtifactIdResponseModel> GetFieldArtifactIdAsync(string fieldName, int workspaceId);
+
+		[HttpPost]
+		[Route("GetFieldCount")]
+		Task<FieldCountResponseModel> GetFieldCountAsync(int fieldArtifactId, int workspaceId);
 	}
 }

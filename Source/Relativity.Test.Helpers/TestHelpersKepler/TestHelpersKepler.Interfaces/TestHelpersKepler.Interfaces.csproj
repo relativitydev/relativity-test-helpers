@@ -55,12 +55,16 @@
     <Compile Include="TestHelpersModule\ITestHelpersModule.cs" />
     <Compile Include="TestHelpersModule\v1\ITestHelpersService.cs" />
     <Compile Include="TestHelpersModule\v1\Exceptions\TestHelpersServiceException.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\FieldArtifactIdRequestModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\FieldArtifactIdResponseModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\FieldCoundResponseModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\GetGuidResponseModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\TestHelpersResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
+    <Compile Include="TestHelpersModule\v1\Models\FieldCountRequestModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
