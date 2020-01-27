@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models
 {
-	public class RequestModel
+	public class BaseRequestModel
 	{
 		public int WorkspaceId { get; set; }
 	}

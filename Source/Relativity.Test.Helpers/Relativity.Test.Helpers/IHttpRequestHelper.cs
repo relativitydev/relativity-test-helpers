@@ -10,6 +10,6 @@ namespace Relativity.Test.Helpers
 {
 	public interface IHttpRequestHelper
 	{
-		string SendPostRequest(RequestModel requestModel, string routeName);
+		string SendPostRequest(BaseRequestModel baseRequestModel, string routeName);
 	}
 }

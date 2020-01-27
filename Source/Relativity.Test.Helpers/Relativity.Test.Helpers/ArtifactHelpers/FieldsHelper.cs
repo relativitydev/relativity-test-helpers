@@ -21,11 +21,11 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	/// </summary>
 	/// 
-	public class Fields : IFields
+	public class FieldsHelper : IFieldsHelper
 	{
 		private readonly IHttpRequestHelper _httpRequestHelper;
 
-		public Fields(IHttpRequestHelper httpRequestHelper)
+		public FieldsHelper(IHttpRequestHelper httpRequestHelper)
 		{
 			_httpRequestHelper = httpRequestHelper;
 		}
@@ -34,7 +34,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			const string routeName = "GetFieldArtifactId";
 
-			var requestModel = new FieldArtifactIdRequestModel
+			var requestModel = new FieldArtifactIdBaseRequestModel
 			{
 				FieldName = fieldname,
 				WorkspaceId = workspaceId
@@ -50,7 +50,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			const string routeName = "GetFieldCount";
 
-			var requestModel = new FieldCountRequestModel
+			var requestModel = new FieldCountBaseRequestModel
 			{
 				FieldArtifactId = artifactId,
 				WorkspaceId = workspaceId

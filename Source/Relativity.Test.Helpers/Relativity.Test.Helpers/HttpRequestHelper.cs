@@ -13,7 +13,7 @@ namespace Relativity.Test.Helpers
 {
 	public class HttpRequestHelper: IHttpRequestHelper
 	{
-		public string SendPostRequest(RequestModel requestModel, string routeName)
+		public string SendPostRequest(BaseRequestModel baseRequestModel, string routeName)
 		{
 			string usernamePassword = string.Format("{0}:{1}", ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			string base64UsernamePassword = Convert.ToBase64String(Encoding.ASCII.GetBytes(usernamePassword));
@@ -26,7 +26,7 @@ namespace Relativity.Test.Helpers
 				httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + base64UsernamePassword);
 				httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
 
-				var jsonRequest = JsonConvert.SerializeObject(requestModel);
+				var jsonRequest = JsonConvert.SerializeObject(baseRequestModel);
 				var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
 				response = httpClient.PostAsync(restAddress, content).Result;
