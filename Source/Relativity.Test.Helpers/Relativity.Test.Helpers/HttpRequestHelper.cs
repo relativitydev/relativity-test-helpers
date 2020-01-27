@@ -34,7 +34,7 @@ namespace Relativity.Test.Helpers
 
 			if (!response.IsSuccessStatusCode)
 			{
-				throw new TestHelpersException("Failed to get field Aritfact ID.");
+				throw new TestHelpersException($"Failed to hit endpoint {routeName}.");
 			}
 
 			var responseString = response.Content.ReadAsStringAsync().Result;
