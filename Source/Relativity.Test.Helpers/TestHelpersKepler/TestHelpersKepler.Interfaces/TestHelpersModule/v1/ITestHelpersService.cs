@@ -38,5 +38,9 @@ namespace TestHelpersKepler.Interfaces.TestHelpersModule.v1
 		[HttpPost]
 		[Route("GetFieldCount")]
 		Task<FieldCountResponseModel> GetFieldCountAsync(int fieldArtifactId, int workspaceId);
+
+		[HttpPost]
+		[Route("GetFolderName")]
+		Task<GetFolderNameResponseModel> GetFolderNameAsync(int folderArtifactId, int workspaceId);
 	}
 }
