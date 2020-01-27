@@ -4,16 +4,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 
 namespace Relativity.Test.Helpers
 {
-	public interface IHttpRequestHelper<T>
+	public interface IHttpRequestHelper
 	{
-		HttpClient GetClient();
-
-		string GetRestAddress(string routeName);
-
-		StringContent GetRequestContent(T requestModel);
-
+		string SendPostRequest(RequestModel requestModel, string routeName);
 	}
 }

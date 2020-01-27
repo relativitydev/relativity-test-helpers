@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models
 {
-	public class FieldArtifactIdRequestModel : RequestModel
+	public class RequestModel
 	{
-		public string FieldName { get; set; }
+		public int WorkspaceId { get; set; }
 	}
 }

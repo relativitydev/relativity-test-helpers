@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Newtonsoft.Json;
+using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 using Relativity.Test.Helpers.Exceptions;
 using Renci.SshNet;
 using DTOs = kCura.Relativity.Client.DTOs;
@@ -20,14 +21,18 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	/// </summary>
 	/// 
-	public class Fields
+	public class Fields : IFields
 	{
+		private readonly IHttpRequestHelper _httpRequestHelper;
 
-		public static int GetFieldArtifactID(String fieldname, int workspaceId)
+		public Fields(IHttpRequestHelper httpRequestHelper)
+		{
+			_httpRequestHelper = httpRequestHelper;
+		}
+
+		public int GetFieldArtifactId(string fieldname, int workspaceId)
 		{
 			const string routeName = "GetFieldArtifactId";
-
-			var httpRequestHelper = new HttpRequestHelper<FieldArtifactIdRequestModel>();
 
 			var requestModel = new FieldArtifactIdRequestModel
 			{
@@ -35,30 +40,15 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				WorkspaceId = workspaceId
 			};
 
-			var content = httpRequestHelper.GetRequestContent(requestModel);
-			var restAddress = httpRequestHelper.GetRestAddress(routeName);
-
-			FieldArtifactIdResponseModel responseModel;
-			var client = httpRequestHelper.GetClient();
-			using (client)
-			{
-				var response = client.PostAsync(restAddress, content).Result;
-				if (!response.IsSuccessStatusCode)
-				{
-					throw new TestHelpersException("Failed to get field Aritfact ID.");
-				}
-				var responseString = response.Content.ReadAsStringAsync().Result;
-				responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
-			}
+			var responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+			FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
 
 			return responseModel.ArtifactId;
 		}
 
-		public static int GetFieldCount(int artifactId, int workspaceId)
+		public int GetFieldCount(int artifactId, int workspaceId)
 		{
 			const string routeName = "GetFieldCount";
-
-			var httpRequestHelper = new HttpRequestHelper<FieldCountRequestModel>();
 
 			var requestModel = new FieldCountRequestModel
 			{
@@ -66,21 +56,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				WorkspaceId = workspaceId
 			};
 
-			var content = httpRequestHelper.GetRequestContent(requestModel);
-			var restAddress = httpRequestHelper.GetRestAddress(routeName);
-
-			FieldCountResponseModel responseModel;
-			var client = httpRequestHelper.GetClient();
-			using (client)
-			{
-				var response = client.PostAsync(restAddress, content).Result;
-				if (!response.IsSuccessStatusCode)
-				{
-					throw new TestHelpersException("Failed to get field count");
-				}
-				var responseString = response.Content.ReadAsStringAsync().Result;
-				responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
-			}
+			var responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+			FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
 
 			return responseModel.Count;
 		}

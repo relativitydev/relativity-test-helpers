@@ -59,6 +59,7 @@
     <Compile Include="TestHelpersModule\v1\Models\FieldArtifactIdResponseModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\FieldCoundResponseModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\GetGuidResponseModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\RequestModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\TestHelpersResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
