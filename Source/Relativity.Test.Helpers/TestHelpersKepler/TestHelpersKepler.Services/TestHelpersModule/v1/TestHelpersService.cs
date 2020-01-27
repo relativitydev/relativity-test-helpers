@@ -65,7 +65,7 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 				int fieldId = await _helper.GetDBContext(workspaceId).ExecuteScalarAsync<int>(
 					new ContextQuery
 					{
-						SqlStatement = "SELECT [ArtifactID] FROM [EDDSDBO].[Field] WHERE [DisplayName] LIKE @fieldName",
+						SqlStatement = "SELECT [ArtifactID] FROM [ExtendedField] WHERE [DisplayName] LIKE @fieldName",
 						Parameters = new[]
 						{
 							new SqlParameter("@fieldName", fieldName)

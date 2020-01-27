@@ -9,9 +9,9 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 
 namespace Relativity.Test.Helpers
 {
-	public class HttpRequestHelper<T>
+	public class HttpRequestHelper<T> : IHttpRequestHelper<T>
 	{
-		public static HttpClient GetClient()
+		public HttpClient GetClient()
 		{
 			HttpClient httpClient = new HttpClient();
 			string usernamePassword =
@@ -24,12 +24,12 @@ namespace Relativity.Test.Helpers
 			return httpClient;
 		}
 
-		public static string GetRestAddress(string routeName)
+		public string GetRestAddress(string routeName)
 		{
 			return ConfigurationHelper.SERVER_BINDING_TYPE + "://" + ConfigurationHelper.REST_SERVER_ADDRESS + "/Relativity.REST/api/TestHelpersModule/v1/TestHelpersService/" + routeName;
 		}
 
-		public static StringContent GetRequestContent(T requestModel)
+		public StringContent GetRequestContent(T requestModel)
 		{
 			var jsonRequest = JsonConvert.SerializeObject(requestModel);
 			return new StringContent(jsonRequest, Encoding.UTF8, "application/json");

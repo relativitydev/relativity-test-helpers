@@ -197,6 +197,7 @@
     <Compile Include="Exceptions\TestHelpersApplicationInstallException.cs" />
     <Compile Include="Exceptions\TestHelpersOAuth2Exception.cs" />
     <Compile Include="HttpRequestHelper.cs" />
+    <Compile Include="IHttpRequestHelper.cs" />
     <Compile Include="Kepler\ApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IOAuth2Helper.cs" />
