@@ -18,7 +18,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 	public class FieldsTest
 	{
 		private IHttpRequestHelper _httpRequestHelper;
-		private readonly int _workspaceId = 1017834;
+		private readonly int _workspaceId = 1234567;
 
 		private IFields _fieldsHelper;
 
@@ -38,14 +38,14 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 		public void GetFieldArtifactId()
 		{
 			//Setup
-			string _responseJson = "{\"ArtifactId\": 1037705}";
+			string _responseJson = "{\"ArtifactId\": 1223344}";
 			var httpRequestHelperMocked = new Mock<IHttpRequestHelper>();
 			httpRequestHelperMocked.Setup(x => x.SendPostRequest(It.IsAny<RequestModel>(), It.IsAny<string>())).Returns(_responseJson);
 			_httpRequestHelper = httpRequestHelperMocked.Object;
 
 			//Arrange
-			string fieldName = "Production::Sort Order";
-			int _productionSortOrderFieldId = 1037705;
+			string fieldName = "TestField";
+			int fieldId = 1223344;
 
 			_fieldsHelper = new Fields(_httpRequestHelper);
 
@@ -53,7 +53,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 			var fieldArtifactId = _fieldsHelper.GetFieldArtifactId(fieldName, _workspaceId);
 
 			//assert
-			Assert.AreEqual(fieldArtifactId, _productionSortOrderFieldId);
+			Assert.AreEqual(fieldArtifactId, fieldId);
 
 		}
 
@@ -68,7 +68,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 
 			//arrange
 			int _count = 1;
-			const int fieldArtifactId = 1037705;
+			const int fieldArtifactId = 1223344;
 
 			_fieldsHelper = new Fields(_httpRequestHelper);
 
