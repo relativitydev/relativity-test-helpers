@@ -25,11 +25,11 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private IRSAPIClient _rsapiClient;
 
 		private int _workspaceId;
-		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
+		private readonly string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 
-		private string _testFieldName = "Production::Sort Order";
+		private const string _testFieldName = "Production::Sort Order";
 		private int _productionSortOrderFieldArtifactId;
-		private int _productionSortOrderFieldCount = 1;
+		private const int _productionSortOrderFieldCount = 1;
 
 		[OneTimeSetUp]
 		public void SetUp()
@@ -66,6 +66,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			_httpRequestHelper = null;
+			_servicesManager = null;
+			_rsapiClient = null;
 			SuT = null;
 			_testHelper = null;
 		}
