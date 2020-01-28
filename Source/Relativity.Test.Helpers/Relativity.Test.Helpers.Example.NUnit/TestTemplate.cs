@@ -6,7 +6,8 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
 using System.Reflection;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
+using Relativity.Test.Helpers.ArtifactHelpers;
+using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Example.NUnit
@@ -80,7 +81,10 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
-			var folderName = Relativity.Test.Helpers.ArtifactHelpers.Folders.GetFolderName(_rootFolderArtifactID, dbContext);
+			_rootFolderArtifactID = Relativity.Test.Helpers.ArtifactHelpers.FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			IFoldersHelper foldersHelper = new FoldersHelper(new HttpRequestHelper());
+			var folderName = foldersHelper.GetFolderName(_rootFolderArtifactID, _workspaceId);
+
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
