@@ -22,7 +22,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private IHttpRequestHelper _httpRequestHelper;
 		private IHelper _testHelper;
 		private IServicesMgr _servicesManager;
-		private IRSAPIClient _client;
+		private IRSAPIClient _rsapiClient;
 
 		private int _workspaceId;
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
@@ -40,11 +40,11 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			SuT = new FieldsHelper(_httpRequestHelper);
 			_testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			_servicesManager = _testHelper.GetServicesManager();
-			_client = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			_rsapiClient = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			//Create workspace
 			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-			_client.APIOptions.WorkspaceID = _workspaceId;
+			_rsapiClient.APIOptions.WorkspaceID = _workspaceId;
 
 			//Query for field ID to be used in test
 			var fieldNameCondition = new TextCondition("Name", TextConditionEnum.EqualTo, _testFieldName);
@@ -53,7 +53,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			query.Fields.Add(new FieldValue("Name"));
 
 			//Query and throw exception if the query fails
-			var results = _client.Repositories.RDO.Query(query);
+			var results = _rsapiClient.Repositories.RDO.Query(query);
 			if (!results.Success) throw new Exception("Failed to query for field.");
 			_productionSortOrderFieldArtifactId = results.Results.First().Artifact.ArtifactID;
 
