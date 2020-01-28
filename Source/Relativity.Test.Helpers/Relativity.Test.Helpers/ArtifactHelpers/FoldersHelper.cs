@@ -55,7 +55,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 			catch (Exception exception)
 			{
-				throw new TestHelpersException("Error Getting Folder Name", exception);
+				throw new TestHelpersException($"Error Getting Root Folder ArtifactID [{nameof(workspaceID)}:{workspaceID}]", exception);
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 			catch (Exception exception)
 			{
-				throw new TestHelpersException("Error Getting Folder Name", exception);
+				throw new TestHelpersException($"Error Getting Folder Name [{nameof(folderArtifactId)}:{folderArtifactId}]", exception);
 			}
 		}
 	}

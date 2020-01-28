@@ -15,17 +15,29 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 	{
 		private IHelper testHelper;
 		private FoldersHelper SuT;
+		private int _workspaceId;
+		private IServicesMgr servicesManager;
+		private string _workspaceName;
 
 		[SetUp]
 		public void SetUp()
 		{
 			testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			SuT = new FoldersHelper(new HttpRequestHelper());
+
+			_workspaceName = $"IntTest_{Guid.NewGuid()}";
+			IServicesMgr servicesManager = testHelper.GetServicesManager();
+			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
+				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager,
+				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
+			//Delete Workspace
+			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+
 			testHelper = null;
 			SuT = null;
 		}
@@ -33,28 +45,19 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		[Test]
 		public void GetFolderName()
 		{
-			string _workspaceName = $"IntTest_{Guid.NewGuid()}";
-			IServicesMgr servicesManager = testHelper.GetServicesManager();
-			int _workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager,
-				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-			try
-			{
-				// Arrange
-				int rootFolderArtifactId = FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager,
-					ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
-				// Act
-				string folderName = SuT.GetFolderName(rootFolderArtifactId, _workspaceId);
+			IServicesMgr servicesManager = null;
+			int _workspaceId = 0;
+			// Arrange
 
-				// Assert
-				Assert.AreEqual(_workspaceName, folderName);
-			}
-			finally
-			{
-				//Delete Workspace
-				WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			}
+			int rootFolderArtifactId = FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager,
+				ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+
+			// Act
+			string folderName = SuT.GetFolderName(rootFolderArtifactId, _workspaceId);
+
+			// Assert
+			Assert.AreEqual(_workspaceName, folderName);
 		}
 	}
 }
