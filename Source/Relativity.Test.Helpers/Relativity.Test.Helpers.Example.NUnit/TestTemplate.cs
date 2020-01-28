@@ -81,6 +81,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
+			_rootFolderArtifactID = Relativity.Test.Helpers.ArtifactHelpers.FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			FoldersHelper foldersHelper = new FoldersHelper(new HttpRequestHelper());
 			var folderName = foldersHelper.GetFolderName(_rootFolderArtifactID, _workspaceId);
 
