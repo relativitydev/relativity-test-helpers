@@ -16,14 +16,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		private IHelper testHelper;
 		private FoldersHelper SuT;
 
-		[OneTimeSetUp]
+		[SetUp]
 		public void SetUp()
 		{
 			testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			SuT = new FoldersHelper(new HttpRequestHelper());
 		}
 
-		[OneTimeTearDown]
+		[TearDown]
 		public void TearDown()
 		{
 			testHelper = null;
@@ -33,24 +33,28 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		[Test]
 		public void GetFolderName()
 		{
-			// Arrange
 			string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 			IServicesMgr servicesManager = testHelper.GetServicesManager();
 			int _workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
 				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager,
 				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-			int rootFolderArtifactId = FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager,
-				ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			
-			// Act
-			// Get Folder Name
-			string folderName = SuT.GetFolderName(rootFolderArtifactId, _workspaceId);
+			try
+			{
+				// Arrange
+				int rootFolderArtifactId = FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager,
+					ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
-			// Assert
-			Assert.AreEqual(_workspaceName, folderName);
+				// Act
+				string folderName = SuT.GetFolderName(rootFolderArtifactId, _workspaceId);
 
-			//Delete Workspace
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+				// Assert
+				Assert.AreEqual(_workspaceName, folderName);
+			}
+			finally
+			{
+				//Delete Workspace
+				WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			}
 		}
 	}
 }
