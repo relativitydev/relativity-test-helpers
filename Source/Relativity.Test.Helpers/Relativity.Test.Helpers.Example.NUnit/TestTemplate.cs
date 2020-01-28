@@ -84,13 +84,13 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
-			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_FixedLengthText(_client, _workspaceId);
+			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldsHelper.CreateField_FixedLengthText(_client, _workspaceId);
 
 			//Create Long Text Field
-			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_LongText(_client, _workspaceId);
+			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.FieldsHelper.CreateField_LongText(_client, _workspaceId);
 
 			//Create Whole number field
-			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
+			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldsHelper.CreateField_WholeNumber(_client, _workspaceId);
 
 			//Get Workspace Guid
 			Guid guid = testHelper.GetGuid(-1, _workspaceId);

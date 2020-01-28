@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpersTest.cs" />
+    <Compile Include="ArtifactHelpers\FieldsHelperTest.cs" />
     <Compile Include="Kepler\ApplicationInstallHelperUnitTests.cs" />
     <Compile Include="Kepler\OAuth2HelperUnitTests.cs" />
     <Compile Include="ImportAPI\ImportAPIHelperTest.cs" />
@@ -178,6 +179,10 @@
     <ProjectReference Include="..\Relativity.Test.Helpers\Relativity.Test.Helpers.csproj">
       <Project>{500fcc47-7792-47e0-8308-ff7632c65cc9}</Project>
       <Name>Relativity.Test.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Interfaces\TestHelpersKepler.Interfaces.csproj">
+      <Project>{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}</Project>
+      <Name>TestHelpersKepler.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
