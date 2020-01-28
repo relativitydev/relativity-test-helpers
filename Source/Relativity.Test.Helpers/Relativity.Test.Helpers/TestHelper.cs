@@ -72,29 +72,15 @@ namespace Relativity.Test.Helpers
 		{
 			const string routeName = "GetGuid";
 
-			HttpRequestHelper<GetGuidRequestModel> httpRequestHelper = new HttpRequestHelper<GetGuidRequestModel>();
-
 			var requestModel = new GetGuidRequestModel
 			{
 				artifactID = artifactID,
 				workspaceID = workspaceID
 			};
 
-			StringContent content = httpRequestHelper.GetRequestContent(requestModel);
-			string restAddress = httpRequestHelper.GetRestAddress(routeName);
-
-			GetGuidResponseModel responseModel;
-			HttpClient client = httpRequestHelper.GetClient();
-			using (client)
-			{
-				var response = client.PostAsync(restAddress, content).Result;
-				if (!response.IsSuccessStatusCode)
-				{
-					throw new TestHelpersException("Failed to Get Artifact Guid.");
-				}
-				string responseString = response.Content.ReadAsStringAsync().Result;
-				responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
-			}
+			IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
+			var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
+			GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
 
 			return responseModel.Guid;
 		}

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Relativity.API;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers.Interfaces
 {
-	public interface IFieldsHelper
+	public interface IFoldersHelper
 	{
-		int GetFieldArtifactId(string fieldname, int workspaceId);
-		int GetFieldCount(int artifactId, int workspaceId);
+		string GetFolderName(int folderArtifactId, int workspaceId);
 	}
 }
