@@ -160,6 +160,7 @@
     <Compile Include="Mail\GmailMailHelperTests.cs" />
     <Compile Include="TestConstants.cs" />
     <Compile Include="TestEHHelperIntegrationTests.cs" />
+    <Compile Include="TestFolderIntegrationTests.cs" />
     <Compile Include="TestHelperRunSettingsIntegrationTests.cs" />
     <Compile Include="TestHelperIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

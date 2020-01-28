@@ -43,16 +43,6 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-
-		//public static String GetFolderName(Int32 folderArtifactID, IDBContext workspaceDbContext)
-		//{
-		//	string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);
-
-		//	string folderName = workspaceDbContext.ExecuteSqlStatementAsScalar(sql).ToString();
-
-		//	return folderName;
-		//}
-
 		public static string GetFolderName(int folderArtifactId, int workspaceId)
 		{
 			const string routeName = "GetFolderName";
