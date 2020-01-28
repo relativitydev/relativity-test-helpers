@@ -38,7 +38,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				Query<Folder> query = new Query<Folder>();
 				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
 				query.Fields = FieldValue.NoFields;
-				var ResultSet = client.Repositories.Folder.Query(query);
+				QueryResultSet<Folder> ResultSet = client.Repositories.Folder.Query(query);
 
 				if (!ResultSet.Success)
 				{
@@ -56,13 +56,13 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			const string routeName = "GetFolderName";
 
-			var requestModel = new GetFolderNameRequestModel
+			GetFolderNameRequestModel requestModel = new GetFolderNameRequestModel
 			{
 				FolderArtifactId = folderArtifactId,
 				WorkspaceId = workspaceId
 			};
 
-			var responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
 			GetFolderNameResponseModel responseModel = JsonConvert.DeserializeObject<GetFolderNameResponseModel>(responseString);
 
 			return responseModel.FolderName;

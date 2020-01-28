@@ -42,5 +42,13 @@ namespace TestHelpersKepler.Interfaces.TestHelpersModule.v1
 		[HttpPost]
 		[Route("GetFolderName")]
 		Task<GetFolderNameResponseModel> GetFolderNameAsync(int folderArtifactId, int workspaceId);
+
+		[HttpPost]
+		[Route("GetDocumentIdentifierFieldColumnName")]
+		Task<GetDocumentIdentifierFieldColumnNameResponseModel> GetDocumentIdentifierFieldColumnName(int fieldArtifactTypeId, int workspaceId);
+
+		[HttpPost]
+		[Route("GetDocumentIdentifierFieldName")]
+		Task<GetDocumentIdentifierFieldNameResponseModel> GetDocumentIdentifierFieldName(int fieldArtifactTypeId, int workspaceId);
 	}
 }
