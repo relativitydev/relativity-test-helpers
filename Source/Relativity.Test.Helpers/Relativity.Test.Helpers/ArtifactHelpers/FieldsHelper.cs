@@ -32,7 +32,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public int GetFieldArtifactId(string fieldname, int workspaceId)
 		{
-			const string routeName = "GetFieldArtifactId";
+			const string routeName = "GetFieldArtifactIdAsync";
 
 			FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
 			{
@@ -48,7 +48,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public int GetFieldCount(int artifactId, int workspaceId)
 		{
-			const string routeName = "GetFieldCount";
+			const string routeName = "GetFieldCountAsync";
 
 			FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
 			{

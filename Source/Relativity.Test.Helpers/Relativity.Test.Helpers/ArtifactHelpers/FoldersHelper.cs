@@ -32,40 +32,54 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public static int GetRootFolderArtifactID(int workspaceID, IServicesMgr svgMgr, string userName, string password)
 		{
-			using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(userName, password))
+			try
 			{
-				client.APIOptions.WorkspaceID = workspaceID;
-				Query<Folder> query = new Query<Folder>();
-				query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
-				query.Fields = FieldValue.NoFields;
+				using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(userName, password))
+				{
+					client.APIOptions.WorkspaceID = workspaceID;
+					Query<Folder> query = new Query<Folder>();
+					query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
+					query.Fields = FieldValue.NoFields;
 				QueryResultSet<Folder> ResultSet = client.Repositories.Folder.Query(query);
 
-				if (!ResultSet.Success)
-				{
-					throw new System.Exception("Folder was not found");
+					if (!ResultSet.Success)
+					{
+						throw new TestHelpersException("Folder was not found");
+					}
+					else if (ResultSet.TotalCount == 0)
+					{
+						throw new TestHelpersException("folder count was 0, so the folder was not found");
+					}
+					return ResultSet.Results.FirstOrDefault().Artifact.ArtifactID;
 				}
-				else if (ResultSet.TotalCount == 0)
-				{
-					throw new System.Exception("folder count was 0, so the folder was not found");
-				}
-				return ResultSet.Results.FirstOrDefault().Artifact.ArtifactID;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException("Error Getting Folder Name", exception);
 			}
 		}
 
 		public string GetFolderName(int folderArtifactId, int workspaceId)
 		{
-			const string routeName = "GetFolderName";
+			try
+			{
+				const string routeName = "GetFolderNameAsync";
 
 			GetFolderNameRequestModel requestModel = new GetFolderNameRequestModel
-			{
-				FolderArtifactId = folderArtifactId,
-				WorkspaceId = workspaceId
-			};
+				{
+					FolderArtifactId = folderArtifactId,
+					WorkspaceId = workspaceId
+				};
 
 			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-			GetFolderNameResponseModel responseModel = JsonConvert.DeserializeObject<GetFolderNameResponseModel>(responseString);
+				GetFolderNameResponseModel responseModel = JsonConvert.DeserializeObject<GetFolderNameResponseModel>(responseString);
 
-			return responseModel.FolderName;
+				return responseModel.FolderName;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException("Error Getting Folder Name", exception);
+			}
 		}
 	}
 }

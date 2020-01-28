@@ -40,7 +40,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 		public void GetFolderName()
 		{
 			//Setup
-			string exampleFolderName = "ExampleFolderName";
+			const string exampleFolderName = "ExampleFolderName";
 			string _responseJson = "{\"FolderName\": \"@exampleFolderName\"}";
 			_responseJson = _responseJson.Replace("@exampleFolderName", exampleFolderName);
 			_httpRequestHelperMocked.Setup(x => x.SendPostRequest(It.IsAny<BaseRequestModel>(), It.IsAny<string>())).Returns(_responseJson);
