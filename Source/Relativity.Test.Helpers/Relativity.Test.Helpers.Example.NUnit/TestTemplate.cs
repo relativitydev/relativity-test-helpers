@@ -6,6 +6,8 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
 using System.Reflection;
+using Relativity.Test.Helpers.ArtifactHelpers;
+using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
@@ -42,6 +44,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private int _longtextartid;
 		private int _yesnoartid;
 		private int _wholeNumberArtId;
+		private IFieldsHelper _fieldsHelper;
 
 		#endregion
 
@@ -94,6 +97,11 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			//Get Workspace Guid
 			Guid guid = testHelper.GetGuid(-1, _workspaceId);
+
+			//FieldsHelper - Get field artifact ID from name
+			_fieldsHelper = new FieldsHelper(new HttpRequestHelper());
+			var fieldName = "Production::Sort Order";
+			int fieldArtifactId = _fieldsHelper.GetFieldArtifactId(fieldName, _workspaceId);
 		}
 
 		#endregion
