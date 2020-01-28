@@ -32,34 +32,48 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public int GetFieldArtifactId(string fieldname, int workspaceId)
 		{
-			const string routeName = "GetFieldArtifactId";
-
-			var requestModel = new FieldArtifactIdBaseRequestModel
+			try
 			{
-				FieldName = fieldname,
-				WorkspaceId = workspaceId
-			};
+				const string routeName = "GetFieldArtifactIdAsync";
 
-			var responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-			FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
+				var requestModel = new FieldArtifactIdBaseRequestModel
+				{
+					FieldName = fieldname,
+					WorkspaceId = workspaceId
+				};
 
-			return responseModel.ArtifactId;
+				var responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
+
+				return responseModel.ArtifactId;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Error Getting Field ArtifactID [{nameof(fieldname)}:{fieldname}]", exception);
+			}
 		}
 
 		public int GetFieldCount(int artifactId, int workspaceId)
 		{
-			const string routeName = "GetFieldCount";
-
-			var requestModel = new FieldCountBaseRequestModel
+			try
 			{
-				FieldArtifactId = artifactId,
-				WorkspaceId = workspaceId
-			};
+				const string routeName = "GetFieldCountAsync";
 
-			var responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-			FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
+				var requestModel = new FieldCountBaseRequestModel
+				{
+					FieldArtifactId = artifactId,
+					WorkspaceId = workspaceId
+				};
 
-			return responseModel.Count;
+				var responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
+
+				return responseModel.Count;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Error Getting Field Count [{nameof(artifactId)}:{artifactId}]", exception);
+			}
 		}
 		public static int CreateField(IRSAPIClient client, FieldRequest request)
 		{

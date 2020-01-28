@@ -129,6 +129,41 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 			return responseModel;
 		}
 
+		public async Task<GetFolderNameResponseModel> GetFolderNameAsync(int folderArtifactId, int workspaceId)
+		{
+			GetFolderNameResponseModel responseModel;
+			try
+			{
+				string folderName = await _helper.GetDBContext(workspaceId).ExecuteScalarAsync<string>(
+					new ContextQuery
+					{
+						SqlStatement = "select Name from folder where ArtifactID = @folderArtifactId",
+						Parameters = new[]
+						{
+							new SqlParameter("@folderArtifactId", folderArtifactId)
+						}
+					}
+				).ConfigureAwait(false);
+
+				responseModel = new GetFolderNameResponseModel
+				{
+					FolderName = folderName
+				};
+			}
+			catch (Exception exception)
+			{
+				// Note: logging templates should never use interpolation! Doing so will cause memory leaks.
+				_logger.LogWarning(exception,
+					"An exception occured getting the folder name of folder with ID {folderArtifactId}.", folderArtifactId);
+
+				// Throwing a user defined exception with a 404 status code.
+				throw new TestHelpersServiceException(
+					$"An exception occured getting the folder name of folder with ID {folderArtifactId}.");
+			}
+
+			return responseModel;
+		}
+
 		/// <summary>
 		/// All Kepler services must inherit from IDisposable.
 		/// Use this dispose method to dispose of any unmanaged memory at this point.

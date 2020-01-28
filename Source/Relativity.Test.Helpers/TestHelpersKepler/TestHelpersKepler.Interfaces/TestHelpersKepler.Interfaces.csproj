@@ -58,6 +58,9 @@
     <Compile Include="TestHelpersModule\v1\Models\FieldArtifactIdBaseRequestModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\FieldArtifactIdResponseModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\FieldCoundResponseModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\GetFolderNameRequestModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\GetFolderNameResponseModel.cs" />
+    <Compile Include="TestHelpersModule\v1\Models\GetGuidRequestModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\GetGuidResponseModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\BaseRequestModel.cs" />
     <Compile Include="TestHelpersModule\v1\Models\TestHelpersResponseModel.cs" />
