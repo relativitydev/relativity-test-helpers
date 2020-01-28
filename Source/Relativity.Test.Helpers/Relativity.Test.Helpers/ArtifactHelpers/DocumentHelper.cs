@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
+using Relativity.Test.Helpers.Exceptions;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
@@ -25,34 +26,48 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public string GetDocumentIdentifierFieldColumnName(int fieldArtifactTypeID, int workspaceID)
 		{
-			const string routeName = "GetDocumentIdentifierFieldColumnName";
-
-			GetDocumentIdentifierFieldColumnNameRequestModel requestModel = new GetDocumentIdentifierFieldColumnNameRequestModel
+			try
 			{
-				FieldArtifactTypeId = fieldArtifactTypeID,
-				WorkspaceId = workspaceID
-			};
+				const string routeName = "GetDocumentIdentifierFieldColumnName";
 
-			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-			GetDocumentIdentifierFieldColumnNameResponseModel responseModel = JsonConvert.DeserializeObject<GetDocumentIdentifierFieldColumnNameResponseModel>(responseString);
+				GetDocumentIdentifierFieldColumnNameRequestModel requestModel = new GetDocumentIdentifierFieldColumnNameRequestModel
+				{
+					FieldArtifactTypeId = fieldArtifactTypeID,
+					WorkspaceId = workspaceID
+				};
 
-			return responseModel.ColumnName;
+				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				GetDocumentIdentifierFieldColumnNameResponseModel responseModel = JsonConvert.DeserializeObject<GetDocumentIdentifierFieldColumnNameResponseModel>(responseString);
+
+				return responseModel.ColumnName;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Failed to Get Document Identifier Field Column Name [{nameof(fieldArtifactTypeID)}:{nameof(fieldArtifactTypeID)}]", exception);
+			}
 		}
 
 		public string GetDocumentIdentifierFieldName(int fieldArtifactTypeID, int workspaceID)
 		{
-			const string routeName = "GetDocumentIdentifierFieldColumnName";
-
-			GetDocumentIdentifierFieldNameRequestModel requestModel = new GetDocumentIdentifierFieldNameRequestModel
+			try
 			{
-				FieldArtifactTypeId = fieldArtifactTypeID,
-				WorkspaceId = workspaceID
-			};
+				const string routeName = "GetDocumentIdentifierFieldColumnName";
 
-			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-			GetDocumentIdentifierFieldNameResponseModel responseModel = JsonConvert.DeserializeObject<GetDocumentIdentifierFieldNameResponseModel>(responseString);
+				GetDocumentIdentifierFieldNameRequestModel requestModel = new GetDocumentIdentifierFieldNameRequestModel
+				{
+					FieldArtifactTypeId = fieldArtifactTypeID,
+					WorkspaceId = workspaceID
+				};
 
-			return responseModel.FieldName;
+				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				GetDocumentIdentifierFieldNameResponseModel responseModel = JsonConvert.DeserializeObject<GetDocumentIdentifierFieldNameResponseModel>(responseString);
+
+				return responseModel.FieldName;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Failed to Get Document Identifier Field Name [{nameof(fieldArtifactTypeID)}:{nameof(fieldArtifactTypeID)}]", exception);
+			}
 		}
 	}
 }

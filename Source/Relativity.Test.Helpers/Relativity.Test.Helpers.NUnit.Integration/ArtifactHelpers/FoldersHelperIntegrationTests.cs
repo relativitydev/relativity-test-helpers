@@ -9,7 +9,7 @@ using Relativity.API;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.SharedTestHelpers;
 
-namespace Relativity.Test.Helpers.NUnit.Integration
+namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
 	public class TestFolderIntegrationTests
 	{

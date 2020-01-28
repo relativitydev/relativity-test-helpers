@@ -162,7 +162,7 @@
     <Compile Include="TestConstants.cs" />
     <Compile Include="TestDocumentIntegrationTests.cs" />
     <Compile Include="TestEHHelperIntegrationTests.cs" />
-    <Compile Include="TestFolderIntegrationTests.cs" />
+    <Compile Include="ArtifactHelpers\FoldersHelperIntegrationTests.cs" />
     <Compile Include="TestHelperRunSettingsIntegrationTests.cs" />
     <Compile Include="TestHelperIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
