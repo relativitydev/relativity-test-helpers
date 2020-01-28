@@ -15,7 +15,7 @@ using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 {
 	[TestFixture]
-	public class FieldsTest
+	public class FieldsHelperTest
 	{
 		private IHttpRequestHelper _httpRequestHelper;
 		private readonly int _workspaceId = 1234567;
@@ -27,6 +27,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 		{
 			_httpRequestHelperMocked = new Mock<IHttpRequestHelper>();
 			_httpRequestHelper = _httpRequestHelperMocked.Object;
+			Sut = new FieldsHelper(_httpRequestHelper);
 		}
 
 		[TearDown]
@@ -49,8 +50,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 			string fieldName = "TestField";
 			int fieldId = 1223344;
 
-			Sut = new FieldsHelper(_httpRequestHelper);
-
 			//act
 			var fieldArtifactId = Sut.GetFieldArtifactId(fieldName, _workspaceId);
 
@@ -71,8 +70,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 			//arrange
 			int _count = 1;
 			const int fieldArtifactId = 1223344;
-
-			Sut = new FieldsHelper(_httpRequestHelper);
 
 			//act
 			var fieldCount = Sut.GetFieldCount(fieldArtifactId, _workspaceId);

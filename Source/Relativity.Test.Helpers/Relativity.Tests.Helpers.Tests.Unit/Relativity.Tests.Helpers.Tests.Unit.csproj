@@ -159,7 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpersTest.cs" />
-    <Compile Include="ArtifactHelpers\FieldsTest.cs" />
+    <Compile Include="ArtifactHelpers\FieldsHelperTest.cs" />
     <Compile Include="Kepler\ApplicationInstallHelperUnitTests.cs" />
     <Compile Include="Kepler\OAuth2HelperUnitTests.cs" />
     <Compile Include="ImportAPI\ImportAPIHelperTest.cs" />
