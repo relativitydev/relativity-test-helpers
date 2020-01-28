@@ -32,34 +32,48 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public int GetFieldArtifactId(string fieldname, int workspaceId)
 		{
-			const string routeName = "GetFieldArtifactIdAsync";
+			try
+			{
+				const string routeName = "GetFieldArtifactIdAsync";
 
 			FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
-			{
-				FieldName = fieldname,
-				WorkspaceId = workspaceId
-			};
+				{
+					FieldName = fieldname,
+					WorkspaceId = workspaceId
+				};
 
 			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-			FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
+				FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
 
-			return responseModel.ArtifactId;
+				return responseModel.ArtifactId;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Error Getting Field ArtifactID [{nameof(fieldname)}:{fieldname}]", exception);
+			}
 		}
 
 		public int GetFieldCount(int artifactId, int workspaceId)
 		{
-			const string routeName = "GetFieldCountAsync";
+			try
+			{
+				const string routeName = "GetFieldCountAsync";
 
 			FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
-			{
-				FieldArtifactId = artifactId,
-				WorkspaceId = workspaceId
-			};
+				{
+					FieldArtifactId = artifactId,
+					WorkspaceId = workspaceId
+				};
 
 			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-			FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
+				FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
 
-			return responseModel.Count;
+				return responseModel.Count;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Error Getting Field Count [{nameof(artifactId)}:{artifactId}]", exception);
+			}
 		}
 		public static int CreateField(IRSAPIClient client, FieldRequest request)
 		{
