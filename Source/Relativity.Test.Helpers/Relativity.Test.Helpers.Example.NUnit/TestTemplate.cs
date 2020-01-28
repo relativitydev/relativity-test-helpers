@@ -7,7 +7,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using Relativity.Test.Helpers.ArtifactHelpers;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Example.NUnit
