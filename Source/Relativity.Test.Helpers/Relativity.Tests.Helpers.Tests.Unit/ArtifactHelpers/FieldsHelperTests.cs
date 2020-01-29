@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using kCura.Relativity.Client;
 using Moq;
 using NUnit.Framework;
 using Relativity.Test.Helpers;
@@ -13,19 +15,19 @@ using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 {
 	[TestFixture]
-	public class FoldersHelperTest
+	public class FieldsHelperTests
 	{
 		private IHttpRequestHelper _httpRequestHelper;
 		private readonly int _workspaceId = 1234567;
 		private Mock<IHttpRequestHelper> _httpRequestHelperMocked;
-		private IFoldersHelper Sut;
+		private IFieldsHelper Sut;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_httpRequestHelperMocked = new Mock<IHttpRequestHelper>();
 			_httpRequestHelper = _httpRequestHelperMocked.Object;
-			Sut = new FoldersHelper(_httpRequestHelper);
+			Sut = new FieldsHelper(_httpRequestHelper);
 		}
 
 		[TearDown]
@@ -37,23 +39,43 @@ namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 		}
 
 		[Test]
-		public void GetFolderName()
+		public void GetFieldArtifactId()
 		{
 			//Setup
-			const string exampleFolderName = "ExampleFolderName";
-			string _responseJson = "{\"FolderName\": \"@exampleFolderName\"}";
-			_responseJson = _responseJson.Replace("@exampleFolderName", exampleFolderName);
+			string _responseJson = "{\"ArtifactId\": 1223344}";
 			_httpRequestHelperMocked.Setup(x => x.SendPostRequest(It.IsAny<BaseRequestModel>(), It.IsAny<string>())).Returns(_responseJson);
 
 
 			//Arrange
-			int folderArtifactId = 4433221;
+			string fieldName = "TestField";
+			int fieldId = 1223344;
 
-			//Act
-			string folderName = Sut.GetFolderName(folderArtifactId, _workspaceId);
+			//act
+			var fieldArtifactId = Sut.GetFieldArtifactId(fieldName, _workspaceId);
 
-			//Assert
-			Assert.AreEqual(exampleFolderName, folderName);
+			//assert
+			Assert.AreEqual(fieldArtifactId, fieldId);
+
+			//Verify
+			_httpRequestHelperMocked.Verify(x => x.SendPostRequest(It.IsAny<BaseRequestModel>(), It.IsAny<string>()), Times.Exactly(1));
+		}
+
+		[Test]
+		public void GetFieldCount()
+		{
+			//setup
+			string _responseJson = "{\"Count\": 1}";
+			_httpRequestHelperMocked.Setup(x => x.SendPostRequest(It.IsAny<BaseRequestModel>(), It.IsAny<string>())).Returns(_responseJson);
+
+			//arrange
+			int _count = 1;
+			const int fieldArtifactId = 1223344;
+
+			//act
+			var fieldCount = Sut.GetFieldCount(fieldArtifactId, _workspaceId);
+
+			//assert
+			Assert.AreEqual(fieldCount, _count);
 
 			//Verify
 			_httpRequestHelperMocked.Verify(x => x.SendPostRequest(It.IsAny<BaseRequestModel>(), It.IsAny<string>()), Times.Exactly(1));
