@@ -17,6 +17,7 @@ using Newtonsoft.Json.Linq;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.Exceptions;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
+using TestHelpersKepler.Services;
 
 
 namespace Relativity.Test.Helpers
@@ -28,22 +29,19 @@ namespace Relativity.Test.Helpers
 		private readonly AppConfigSettings _alternateConfig;
 
 		private readonly string _defaultAppGuid = "3E86B18F-8B55-45C4-9A57-9E0CBD7BAF46";
-		//private readonly string _keplerFileLocation = "S:\\temp_kepler_files\\";
 		private readonly string _keplerFileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-		private List<string> keplerFileNames = new List<string>()
+		private readonly List<string> _keplerFileNames = new List<string>()
 		{
 			"TestHelpersKepler.Services.dll",
 			"TestHelpersKepler.Interfaces.dll"
 		};
-		//private readonly string _keplerServicesDllName = "TestHelpersKepler.Services.dll";
-		//private readonly string _keplerInterfacesDllName = "TestHelpersKepler.Interfaces.dll";
 
 		public TestHelper(string username, string password)
 		{
 			_username = username;
 			_password = password;
-			InstallKeplerResourceFiles(keplerFileNames);
+			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public TestHelper(string configSectionName)
@@ -51,7 +49,7 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
-			InstallKeplerResourceFiles(keplerFileNames);
+			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public TestHelper(Dictionary<string, string> configDictionary)
@@ -59,7 +57,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(configDictionary);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			InstallKeplerResourceFiles(keplerFileNames);
+			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public TestHelper(TestContext testContext)
@@ -67,7 +65,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(testContext);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			InstallKeplerResourceFiles(keplerFileNames);
+			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public static IHelper ForUser(string username, string password)
