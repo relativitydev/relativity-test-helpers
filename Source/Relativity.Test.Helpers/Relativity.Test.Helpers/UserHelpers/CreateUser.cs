@@ -3,12 +3,13 @@ using kCura.Relativity.Client.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Relativity.Test.Helpers.Exceptions;
 using Choice = kCura.Relativity.Client.DTOs.Choice;
 using User = kCura.Relativity.Client.DTOs.User;
 
 namespace Relativity.Test.Helpers.UserHelpers
 {
-    public static class CreateUser
+	public static class CreateUser
 	{
 
 		public static int CreateNewUser(IRSAPIClient client)
@@ -75,7 +76,7 @@ namespace Relativity.Test.Helpers.UserHelpers
 			}
 			catch (Exception ex)
 			{
-				throw new Exception(errorContext, ex);
+				throw new TestHelpersException(errorContext, ex);
 			}
 
 			// Check for success.
@@ -89,6 +90,8 @@ namespace Relativity.Test.Helpers.UserHelpers
 
 		public static int CreateNewUser(IRSAPIClient client, String firstName, String lastName, String emailAddress, String password, List<int> groupArtifactIds, Boolean relativityAccess, String userType, String clientName)
 		{
+			const string errorContext = "An error occured when creating a new Relativity User.";
+			int userArtifactId = 0;
 
 			client.APIOptions.WorkspaceID = -1;
 
@@ -143,8 +146,24 @@ namespace Relativity.Test.Helpers.UserHelpers
 				userDto.Groups.Add(new kCura.Relativity.Client.DTOs.Group(groupArtifactId));
 			}
 
-			var results = client.Repositories.User.Create(userDto);
-			return results.Results[0].Artifact.ArtifactID;
+			WriteResultSet<User> createResults;
+
+			try
+			{
+				createResults = client.Repositories.User.Create(userDto);
+			}
+			catch (Exception ex)
+			{
+				throw new TestHelpersException(errorContext, ex);
+			}
+
+			// Check for success.
+			if (createResults.Success)
+			{
+				userArtifactId = createResults.Results[0].Artifact.ArtifactID;
+			}
+
+			return userArtifactId;
 		}
 
 
@@ -165,6 +184,10 @@ namespace Relativity.Test.Helpers.UserHelpers
 			if (choiceQueryResult.Success && choiceQueryResult.Results.Count == 1)
 			{
 				artifactId = choiceQueryResult.Results.FirstOrDefault().Artifact.ArtifactID;
+			}
+			else
+			{
+				throw new TestHelpersException($"Error Finding Choice Artifact Id [{nameof(choiceType)}:{choiceType},{nameof(value)}:{value}]");
 			}
 
 			return artifactId;
@@ -188,6 +211,10 @@ namespace Relativity.Test.Helpers.UserHelpers
 			{
 				artifactId = resultSetGroup.Results.FirstOrDefault().Artifact.ArtifactID;
 			}
+			else
+			{
+				throw new TestHelpersException($"Error Finding Group Artifact Id [{nameof(group)}:{group}]");
+			}
 
 			return artifactId;
 		}
@@ -208,6 +235,12 @@ namespace Relativity.Test.Helpers.UserHelpers
 			{
 				artifactId = resultSetClient.Results.FirstOrDefault().Artifact.ArtifactID;
 			}
+			else
+			{
+				throw new TestHelpersException($"Error Finding Client Artifact Id [{nameof(group)}:{group}]");
+			}
+
+
 			return artifactId;
 		}
 
