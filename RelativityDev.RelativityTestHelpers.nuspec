@@ -25,5 +25,7 @@
   </metadata>
   <files>
     <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\Relativity.Test.Helpers.dll" target="lib\net462\" />
+    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\$configuration$\TestHelpersKepler.Interfaces.dll" target="lib\net462\" />
+    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\$configuration$\TestHelpersKepler.Services.dll" target="lib\net462\" />
   </files>
 </package>
