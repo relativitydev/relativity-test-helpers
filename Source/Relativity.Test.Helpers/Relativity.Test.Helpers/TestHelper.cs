@@ -6,8 +6,10 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using kCura.Relativity.Client;
 using Newtonsoft.Json;
@@ -26,7 +28,9 @@ namespace Relativity.Test.Helpers
 		private readonly AppConfigSettings _alternateConfig;
 
 		private readonly string _defaultAppGuid = "3E86B18F-8B55-45C4-9A57-9E0CBD7BAF46";
-		private readonly string _keplerFileLocation = "S:\\temp_kepler_files\\";
+		//private readonly string _keplerFileLocation = "S:\\temp_kepler_files\\";
+		private readonly string _keplerFileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
 		private List<string> keplerFileNames = new List<string>()
 		{
 			"TestHelpersKepler.Services.dll",
@@ -162,7 +166,7 @@ namespace Relativity.Test.Helpers
 					var rfRequest = new ResourceFileRequest
 					{
 						AppGuid = new Guid(_defaultAppGuid),
-						FullFilePath = _keplerFileLocation + keplerDllName,
+						FullFilePath = Path.Combine(_keplerFileLocation, keplerDllName),
 						FileName = keplerDllName
 					};
 					try
