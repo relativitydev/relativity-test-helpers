@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using kCura.Relativity.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Relativity.Services.ServiceProxy;
@@ -23,11 +24,15 @@ namespace Relativity.Test.Helpers
 		private readonly string _username;
 		private readonly string _password;
 		private readonly AppConfigSettings _alternateConfig;
+		private readonly string _defaultAppGuid = "3E86B18F-8B55-45C4-9A57-9E0CBD7BAF46";
+		private readonly string _keplerServicesDllName = "TestHelpersKepler.Services.dll";
+		private readonly string _keplerInterfacesDllName = "TestHelpersKepler.Interfaces.dll";
 
 		public TestHelper(string username, string password)
 		{
 			_username = username;
 			_password = password;
+			InstallKeplerResourceFiles();
 		}
 
 		public TestHelper(string configSectionName)
@@ -35,6 +40,7 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
+			InstallKeplerResourceFiles();
 		}
 
 		public TestHelper(Dictionary<string, string> configDictionary)
@@ -42,6 +48,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(configDictionary);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			InstallKeplerResourceFiles();
 		}
 
 		public TestHelper(TestContext testContext)
@@ -49,6 +56,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(testContext);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			InstallKeplerResourceFiles();
 		}
 
 		public static IHelper ForUser(string username, string password)
@@ -137,7 +145,54 @@ namespace Relativity.Test.Helpers
 		{
 			throw new NotImplementedException();
 		}
+
+		private void InstallKeplerResourceFiles()
+		{
+			using (IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>())
+			{
+				var rfRequest = new ResourceFileRequest
+				{
+					AppGuid = new Guid(_defaultAppGuid), 
+					FullFilePath = "", 
+					FileName = _keplerInterfacesDllName
+				};
+				try
+				{
+					rsapiClient.PushResourceFiles(rsapiClient.APIOptions, new List<ResourceFileRequest>() { rfRequest });
+					Console.WriteLine($"{nameof(InstallKeplerResourceFiles)} - Local YAML file ({_keplerInterfacesDllName}) - was uploaded successfully");
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"{nameof(InstallKeplerResourceFiles)} - Could not upload ({_keplerInterfacesDllName}) - Exception: {ex.Message}");
+				}
+
+			}
+
+		}
+
+		private void RemoveKeplerResourceFiles()
+		{
+
+		}
+
+		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
+		{
+			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
+			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
+
+			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
+				username: ConfigurationHelper.ADMIN_USERNAME,
+				password: ConfigurationHelper.DEFAULT_PASSWORD);
+
+			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
+				relativityServicesUri: relativityServicesUri,
+				relativityRestUri: relativityRestUri,
+				credentials: usernamePasswordCredentials);
+
+			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
+				settings: serviceFactorySettings);
+
+			return serviceFactory;
+		}
 	}
-
-
 }
