@@ -11,12 +11,12 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
-	public class TestFolderIntegrationTests
+	public class FoldersHelperIntegrationTests
 	{
 		private IHelper testHelper;
 		private FoldersHelper SuT;
 		private int _workspaceId;
-		private IServicesMgr servicesManager;
+		private IServicesMgr _servicesManager;
 		private string _workspaceName;
 
 		[SetUp]
@@ -26,9 +26,9 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			SuT = new FoldersHelper(new HttpRequestHelper());
 
 			_workspaceName = $"IntTest_{Guid.NewGuid()}";
-			IServicesMgr servicesManager = testHelper.GetServicesManager();
+			_servicesManager = testHelper.GetServicesManager();
 			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager,
+				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
 				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 		}
 
@@ -36,7 +36,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void TearDown()
 		{
 			//Delete Workspace
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			testHelper = null;
 			SuT = null;
@@ -45,12 +45,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		[Test]
 		public void GetFolderName()
 		{
-
-			IServicesMgr servicesManager = null;
-			int _workspaceId = 0;
 			// Arrange
-
-			int rootFolderArtifactId = FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager,
+			int rootFolderArtifactId = FoldersHelper.GetRootFolderArtifactID(_workspaceId, _servicesManager,
 				ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			// Act

@@ -164,7 +164,7 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 			return responseModel;
 		}
 
-		public async Task<GetDocumentIdentifierFieldColumnNameResponseModel> GetDocumentIdentifierFieldColumnName(
+		public async Task<GetDocumentIdentifierFieldColumnNameResponseModel> GetDocumentIdentifierFieldColumnNameAsync(
 			int fieldArtifactTypeId, int workspaceId)
 		{
 			GetDocumentIdentifierFieldColumnNameResponseModel responseModel;
@@ -174,13 +174,13 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 					new ContextQuery
 					{
 						SqlStatement = @"
-						SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
-						JOIN [EDDSDBO].[ArtifactViewField] AVF WITH(NOLOCK)
-						ON EF.TextIdentifier = AVF.HeaderName
-						WHERE EF.IsIdentifier = 1 AND EF.FieldArtifactTypeID = '@fieldArtifactTypeID'",
+							SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
+							JOIN [EDDSDBO].[ArtifactViewField] AVF WITH(NOLOCK)
+							ON EF.TextIdentifier = AVF.HeaderName
+							WHERE EF.IsIdentifier = 1 AND EF.FieldArtifactTypeID = @fieldArtifactTypeID",
 						Parameters = new[]
 						{
-							new SqlParameter("@fieldArtifactTypeID", fieldArtifactTypeId)
+								new SqlParameter("@fieldArtifactTypeID", fieldArtifactTypeId)
 						}
 					}
 				).ConfigureAwait(false);
@@ -204,7 +204,7 @@ namespace TestHelpersKepler.Services.TestHelpersModule.v1
 			return responseModel;
 		}
 
-		public async Task<GetDocumentIdentifierFieldNameResponseModel> GetDocumentIdentifierFieldName(
+		public async Task<GetDocumentIdentifierFieldNameResponseModel> GetDocumentIdentifierFieldNameAsync(
 			int fieldArtifactTypeId, int workspaceId)
 		{
 			GetDocumentIdentifierFieldNameResponseModel responseModel;

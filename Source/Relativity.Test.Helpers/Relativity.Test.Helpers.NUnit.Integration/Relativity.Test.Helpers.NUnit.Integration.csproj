@@ -160,7 +160,7 @@
     <Compile Include="Kepler\OAuth2HelperTests.cs" />
     <Compile Include="Mail\GmailMailHelperTests.cs" />
     <Compile Include="TestConstants.cs" />
-    <Compile Include="TestDocumentIntegrationTests.cs" />
+    <Compile Include="ArtifactHelpers\DocumentHelperIntegrationTests.cs" />
     <Compile Include="TestEHHelperIntegrationTests.cs" />
     <Compile Include="ArtifactHelpers\FoldersHelperIntegrationTests.cs" />
     <Compile Include="TestHelperRunSettingsIntegrationTests.cs" />
