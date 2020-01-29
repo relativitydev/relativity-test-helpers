@@ -195,6 +195,7 @@
     <Compile Include="ArtifactHelpers\FieldsHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFieldsHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFoldersHelper.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Exceptions\TestHelpersException.cs" />
     <Compile Include="Exceptions\TestHelpersApplicationInstallException.cs" />
     <Compile Include="Exceptions\TestHelpersOAuth2Exception.cs" />

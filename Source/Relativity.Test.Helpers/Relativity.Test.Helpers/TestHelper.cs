@@ -28,13 +28,13 @@ namespace Relativity.Test.Helpers
 		private readonly string _password;
 		private readonly AppConfigSettings _alternateConfig;
 
-		private readonly string _defaultAppGuid = "3E86B18F-8B55-45C4-9A57-9E0CBD7BAF46";
+		private readonly string _defaultAppGuid = Constants.Kepler.DEFAULT_APP_GUID;
 		private readonly string _keplerFileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
 		private readonly List<string> _keplerFileNames = new List<string>()
 		{
-			"TestHelpersKepler.Services.dll",
-			"TestHelpersKepler.Interfaces.dll"
+			Constants.Kepler.SERVICES_DLL_NAME,
+			Constants.Kepler.INTERFACES_DLL_NAME
 		};
 
 		public TestHelper(string username, string password)
@@ -174,7 +174,7 @@ namespace Relativity.Test.Helpers
 					}
 					catch (Exception ex)
 					{
-						Console.WriteLine($"{nameof(InstallKeplerResourceFiles)} - Could not upload ({keplerDllName}) - Exception: {ex.Message}");
+						throw new TestHelpersException($"{nameof(InstallKeplerResourceFiles)} - Could not upload ({keplerDllName}) - Exception: {ex.Message}");
 					}
 				}
 			}
