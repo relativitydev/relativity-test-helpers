@@ -18,7 +18,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 	public class DocumentHelper : IDocumentHelper
 	{
-		private IHttpRequestHelper _httpRequestHelper;
+		private readonly IHttpRequestHelper _httpRequestHelper;
 		public DocumentHelper(IHttpRequestHelper httpRequestHelper)
 		{
 			_httpRequestHelper = httpRequestHelper;
@@ -43,7 +43,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 			catch (Exception exception)
 			{
-				throw new TestHelpersException($"Failed to Get Document Identifier Field Column Name [{nameof(fieldArtifactTypeID)}:{nameof(fieldArtifactTypeID)}]", exception);
+				throw new TestHelpersException($"Failed to Get Document Identifier Field Column Name [{nameof(fieldArtifactTypeID)}:{fieldArtifactTypeID}]", exception);
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 			catch (Exception exception)
 			{
-				throw new TestHelpersException($"Failed to Get Document Identifier Field Name [{nameof(fieldArtifactTypeID)}:{nameof(fieldArtifactTypeID)}]", exception);
+				throw new TestHelpersException($"Failed to Get Document Identifier Field Name [{nameof(fieldArtifactTypeID)}:{fieldArtifactTypeID}]", exception);
 			}
 		}
 	}

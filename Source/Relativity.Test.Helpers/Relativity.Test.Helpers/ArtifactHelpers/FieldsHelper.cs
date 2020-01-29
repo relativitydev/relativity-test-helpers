@@ -36,13 +36,13 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			{
 				const string routeName = "GetFieldArtifactIdAsync";
 
-			FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
+				FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
 				{
 					FieldName = fieldname,
 					WorkspaceId = workspaceId
 				};
 
-			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
 				FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
 
 				return responseModel.ArtifactId;
@@ -59,13 +59,13 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			{
 				const string routeName = "GetFieldCountAsync";
 
-			FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
+				FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
 				{
 					FieldArtifactId = artifactId,
 					WorkspaceId = workspaceId
 				};
 
-			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
 				FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
 
 				return responseModel.Count;
@@ -77,26 +77,33 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		}
 		public static int CreateField(IRSAPIClient client, FieldRequest request)
 		{
-			int fieldID = 0;
-			//Set the workspace ID
-			client.APIOptions.WorkspaceID = request.WorkspaceID;
-			//Create a Field DTO
-			DTOs.Field fieldDTO = new DTOs.Field();
-			//Set secondary fields
-			request.HydrateFieldDTO(fieldDTO);
-			//Create the field
-			DTOs.WriteResultSet<DTOs.Field> resultSet = client.Repositories.Field.Create(fieldDTO);
-			//Check for success
-			if (resultSet.Success)
+			try
 			{
-				fieldID = resultSet.Results.FirstOrDefault().Artifact.ArtifactID;
+				int fieldID = 0;
+				//Set the workspace ID
+				client.APIOptions.WorkspaceID = request.WorkspaceID;
+				//Create a Field DTO
+				DTOs.Field fieldDTO = new DTOs.Field();
+				//Set secondary fields
+				request.HydrateFieldDTO(fieldDTO);
+				//Create the field
+				DTOs.WriteResultSet<DTOs.Field> resultSet = client.Repositories.Field.Create(fieldDTO);
+				//Check for success
+				if (resultSet.Success)
+				{
+					fieldID = resultSet.Results.FirstOrDefault().Artifact.ArtifactID;
+				}
+				else
+				{
+					TestHelpersException innEx = resultSet.Results.Any() ? new TestHelpersException(resultSet.Results.First().Message) : null;
+					throw new TestHelpersException(resultSet.Message, innEx);
+				}
+				return fieldID;
 			}
-			else
+			catch (Exception exception)
 			{
-				Exception innEx = resultSet.Results.Any() ? new Exception(resultSet.Results.First().Message) : null;
-				throw new Exception(resultSet.Message, innEx);
+				throw new TestHelpersException($"Error Creating Field [{nameof(request)}:{request}]");
 			}
-			return fieldID;
 		}
 		public static int CreateField_Date(IRSAPIClient client, int workspaceID)
 		{

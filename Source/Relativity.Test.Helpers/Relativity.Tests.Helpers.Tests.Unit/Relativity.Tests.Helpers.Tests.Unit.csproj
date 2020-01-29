@@ -159,9 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpersTest.cs" />
-    <Compile Include="ArtifactHelpers\DocumentHelperTest.cs" />
-    <Compile Include="ArtifactHelpers\FieldsHelperTest.cs" />
-    <Compile Include="ArtifactHelpers\FoldersHelperTest.cs" />
+    <Compile Include="ArtifactHelpers\DocumentHelperTests.cs" />
+    <Compile Include="ArtifactHelpers\FieldsHelperTests.cs" />
+    <Compile Include="ArtifactHelpers\FoldersHelperTests.cs" />
     <Compile Include="Kepler\ApplicationInstallHelperUnitTests.cs" />
     <Compile Include="Kepler\OAuth2HelperUnitTests.cs" />
     <Compile Include="ImportAPI\ImportAPIHelperTest.cs" />

@@ -15,7 +15,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private IHelper testHelper;
 		private DocumentHelper SuT;
 		private string _workspaceName;
-		private IServicesMgr servicesManager;
+		private IServicesMgr _servicesManager;
 		private int _workspaceId;
 
 		[SetUp]
@@ -24,9 +24,9 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			SuT = new DocumentHelper(new HttpRequestHelper());
 			_workspaceName = $"IntTest_{Guid.NewGuid()}";
-			servicesManager = testHelper.GetServicesManager();
+			_servicesManager = testHelper.GetServicesManager();
 			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager,
+				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
 				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 		}
 
@@ -34,18 +34,19 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void TearDown()
 		{
 			//Delete Workspace
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			testHelper = null;
 			SuT = null;
+			_servicesManager = null;
 		}
 
 		[Test]
 		public void GetDocumentIdentifierFieldColumnName()
 		{
 			// Arrange
-			int fieldArtifactTypeId = 10;
-			string controlNumber = "ControlNumber";
+			const int fieldArtifactTypeId = 10;
+			const string controlNumber = "ControlNumber";
 
 			// Act
 			string columnName = SuT.GetDocumentIdentifierFieldColumnName(fieldArtifactTypeId, _workspaceId);
@@ -58,8 +59,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void GetDocumentIdentifierFieldName()
 		{
 			// Arrange
-			int fieldArtifactTypeId = 10;
-			string controlNumber = "Control Number";
+			const int fieldArtifactTypeId = 10;
+			const string controlNumber = "Control Number";
 
 			// Act
 			string fieldName = SuT.GetDocumentIdentifierFieldName(fieldArtifactTypeId, _workspaceId);

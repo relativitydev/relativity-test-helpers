@@ -40,6 +40,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			testHelper = null;
 			SuT = null;
+			_servicesManager = null;
 		}
 
 		[Test]
