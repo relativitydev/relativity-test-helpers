@@ -82,13 +82,28 @@ namespace Relativity.Test.Helpers.UserHelpers
 				}
 
 				// Check for success.
-				if (createResults.Success)
+				if (createResults == null)
 				{
-					userArtifactId = createResults.Results[0].Artifact.ArtifactID;
+					throw new ArgumentNullException(nameof(createResults));
+				}
+				else if (!createResults.Success)
+				{
+					string message = createResults.Message;
+					if (string.IsNullOrWhiteSpace(message) ||
+							(message ?? string.Empty).Contains("see individual results for more details"))
+					{
+						message += string.Join(",", createResults.Results.Select(x => x.Message).Where(x => !string.IsNullOrWhiteSpace(x)));
+					}
+
+					if (string.IsNullOrWhiteSpace(message))
+					{
+						message = "An unknown error occurred.";
+					}
+					throw new TestHelpersException(message);
 				}
 				else
 				{
-					throw new TestHelpersException("Failed to Create User");
+					userArtifactId = createResults.Results[0].Artifact.ArtifactID;
 				}
 
 				return userArtifactId;
@@ -171,13 +186,28 @@ namespace Relativity.Test.Helpers.UserHelpers
 				}
 
 				// Check for success.
-				if (createResults.Success)
+				if (createResults == null)
 				{
-					userArtifactId = createResults.Results[0].Artifact.ArtifactID;
+					throw new ArgumentNullException(nameof(createResults));
+				}
+				else if (!createResults.Success)
+				{
+					string message = createResults.Message;
+					if (string.IsNullOrWhiteSpace(message) ||
+							(message ?? string.Empty).Contains("see individual results for more details"))
+					{
+						message += string.Join(",", createResults.Results.Select(x => x.Message).Where(x => !string.IsNullOrWhiteSpace(x)));
+					}
+
+					if (string.IsNullOrWhiteSpace(message))
+					{
+						message = "An unknown error occurred.";
+					}
+					throw new TestHelpersException(message);
 				}
 				else
 				{
-					throw new TestHelpersException("Failed to Create User");
+					userArtifactId = createResults.Results[0].Artifact.ArtifactID;
 				}
 
 				return userArtifactId;
@@ -205,13 +235,40 @@ namespace Relativity.Test.Helpers.UserHelpers
 
 				QueryResultSet<Choice> choiceQueryResult = proxy.Repositories.Choice.Query(choiceQuery);
 
-				if (choiceQueryResult.Success && choiceQueryResult.Results.Count == 1)
+
+				if (choiceQueryResult == null)
 				{
-					artifactId = choiceQueryResult.Results.FirstOrDefault().Artifact.ArtifactID;
+					throw new ArgumentNullException(nameof(choiceQueryResult));
+				}
+				else if (!choiceQueryResult.Success)
+				{
+					string message = choiceQueryResult.Message;
+					if (string.IsNullOrWhiteSpace(message) ||
+							(message ?? string.Empty).Contains("see individual results for more details"))
+					{
+						message += string.Join(",", choiceQueryResult.Results.Select(x => x.Message).Where(x => !string.IsNullOrWhiteSpace(x)));
+					}
+
+					if (string.IsNullOrWhiteSpace(message))
+					{
+						message = "An unknown error occurred.";
+					}
+					throw new TestHelpersException(message);
 				}
 				else
 				{
-					throw new TestHelpersException($"Error Finding Choice Artifact Id [{nameof(choiceType)}:{choiceType},{nameof(value)}:{value}]");
+					if (choiceQueryResult.Results.Count == 0)
+					{
+						throw new TestHelpersException($"Query did not return any results [{nameof(choiceQueryResult)}:{choiceQueryResult}]");
+					}
+					else if (choiceQueryResult.Results.Count > 1)
+					{
+						throw new TestHelpersException($"Query returned more than 1 result [{nameof(choiceQueryResult)}:{choiceQueryResult}]");
+					}
+					else
+					{
+						artifactId = choiceQueryResult.Results.FirstOrDefault().Artifact.ArtifactID;
+					}
 				}
 
 				return artifactId;
@@ -233,18 +290,43 @@ namespace Relativity.Test.Helpers.UserHelpers
 					{
 						Condition = new TextCondition(GroupFieldNames.Name, TextConditionEnum.EqualTo, @group)
 					};
-
 				queryGroup.Fields.Add(new FieldValue(ArtifactQueryFieldNames.ArtifactID));
-
 				QueryResultSet<kCura.Relativity.Client.DTOs.Group> resultSetGroup = proxy.Repositories.Group.Query(queryGroup, 0);
 
-				if (resultSetGroup.Success && resultSetGroup.Results.Count == 1)
+				// Check for success.
+				if (resultSetGroup == null)
 				{
-					artifactId = resultSetGroup.Results.FirstOrDefault().Artifact.ArtifactID;
+					throw new ArgumentNullException(nameof(resultSetGroup));
+				}
+				else if (!resultSetGroup.Success)
+				{
+					string message = resultSetGroup.Message;
+					if (string.IsNullOrWhiteSpace(message) ||
+							(message ?? string.Empty).Contains("see individual results for more details"))
+					{
+						message += string.Join(",", resultSetGroup.Results.Select(x => x.Message).Where(x => !string.IsNullOrWhiteSpace(x)));
+					}
+
+					if (string.IsNullOrWhiteSpace(message))
+					{
+						message = "An unknown error occurred.";
+					}
+					throw new TestHelpersException(message);
 				}
 				else
 				{
-					throw new TestHelpersException($"Error Finding Group Artifact Id [{nameof(group)}:{group}]");
+					if (resultSetGroup.Results.Count == 0)
+					{
+						throw new TestHelpersException($"Query did not return any results [{nameof(resultSetGroup)}:{resultSetGroup}]");
+					}
+					else if (resultSetGroup.Results.Count > 1)
+					{
+						throw new TestHelpersException($"Query returned more than 1 result [{nameof(resultSetGroup)}:{resultSetGroup}]");
+					}
+					else
+					{
+						artifactId = resultSetGroup.Results.FirstOrDefault().Artifact.ArtifactID;
+					}
 				}
 
 				return artifactId;
@@ -266,16 +348,42 @@ namespace Relativity.Test.Helpers.UserHelpers
 					Condition = new TextCondition(ClientFieldNames.Name, TextConditionEnum.EqualTo, @group),
 					Fields = FieldValue.AllFields
 				};
-
 				QueryResultSet<Client> resultSetClient = proxy.Repositories.Client.Query(queryClient, 0);
 
-				if (resultSetClient.Success && resultSetClient.Results.Count == 1)
+				// Check for success.
+				if (resultSetClient == null)
 				{
-					artifactId = resultSetClient.Results.FirstOrDefault().Artifact.ArtifactID;
+					throw new ArgumentNullException(nameof(resultSetClient));
+				}
+				else if (!resultSetClient.Success)
+				{
+					string message = resultSetClient.Message;
+					if (string.IsNullOrWhiteSpace(message) ||
+							(message ?? string.Empty).Contains("see individual results for more details"))
+					{
+						message += string.Join(",", resultSetClient.Results.Select(x => x.Message).Where(x => !string.IsNullOrWhiteSpace(x)));
+					}
+
+					if (string.IsNullOrWhiteSpace(message))
+					{
+						message = "An unknown error occurred.";
+					}
+					throw new TestHelpersException(message);
 				}
 				else
 				{
-					throw new TestHelpersException($"Error Finding Client Artifact Id [{nameof(group)}:{group}]");
+					if (resultSetClient.Results.Count == 0)
+					{
+						throw new TestHelpersException($"Query did not return any results [{nameof(resultSetClient)}:{resultSetClient}]");
+					}
+					else if (resultSetClient.Results.Count > 1)
+					{
+						throw new TestHelpersException($"Query returned more than 1 result [{nameof(resultSetClient)}:{resultSetClient}]");
+					}
+					else
+					{
+						artifactId = resultSetClient.Results.FirstOrDefault().Artifact.ArtifactID;
+					}
 				}
 
 				return artifactId;
@@ -285,6 +393,5 @@ namespace Relativity.Test.Helpers.UserHelpers
 				throw new TestHelpersException("Error Finding Client Artifact", ex);
 			}
 		}
-
 	}
 }
