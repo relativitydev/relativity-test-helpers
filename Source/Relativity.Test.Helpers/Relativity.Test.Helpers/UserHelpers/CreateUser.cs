@@ -82,7 +82,7 @@ namespace Relativity.Test.Helpers.UserHelpers
 				}
 
 				// Check for success.
-				userArtifactId = EnsureSuccess<User>(createResults);
+				userArtifactId = createResults.EnsureSuccess();
 
 				return userArtifactId;
 			}
@@ -164,7 +164,7 @@ namespace Relativity.Test.Helpers.UserHelpers
 				}
 
 				// Check for success.
-				userArtifactId = EnsureSuccess<User>(createResults);
+				userArtifactId = createResults.EnsureSuccess();
 
 				return userArtifactId;
 			}
@@ -173,7 +173,6 @@ namespace Relativity.Test.Helpers.UserHelpers
 				throw new TestHelpersException("Error Creating New User", ex);
 			}
 		}
-
 
 		public static int FindChoiceArtifactId(IRSAPIClient proxy, int choiceType, string value)
 		{
@@ -192,7 +191,7 @@ namespace Relativity.Test.Helpers.UserHelpers
 				QueryResultSet<Choice> choiceQueryResult = proxy.Repositories.Choice.Query(choiceQuery);
 
 				// Check for success.
-				artifactId = EnsureSuccess<Choice>(choiceQueryResult);
+				artifactId = choiceQueryResult.EnsureSuccess();
 
 				return artifactId;
 			}
@@ -217,7 +216,7 @@ namespace Relativity.Test.Helpers.UserHelpers
 				QueryResultSet<kCura.Relativity.Client.DTOs.Group> resultSetGroup = proxy.Repositories.Group.Query(queryGroup, 0);
 
 				// Check for success.
-				artifactId = EnsureSuccess<kCura.Relativity.Client.DTOs.Group>(resultSetGroup);
+				artifactId = resultSetGroup.EnsureSuccess();
 
 				return artifactId;
 			}
@@ -241,54 +240,13 @@ namespace Relativity.Test.Helpers.UserHelpers
 				QueryResultSet<Client> resultSetClient = proxy.Repositories.Client.Query(queryClient, 0);
 
 				// Check for success.
-				artifactId = EnsureSuccess<Client>(resultSetClient);
+				artifactId = resultSetClient.EnsureSuccess();
 
 				return artifactId;
 			}
 			catch (Exception ex)
 			{
 				throw new TestHelpersException("Error Finding Client Artifact", ex);
-			}
-		}
-
-		private static int EnsureSuccess<T>(this ResultSet<T> result) where T : kCura.Relativity.Client.DTOs.Artifact
-		{
-			int artifactId;
-
-			if (result == null)
-			{
-				throw new ArgumentNullException(nameof(result));
-			}
-			else if (!result.Success)
-			{
-				string message = result.Message;
-				if (string.IsNullOrWhiteSpace(message) ||
-						(message ?? string.Empty).Contains("see individual results for more details"))
-				{
-					message += string.Join(",", result.Results.Select(x => x.Message).Where(x => !string.IsNullOrWhiteSpace(x)));
-				}
-
-				if (string.IsNullOrWhiteSpace(message))
-				{
-					message = "An unknown error occurred.";
-				}
-				throw new TestHelpersException(message);
-			}
-			else
-			{
-				if (result.Results.Count == 0)
-				{
-					throw new TestHelpersException($"Did not return any results [{nameof(result)}:{result}]");
-				}
-				else if (result.Results.Count > 1)
-				{
-					throw new TestHelpersException($"Returned more than 1 result [{nameof(result)}:{result}]");
-				}
-				else
-				{
-					artifactId = result.Results.FirstOrDefault().Artifact.ArtifactID;
-					return artifactId;
-				}
 			}
 		}
 	}
