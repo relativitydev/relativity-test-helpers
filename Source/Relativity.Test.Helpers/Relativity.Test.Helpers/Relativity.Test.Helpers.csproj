@@ -200,6 +200,7 @@
     <Compile Include="Exceptions\TestHelpersException.cs" />
     <Compile Include="Exceptions\TestHelpersApplicationInstallException.cs" />
     <Compile Include="Exceptions\TestHelpersOAuth2Exception.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="HttpRequestHelper.cs" />
     <Compile Include="IHttpRequestHelper.cs" />
     <Compile Include="Kepler\ApplicationInstallHelper.cs" />
