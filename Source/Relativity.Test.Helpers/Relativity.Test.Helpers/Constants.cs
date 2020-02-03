@@ -23,6 +23,7 @@ namespace Relativity.Test.Helpers
 			public const string DEFAULT_APP_GUID = "3E86B18F-8B55-45C4-9A57-9E0CBD7BAF46";
 			public const string SERVICES_DLL_NAME = "TestHelpersKepler.Services.dll";
 			public const string INTERFACES_DLL_NAME = "TestHelpersKepler.Interfaces.dll";
+			public const string KEPLER_APP_NAME = "TestHelpers_Kepler_App";
 		}
 	}
 }

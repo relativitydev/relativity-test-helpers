@@ -292,6 +292,7 @@
     </None>
     <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
+    <None Include="TestHelpers_Kepler_App.rap" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Interfaces\TestHelpersKepler.Interfaces.csproj">
