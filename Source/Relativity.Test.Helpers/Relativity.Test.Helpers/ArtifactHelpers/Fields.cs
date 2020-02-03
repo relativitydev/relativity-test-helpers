@@ -56,7 +56,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			try
 			{
-				const string routeName = "GetFieldArtifactIdAsync";
+				const string routeName = Constants.Kepler.RouteNames.GetFieldArtifactIdAsync;
 
 				FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
 				{
@@ -80,7 +80,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			try
 			{
-				const string routeName = "GetFieldCountAsync";
+				const string routeName = Constants.Kepler.RouteNames.GetFieldCountAsync;
 
 				FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
 				{

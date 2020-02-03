@@ -100,7 +100,7 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			//const string routeName = "GetGuid";
+			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
 
 			//var requestModel = new GetGuidRequestModel
 			//{

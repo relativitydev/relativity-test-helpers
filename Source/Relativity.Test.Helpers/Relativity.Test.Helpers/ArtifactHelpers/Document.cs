@@ -60,7 +60,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			try
 			{
-				const string routeName = "GetDocumentIdentifierFieldColumnNameAsync";
+				const string routeName = Constants.Kepler.RouteNames.GetDocumentIdentifierFieldColumnNameAsync;
+
 
 				GetDocumentIdentifierFieldColumnNameRequestModel requestModel = new GetDocumentIdentifierFieldColumnNameRequestModel
 				{
@@ -84,7 +85,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			try
 			{
-				const string routeName = "GetDocumentIdentifierFieldNameAsync";
+				const string routeName = Constants.Kepler.RouteNames.GetDocumentIdentifierFieldNameAsync;
 
 				GetDocumentIdentifierFieldNameRequestModel requestModel = new GetDocumentIdentifierFieldNameRequestModel
 				{

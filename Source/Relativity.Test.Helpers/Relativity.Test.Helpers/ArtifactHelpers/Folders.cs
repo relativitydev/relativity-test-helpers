@@ -40,7 +40,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			try
 			{
-				const string routeName = "GetFolderNameAsync";
+				const string routeName = Constants.Kepler.RouteNames.GetFolderNameAsync;
 
 				GetFolderNameRequestModel requestModel = new GetFolderNameRequestModel
 				{
