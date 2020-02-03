@@ -97,24 +97,38 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			//const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
+			//if kepler compatible 
+			//GetGuidWithKepler
 
-			//var requestModel = new GetGuidRequestModel
-			//{
-			//	artifactID = artifactID,
-			//	workspaceID = workspaceID
-			//};
+			//if force db context or not kepler compatible
+			//GetGuidWithDbContext
 
-			//IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
-			//var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
-			//GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
+			throw new NotImplementedException();
+		}
 
-			//return responseModel.Guid;
-
+		private Guid GetGuidWithDbContext(int workspaceId, int artifactId)
+		{
 			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-			var context = GetDBContext(workspaceID);
-			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactID));
+			var context = GetDBContext(workspaceId);
+			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactId));
 			return result;
+		}
+
+		public Guid GetGuidWithKepler(int workspaceId, int artifactId)
+		{
+			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
+
+			var requestModel = new GetGuidRequestModel
+			{
+				artifactID = artifactId,
+				workspaceID = workspaceId
+			};
+
+			IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
+			var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
+			GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
+
+			return responseModel.Guid;
 		}
 
 		public ISecretStore GetSecretStore()
