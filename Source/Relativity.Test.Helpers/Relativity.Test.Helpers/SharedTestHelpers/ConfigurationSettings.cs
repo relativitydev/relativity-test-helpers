@@ -96,5 +96,10 @@
         {
             get;
         }
+
+        public abstract string ForceDbContext
+        {
+	        get;
+        }
     }
 }

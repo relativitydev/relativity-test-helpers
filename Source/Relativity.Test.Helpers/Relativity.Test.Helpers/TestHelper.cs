@@ -29,9 +29,6 @@ namespace Relativity.Test.Helpers
 		private readonly string _password;
 		private readonly AppConfigSettings _alternateConfig;
 
-		private readonly string _defaultAppGuid = Constants.Kepler.DEFAULT_APP_GUID;
-		private readonly string _keplerFileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
 		private readonly List<string> _keplerFileNames = new List<string>()
 		{
 			Constants.Kepler.SERVICES_DLL_NAME,
@@ -100,7 +97,7 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
+			//const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
 
 			//var requestModel = new GetGuidRequestModel
 			//{
@@ -171,51 +168,6 @@ namespace Relativity.Test.Helpers
 		public IStringSanitizer GetStringSanitizer(int workspaceID)
 		{
 			throw new NotImplementedException();
-		}
-
-		private void InstallKeplerResourceFiles(List<string> keplerFiles)
-		{
-			foreach (var keplerDllName in keplerFiles)
-			{
-				using (IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>())
-				{
-					var rfRequest = new ResourceFileRequest
-					{
-						AppGuid = new Guid(_defaultAppGuid),
-						FullFilePath = Path.Combine(_keplerFileLocation, keplerDllName),
-						FileName = keplerDllName
-					};
-					try
-					{
-						rsapiClient.PushResourceFiles(rsapiClient.APIOptions, new List<ResourceFileRequest>() { rfRequest });
-						Console.WriteLine($"{nameof(InstallKeplerResourceFiles)} - File ({keplerDllName}) - was uploaded successfully");
-					}
-					catch (Exception ex)
-					{
-						throw new TestHelpersException($"{nameof(InstallKeplerResourceFiles)} - Could not upload ({keplerDllName}) - Exception: {ex.Message}");
-					}
-				}
-			}
-		}
-
-		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
-		{
-			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
-			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
-
-			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
-				username: ConfigurationHelper.ADMIN_USERNAME,
-				password: ConfigurationHelper.DEFAULT_PASSWORD);
-
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
-				relativityServicesUri: relativityServicesUri,
-				relativityRestUri: relativityRestUri,
-				credentials: usernamePasswordCredentials);
-
-			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
-				settings: serviceFactorySettings);
-
-			return serviceFactory;
 		}
 	}
 }
