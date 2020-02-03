@@ -16,15 +16,47 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	/// </summary>
 
-	public class DocumentHelper : IDocumentHelper
+	public class Document : IDocumentHelper
 	{
-		private readonly IHttpRequestHelper _httpRequestHelper;
-		public DocumentHelper(IHttpRequestHelper httpRequestHelper)
+		
+		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
-			_httpRequestHelper = httpRequestHelper;
+			#region DBContext Methods
+
+			string sql = @"
+            SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
+            JOIN [EDDSDBO].[ArtifactViewField] AVF WITH(NOLOCK)
+            ON EF.TextIdentifier = AVF.HeaderName
+            WHERE EF.IsIdentifier = 1 AND EF.FieldArtifactTypeID = '@fieldArtifactTypeID'";
+
+			var sqlParams = new List<SqlParameter>
+			{
+				new SqlParameter("@fieldArtifactTypeID", SqlDbType.NVarChar) {Value = fieldArtifactTypeID}
+			};
+
+			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
+			return columnName;
+		}
+		public static string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		{
+			const string sql = @"
+            SELECT [TextIdentifier] FROM [EDDSDBO].[ExtendedField] WITH(NOLOCK)
+            WHERE IsIdentifier = 1 AND FieldArtifactTypeID = @fieldArtifactTypeID";
+
+			var sqlParams = new List<SqlParameter>
+			{
+				new SqlParameter("fieldArtifactTypeID", SqlDbType.NVarChar) {Value = fieldArtifactTypeID}
+			};
+
+			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
+			return columnName;
 		}
 
-		public string GetDocumentIdentifierFieldColumnName(int fieldArtifactTypeID, int workspaceID)
+		#endregion
+
+		#region Kepler methods
+
+		public static string GetDocumentIdentifierFieldColumnName(int fieldArtifactTypeID, int workspaceID)
 		{
 			try
 			{
@@ -36,7 +68,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					WorkspaceId = workspaceID
 				};
 
-				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				var httpRequestHelper = new HttpRequestHelper();
+				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
 				GetDocumentIdentifierFieldColumnNameResponseModel responseModel = JsonConvert.DeserializeObject<GetDocumentIdentifierFieldColumnNameResponseModel>(responseString);
 
 				return responseModel.ColumnName;
@@ -47,7 +80,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public string GetDocumentIdentifierFieldName(int fieldArtifactTypeID, int workspaceID)
+		public static string GetDocumentIdentifierFieldName(int fieldArtifactTypeID, int workspaceID)
 		{
 			try
 			{
@@ -59,7 +92,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					WorkspaceId = workspaceID
 				};
 
-				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				var httpRequestHelper = new HttpRequestHelper();
+				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
 				GetDocumentIdentifierFieldNameResponseModel responseModel = JsonConvert.DeserializeObject<GetDocumentIdentifierFieldNameResponseModel>(responseString);
 
 				return responseModel.FieldName;
@@ -69,5 +103,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new TestHelpersException($"Failed to Get Document Identifier Field Name [{nameof(fieldArtifactTypeID)}:{fieldArtifactTypeID}]", exception);
 			}
 		}
+
+		#endregion
 	}
 }

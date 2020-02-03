@@ -21,14 +21,46 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	/// </summary>
 	/// 
-	public class FoldersHelper : IFoldersHelper
+	public class Folders : IFoldersHelper
 	{
-		private readonly IHttpRequestHelper _httpRequestHelper;
-
-		public FoldersHelper(IHttpRequestHelper httpRequestHelper)
+		
+		#region DbContext Methods
+		public static String GetFolderName(Int32 folderArtifactID, IDBContext workspaceDbContext)
 		{
-			_httpRequestHelper = httpRequestHelper;
+			string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);
+
+			string folderName = workspaceDbContext.ExecuteSqlStatementAsScalar(sql).ToString();
+
+			return folderName;
 		}
+		#endregion
+
+		#region Kepler Methods
+		public static string GetFolderName(int folderArtifactId, int workspaceId)
+		{
+			try
+			{
+				const string routeName = "GetFolderNameAsync";
+
+				GetFolderNameRequestModel requestModel = new GetFolderNameRequestModel
+				{
+					FolderArtifactId = folderArtifactId,
+					WorkspaceId = workspaceId
+				};
+
+				var httpRequestHelper = new HttpRequestHelper();
+				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
+				GetFolderNameResponseModel responseModel = JsonConvert.DeserializeObject<GetFolderNameResponseModel>(responseString);
+
+				return responseModel.FolderName;
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Error Getting Folder Name [{nameof(folderArtifactId)}:{folderArtifactId}]", exception);
+			}
+		}
+
+		#endregion
 
 		public static int GetRootFolderArtifactID(int workspaceID, IServicesMgr svgMgr, string userName, string password)
 		{
@@ -40,7 +72,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Query<Folder> query = new Query<Folder>();
 					query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
 					query.Fields = FieldValue.NoFields;
-				QueryResultSet<Folder> ResultSet = client.Repositories.Folder.Query(query);
+					QueryResultSet<Folder> ResultSet = client.Repositories.Folder.Query(query);
 
 					if (!ResultSet.Success)
 					{
@@ -59,27 +91,5 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public string GetFolderName(int folderArtifactId, int workspaceId)
-		{
-			try
-			{
-				const string routeName = "GetFolderNameAsync";
-
-			GetFolderNameRequestModel requestModel = new GetFolderNameRequestModel
-				{
-					FolderArtifactId = folderArtifactId,
-					WorkspaceId = workspaceId
-				};
-
-			string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
-				GetFolderNameResponseModel responseModel = JsonConvert.DeserializeObject<GetFolderNameResponseModel>(responseString);
-
-				return responseModel.FolderName;
-			}
-			catch (Exception exception)
-			{
-				throw new TestHelpersException($"Error Getting Folder Name [{nameof(folderArtifactId)}:{folderArtifactId}]", exception);
-			}
-		}
 	}
 }

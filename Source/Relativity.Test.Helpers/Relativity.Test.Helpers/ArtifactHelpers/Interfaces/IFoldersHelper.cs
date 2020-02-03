@@ -9,6 +9,5 @@ namespace Relativity.Test.Helpers.ArtifactHelpers.Interfaces
 {
 	public interface IFoldersHelper
 	{
-		string GetFolderName(int folderArtifactId, int workspaceId);
 	}
 }
