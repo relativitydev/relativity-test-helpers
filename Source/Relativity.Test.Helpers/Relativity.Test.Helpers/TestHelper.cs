@@ -18,6 +18,7 @@ using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.Exceptions;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 using TestHelpersKepler.Services;
+using DbContextHelper;
 
 
 namespace Relativity.Test.Helpers
@@ -41,7 +42,6 @@ namespace Relativity.Test.Helpers
 		{
 			_username = username;
 			_password = password;
-			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public TestHelper(string configSectionName)
@@ -49,7 +49,6 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
-			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public TestHelper(Dictionary<string, string> configDictionary)
@@ -57,7 +56,6 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(configDictionary);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public TestHelper(TestContext testContext)
@@ -65,7 +63,6 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(testContext);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			InstallKeplerResourceFiles(_keplerFileNames);
 		}
 
 		public static IHelper ForUser(string username, string password)
@@ -82,24 +79,45 @@ namespace Relativity.Test.Helpers
 
 		public IDBContext GetDBContext(int caseID)
 		{
-			throw new NotImplementedException();
+			//You can create a new DBcontext using kCura.Data.RowDataGeteway until Relativity versions lower than 9.6.85.9
+			//kCura.Data.RowDataGateway.Context context = new kCura.Data.RowDataGateway.Context(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, string.Format("EDDS{0}", caseID == -1 ? "" : caseID.ToString()), SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
+			//return new DBContext(context);
+
+			//You can create a new DBcontext using DBContextHelper for Relativity versions equal to or greater than 9.6.85.9
+			DbContext context;
+
+			if (_alternateConfig != null)
+			{
+				context = new DbContext(this._alternateConfig.SqlServerAddress, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", this._alternateConfig.SqlUserName, this._alternateConfig.SqlPassword);
+			}
+			else
+			{
+				context = new DbContext(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
+			}
+
+			return context;
 		}
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			const string routeName = "GetGuid";
+			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
 
-			var requestModel = new GetGuidRequestModel
-			{
-				artifactID = artifactID,
-				workspaceID = workspaceID
-			};
+			//var requestModel = new GetGuidRequestModel
+			//{
+			//	artifactID = artifactID,
+			//	workspaceID = workspaceID
+			//};
 
-			IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
-			var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
-			GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
+			//IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
+			//var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
+			//GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
 
-			return responseModel.Guid;
+			//return responseModel.Guid;
+
+			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
+			var context = GetDBContext(workspaceID);
+			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactID));
+			return result;
 		}
 
 		public ISecretStore GetSecretStore()

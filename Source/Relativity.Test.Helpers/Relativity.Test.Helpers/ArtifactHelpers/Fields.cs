@@ -21,20 +21,42 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	/// </summary>
 	/// 
-	public class FieldsHelper : IFieldsHelper
+	public class Fields : IFieldsHelper
 	{
-		private readonly IHttpRequestHelper _httpRequestHelper;
 
-		public FieldsHelper(IHttpRequestHelper httpRequestHelper)
+		#region DbContext Methods
+
+		public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
 		{
-			_httpRequestHelper = httpRequestHelper;
+			string sqlquery = @"SELECT [ArtifactID] FROM [EDDSDBO].[Field] Where[DisplayName] like @fieldname";
+			var sqlParams = new List<SqlParameter>
+			{
+				new SqlParameter("@fieldname", SqlDbType.NVarChar) {Value = fieldname}
+			};
+			int artifactTypeId = workspaceDbContext.ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
+			return artifactTypeId;
 		}
 
-		public int GetFieldArtifactId(string fieldname, int workspaceId)
+		public static int GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
+		{
+			string sqlquery = String.Format(@"select count(*) from [EDDSDBO].[ExtendedField] where ArtifactID = @fieldArtifactId");
+			var sqlParams = new List<SqlParameter>
+			{
+				new SqlParameter("@fieldArtifactId", SqlDbType.NVarChar) {Value = fieldArtifactId}
+			};
+			int fieldCount = workspaceDbContext.ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
+			return fieldCount;
+		}
+
+		#endregion
+
+		#region Kepler Methods
+
+		public static int GetFieldArtifactId(string fieldname, int workspaceId)
 		{
 			try
 			{
-				const string routeName = "GetFieldArtifactIdAsync";
+				const string routeName = Constants.Kepler.RouteNames.GetFieldArtifactIdAsync;
 
 				FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
 				{
@@ -42,7 +64,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					WorkspaceId = workspaceId
 				};
 
-				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				var httpRequestHelper = new HttpRequestHelper();
+				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
 				FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
 
 				return responseModel.ArtifactId;
@@ -53,11 +76,11 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public int GetFieldCount(int artifactId, int workspaceId)
+		public static int GetFieldCount(int artifactId, int workspaceId)
 		{
 			try
 			{
-				const string routeName = "GetFieldCountAsync";
+				const string routeName = Constants.Kepler.RouteNames.GetFieldCountAsync;
 
 				FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
 				{
@@ -65,7 +88,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					WorkspaceId = workspaceId
 				};
 
-				string responseString = _httpRequestHelper.SendPostRequest(requestModel, routeName);
+				var httpRequestHelper = new HttpRequestHelper();
+				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
 				FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
 
 				return responseModel.Count;
@@ -75,6 +99,9 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new TestHelpersException($"Error Getting Field Count [{nameof(artifactId)}:{artifactId}]", exception);
 			}
 		}
+
+		#endregion
+
 		public static int CreateField(IRSAPIClient client, FieldRequest request)
 		{
 			try

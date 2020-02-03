@@ -6,9 +6,7 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
 using System.Reflection;
-using Relativity.Test.Helpers.ArtifactHelpers;
-using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
-using Relativity.Test.Helpers.ArtifactHelpers.Request;
+//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
 namespace Relativity.Test.Helpers.Example.NUnit
@@ -35,6 +33,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private const ExecutionIdentity EXECUTION_IDENTITY = ExecutionIdentity.CurrentUser;
 		private IDBContext dbContext;
 		private IServicesMgr servicesManager;
+		private IDBContext _eddsDbContext;
 		private Int32 _numberOfDocuments = 5;
 		private string _foldername = "Test Folder";
 		private string _groupName = "Test Group";
@@ -44,7 +43,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private int _longtextartid;
 		private int _yesnoartid;
 		private int _wholeNumberArtId;
-		private IFieldsHelper _fieldsHelper;
 
 		#endregion
 
@@ -55,12 +53,13 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureSetup()
 		{
 			//Setup for testing
-			var testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			servicesManager = testHelper.GetServicesManager();
+			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			servicesManager = helper.GetServicesManager();
+			_eddsDbContext = helper.GetDBContext(-1);
 
 			// implement_IHelper
 			//create client
-			_client = testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			//Create new user 
 			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
@@ -71,6 +70,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			//Create workspace
 			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			dbContext = helper.GetDBContext(_workspaceId);
 			_client.APIOptions.WorkspaceID = _workspaceId;
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var nativeFilePath = "";
@@ -83,31 +83,18 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
-			_rootFolderArtifactID = Relativity.Test.Helpers.ArtifactHelpers.FoldersHelper.GetRootFolderArtifactID(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			IFoldersHelper foldersHelper = new FoldersHelper(new HttpRequestHelper());
-			var folderName = foldersHelper.GetFolderName(_rootFolderArtifactID, _workspaceId);
-
+			var folderName = Relativity.Test.Helpers.ArtifactHelpers.Folders.GetFolderName(_rootFolderArtifactID, dbContext);
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
-			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldsHelper.CreateField_FixedLengthText(_client, _workspaceId);
+			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_FixedLengthText(_client, _workspaceId);
 
 			//Create Long Text Field
-			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.FieldsHelper.CreateField_LongText(_client, _workspaceId);
+			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_LongText(_client, _workspaceId);
 
 			//Create Whole number field
-			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldsHelper.CreateField_WholeNumber(_client, _workspaceId);
+			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
 
-			//Get Workspace Guid
-			Guid guid = testHelper.GetGuid(-1, _workspaceId);
-
-			//FieldsHelper - Get field artifact ID from name
-			_fieldsHelper = new FieldsHelper(new HttpRequestHelper());
-			var fieldName = "Production::Sort Order";
-			int fieldArtifactId = _fieldsHelper.GetFieldArtifactId(fieldName, _workspaceId);
-
-			//Field methods that did not use DBContext can still be called statically for the time being 
-			ArtifactHelpers.FieldsHelper.CreateField_LongText(_client, _workspaceId);
 		}
 
 		#endregion
