@@ -20,9 +20,6 @@ namespace Relativity.Test.Helpers
 {
 	public class KeplerHelper
 	{
-		private readonly string _fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-		//private readonly string _fileLocation = @"S:\temp_kepler_files";
-
 		public bool ForceDbContext()
 		{
 			return ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
@@ -97,7 +94,6 @@ namespace Relativity.Test.Helpers
 		public void UploadKeplerFiles()
 		{
 			var fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			//var fileLocation = @"S:\temp_kepler_files";
 
 			InstallKeplerTestRap(fileLocation);
 
