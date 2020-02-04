@@ -111,29 +111,31 @@ namespace Relativity.Test.Helpers
 
 		private int InstallKeplerTestRap()
 		{
-			IApplicationInstallManager applicationInstallManager =
-				GetServiceFactory().CreateProxy<IApplicationInstallManager>();
-			ILibraryApplicationManager libraryApplicationManager =
-				GetServiceFactory().CreateProxy<ILibraryApplicationManager>();
-			IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>();
-
-			var applicationInstallHelper = new ApplicationInstallHelper(rsapiClient, applicationInstallManager,
-				libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE,
-				ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, ConfigurationHelper.ADMIN_USERNAME,
-				ConfigurationHelper.DEFAULT_PASSWORD);
-
-			var keplerTestRapFilePath =
-				Path.Combine(_fileLocation, "/" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap");
-			var fileStream = File.OpenRead(keplerTestRapFilePath);
-
-			var keplerTestRapArtifactId = applicationInstallHelper
-				.InstallApplicationAsync(Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME, fileStream, -1, true).Result;
-
-			if (keplerTestRapArtifactId == 0)
+			try
 			{
-				throw new TestHelpersException($"{nameof(InstallKeplerTestRap)} - Application installation failed for RAP {Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME}");
+				IApplicationInstallManager applicationInstallManager =
+					GetServiceFactory().CreateProxy<IApplicationInstallManager>();
+				ILibraryApplicationManager libraryApplicationManager =
+					GetServiceFactory().CreateProxy<ILibraryApplicationManager>();
+				IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>();
+
+				var applicationInstallHelper = new ApplicationInstallHelper(rsapiClient, applicationInstallManager,
+					libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE,
+					ConfigurationHelper.REST_SERVER_ADDRESS, ConfigurationHelper.ADMIN_USERNAME,
+					ConfigurationHelper.DEFAULT_PASSWORD);
+
+				var keplerTestRapFilePath = _fileLocation + @"\" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
+				var fileStream = File.OpenRead(keplerTestRapFilePath);
+
+				var keplerTestRapArtifactId = applicationInstallHelper
+					.InstallApplicationAsync(Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME, fileStream, -1, true).Result;
+
+				return keplerTestRapArtifactId;
 			}
-			return keplerTestRapArtifactId;
+			catch (Exception ex)
+			{
+				throw new TestHelpersException($"{nameof(InstallKeplerTestRap)} - Application installation failed for RAP {Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME} - Exception: {ex.Message}");
+			}
 		}
 
 		private bool InstallKeplerResourceFile(string keplerDll)

@@ -137,8 +137,8 @@ namespace Relativity.Test.Helpers
 
 			var requestModel = new GetGuidRequestModel
 			{
-				artifactID = artifactId,
-				workspaceID = workspaceId
+				ArtifactId = artifactId,
+				WorkspaceId = workspaceId
 			};
 
 			IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();

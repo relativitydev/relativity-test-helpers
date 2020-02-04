@@ -97,15 +97,14 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			//var testAppGuid = "1BBBCB46-B02E-4527-BA42-CB56838F1390";
 
-			var testAppGuid = "151E017C-FCAA-49E6-AE20-3C2B5E721711";
+			//for Dt search
+			var testAppGuid = "	53D74B1C-30F6-4DC2-AB64-A20150EA02D3";
 
 
-			//_workspaceId = 1017831;
 			_workspaceId = 1017834;
-			//var testAppArtifactId = 1038334;
-			var testAppArtifactId = 1038389;
+			var DtSearchAppArtifactId = 1038135;
 
-			var guid = helper.GetGuid(_workspaceId, testAppArtifactId);
+			var guid = helper.GetGuid(_workspaceId, DtSearchAppArtifactId);
 
 			Console.WriteLine(guid);
 			Console.WriteLine(testAppGuid);
