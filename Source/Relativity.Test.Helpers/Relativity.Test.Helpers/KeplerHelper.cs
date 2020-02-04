@@ -20,7 +20,15 @@ namespace Relativity.Test.Helpers
 {
 	public class KeplerHelper
 	{
-		private readonly string _keplerFileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+		//private readonly string _fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+		private readonly string _fileLocation = @"S:\temp_kepler_files";
+
+		public bool ForceDbContext()
+		{
+			return ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
+		}
+
+		#region Kepler Compatibility Check
 
 		public async Task<bool> IsVersionKeplerCompatibleAsync()
 		{
@@ -59,14 +67,16 @@ namespace Relativity.Test.Helpers
 							$"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity")
 				};
 
-				string encoded = System.Convert.ToBase64String(Encoding.ASCII.GetBytes(ConfigurationHelper.ADMIN_USERNAME + ":" + ConfigurationHelper.DEFAULT_PASSWORD));
+				string encoded = System.Convert.ToBase64String(
+					Encoding.ASCII.GetBytes(ConfigurationHelper.ADMIN_USERNAME + ":" + ConfigurationHelper.DEFAULT_PASSWORD));
 				httpClient.DefaultRequestHeaders.Add("X-CSRF-Header", string.Empty);
 				httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {encoded}");
 
 				StringContent content = new StringContent("");
 				content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-				string url = "/relativity.rest/api/Relativity.Services.InstanceDetails.IInstanceDetailsModule/InstanceDetailsService/GetRelativityVersionAsync";
+				string url =
+					"/relativity.rest/api/Relativity.Services.InstanceDetails.IInstanceDetailsModule/InstanceDetailsService/GetRelativityVersionAsync";
 				HttpResponseMessage httpResponse = await httpClient.PostAsync(url, content);
 				string instanceRelativityVersion = await httpResponse.Content.ReadAsStringAsync();
 				instanceRelativityVersion = instanceRelativityVersion.Replace("\"", "");
@@ -80,47 +90,78 @@ namespace Relativity.Test.Helpers
 			}
 		}
 
+		#endregion
+
+		#region Upload Kepler Files
+
+		public void UploadKeplerFiles()
+		{
+			InstallKeplerTestRap();
+
+			var keplerDlls = new List<string>
+			{
+				Constants.Kepler.INTERFACES_DLL_NAME,
+				Constants.Kepler.SERVICES_DLL_NAME
+			};
+			foreach (var file in keplerDlls)
+			{
+				InstallKeplerResourceFile(file);
+			}
+		}
+
 		private int InstallKeplerTestRap()
 		{
-			IApplicationInstallManager applicationInstallManager = GetServiceFactory().CreateProxy<IApplicationInstallManager>();
-			ILibraryApplicationManager libraryApplicationManager = GetServiceFactory().CreateProxy<ILibraryApplicationManager>();
+			IApplicationInstallManager applicationInstallManager =
+				GetServiceFactory().CreateProxy<IApplicationInstallManager>();
+			ILibraryApplicationManager libraryApplicationManager =
+				GetServiceFactory().CreateProxy<ILibraryApplicationManager>();
 			IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>();
 
-			var applicationInstallHelper = new ApplicationInstallHelper(rsapiClient, applicationInstallManager, libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			var applicationInstallHelper = new ApplicationInstallHelper(rsapiClient, applicationInstallManager,
+				libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE,
+				ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, ConfigurationHelper.ADMIN_USERNAME,
+				ConfigurationHelper.DEFAULT_PASSWORD);
 
-			var keplerTestRapFilePath = Path.Combine(_keplerFileLocation, "/" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap");
+			var keplerTestRapFilePath =
+				Path.Combine(_fileLocation, "/" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap");
 			var fileStream = File.OpenRead(keplerTestRapFilePath);
 
-			var keplerTestRapArtifactId = applicationInstallHelper.InstallApplicationAsync(Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME, fileStream, -1, true).Result;
+			var keplerTestRapArtifactId = applicationInstallHelper
+				.InstallApplicationAsync(Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME, fileStream, -1, true).Result;
 
+			if (keplerTestRapArtifactId == 0)
+			{
+				throw new TestHelpersException($"{nameof(InstallKeplerTestRap)} - Application installation failed for RAP {Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME}");
+			}
 			return keplerTestRapArtifactId;
 		}
 
-		private void InstallKeplerResourceFiles(List<string> keplerFiles)
+		private bool InstallKeplerResourceFile(string keplerDll)
 		{
-			foreach (var keplerDllName in keplerFiles)
+			using (IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>())
 			{
-				using (IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>())
+				try
 				{
 					var rfRequest = new ResourceFileRequest
 					{
 						AppGuid = new Guid(Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_GUID),
-						FullFilePath = Path.Combine(_keplerFileLocation, keplerDllName),
-						FileName = keplerDllName
+						FullFilePath = Path.Combine(_fileLocation, keplerDll),
+						FileName = keplerDll
 					};
-					try
-					{
-						rsapiClient.PushResourceFiles(rsapiClient.APIOptions, new List<ResourceFileRequest>() { rfRequest });
-						Console.WriteLine($"{nameof(InstallKeplerResourceFiles)} - File ({keplerDllName}) - was uploaded successfully");
-					}
-					catch (Exception ex)
-					{
-						throw new TestHelpersException($"{nameof(InstallKeplerResourceFiles)} - Could not upload ({keplerDllName}) - Exception: {ex.Message}");
-					}
+
+					var results = rsapiClient.PushResourceFiles(rsapiClient.APIOptions, new List<ResourceFileRequest> { rfRequest });
+					return results.Success;
+				}
+				catch (Exception ex)
+				{
+					throw new TestHelpersException($"{nameof(InstallKeplerResourceFile)} - Could not upload ({keplerDll}) - Exception: {ex.Message}");
 				}
 			}
 		}
 
+		#endregion
+
+		#region Get Service Factory
 		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
 		{
 			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
@@ -140,5 +181,8 @@ namespace Relativity.Test.Helpers
 
 			return serviceFactory;
 		}
+
+		#endregion
+
 	}
 }

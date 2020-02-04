@@ -28,6 +28,7 @@ namespace Relativity.Test.Helpers
 		private readonly string _username;
 		private readonly string _password;
 		private readonly AppConfigSettings _alternateConfig;
+		private bool? _keplerCompatible;
 
 		private readonly List<string> _keplerFileNames = new List<string>()
 		{
@@ -39,6 +40,7 @@ namespace Relativity.Test.Helpers
 		{
 			_username = username;
 			_password = password;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(string configSectionName)
@@ -46,6 +48,7 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(Dictionary<string, string> configDictionary)
@@ -53,6 +56,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(configDictionary);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(TestContext testContext)
@@ -60,6 +64,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(testContext);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			_keplerCompatible = null;
 		}
 
 		public static IHelper ForUser(string username, string password)
@@ -97,13 +102,25 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			//if kepler compatible 
-			//GetGuidWithKepler
+			var keplerHelper = new KeplerHelper();
 
-			//if force db context or not kepler compatible
-			//GetGuidWithDbContext
+			if (keplerHelper.ForceDbContext())
+			{
+				return GetGuidWithDbContext(workspaceID, artifactID);
+			}
 
-			throw new NotImplementedException();
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (_keplerCompatible.Value)
+			{
+				keplerHelper.UploadKeplerFiles();
+				return GetGuidWithKepler(workspaceID, artifactID);
+			}
+
+			return GetGuidWithDbContext(workspaceID, artifactID);
 		}
 
 		private Guid GetGuidWithDbContext(int workspaceId, int artifactId)
