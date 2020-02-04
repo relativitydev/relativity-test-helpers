@@ -3,6 +3,9 @@ using NUnit.Framework;
 using Relativity.API;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
+using System.IO;
+using System.Reflection;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using IServicesMgr = Relativity.API.IServicesMgr;
 using TestHelpersKepler;
 using TestHelpersKepler.Services;
@@ -56,57 +59,53 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			servicesManager = helper.GetServicesManager();
 			_eddsDbContext = helper.GetDBContext(-1);
 
-			//// implement_IHelper
-			////create client
-			//_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			// implement_IHelper
+			//create client
+			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
-			////Create new user 
-			//_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
+			//Create new user 
+			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
 
-			////Create new group
-			//Relativity.Test.Helpers.GroupHelpers.CreateGroup.Create_Group(_client, _groupName);
+			//Create new group
+			Relativity.Test.Helpers.GroupHelpers.CreateGroup.Create_Group(_client, _groupName);
 
 
-			////Create workspace
-			//_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-			//dbContext = helper.GetDBContext(_workspaceId);
-			//_client.APIOptions.WorkspaceID = _workspaceId;
-			//var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			//var nativeFilePath = "";
-			//var nativeName = @"\\\\FakeFilePath\Natives\SampleTextFile.txt";
-			//if (executableLocation != null)
-			//{
-			//	nativeFilePath = Path.Combine(executableLocation, nativeName);
-			//}
-			////Create Documents with a given folder name
-			//Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
+			//Create workspace
+			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			dbContext = helper.GetDBContext(_workspaceId);
+			_client.APIOptions.WorkspaceID = _workspaceId;
+			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var nativeFilePath = "";
+			var nativeName = @"\\\\FakeFilePath\Natives\SampleTextFile.txt";
+			if (executableLocation != null)
+			{
+				nativeFilePath = Path.Combine(executableLocation, nativeName);
+			}
+			//Create Documents with a given folder name
+			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
-			////Create Documents with a given folder artifact id
-			//var folderName = Relativity.Test.Helpers.ArtifactHelpers.Folders.GetFolderName(_rootFolderArtifactID, dbContext);
-			//Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
+			//Create Documents with a given folder artifact id
+			var folderName = Relativity.Test.Helpers.ArtifactHelpers.Folders.GetFolderName(_rootFolderArtifactID, dbContext);
+			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
-			////Create Fixed Length field
-			//_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_FixedLengthText(_client, _workspaceId);
+			//Create Fixed Length field
+			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_FixedLengthText(_client, _workspaceId);
 
-			////Create Long Text Field
-			//_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_LongText(_client, _workspaceId);
+			//Create Long Text Field
+			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_LongText(_client, _workspaceId);
 
-			////Create Whole number field
-			//_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
+			//Create Whole number field
+			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
 
-			//var testAppGuid = "1BBBCB46-B02E-4527-BA42-CB56838F1390";
 
 			//for Dt search
-			var testAppGuid = "	53D74B1C-30F6-4DC2-AB64-A20150EA02D3";
-
+			var testAppGuid = "53D74B1C-30F6-4DC2-AB64-A20150EA02D3";
 
 			_workspaceId = 1017834;
 			var DtSearchAppArtifactId = 1038135;
 
 			var guid = helper.GetGuid(_workspaceId, DtSearchAppArtifactId);
 
-			Console.WriteLine(guid);
-			Console.WriteLine(testAppGuid);
 		}
 
 		#endregion
