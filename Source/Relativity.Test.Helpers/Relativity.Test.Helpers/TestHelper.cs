@@ -106,7 +106,7 @@ namespace Relativity.Test.Helpers
 
 			if (keplerHelper.ForceDbContext())
 			{
-				return GetGuidWithDbContext(workspaceID, artifactID);
+				return GetGuidFromDbContext(workspaceID, artifactID);
 			}
 
 			if (_keplerCompatible == null)
@@ -117,13 +117,13 @@ namespace Relativity.Test.Helpers
 			if (_keplerCompatible.Value)
 			{
 				keplerHelper.UploadKeplerFiles();
-				return GetGuidWithKepler(workspaceID, artifactID);
+				return GetGuidFromKeplerService(workspaceID, artifactID);
 			}
 
-			return GetGuidWithDbContext(workspaceID, artifactID);
+			return GetGuidFromDbContext(workspaceID, artifactID);
 		}
 
-		private Guid GetGuidWithDbContext(int workspaceId, int artifactId)
+		private Guid GetGuidFromDbContext(int workspaceId, int artifactId)
 		{
 			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
 			var context = GetDBContext(workspaceId);
@@ -131,7 +131,7 @@ namespace Relativity.Test.Helpers
 			return result;
 		}
 
-		public Guid GetGuidWithKepler(int workspaceId, int artifactId)
+		public Guid GetGuidFromKeplerService(int workspaceId, int artifactId)
 		{
 			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
 
