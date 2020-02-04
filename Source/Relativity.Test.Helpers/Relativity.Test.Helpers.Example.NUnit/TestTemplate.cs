@@ -117,13 +117,13 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace
-			//WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
-			////Delete User
-			//UserHelpers.DeleteUser.Delete_User(_client, _userArtifactId);
+			//Delete User
+			UserHelpers.DeleteUser.Delete_User(_client, _userArtifactId);
 
-			////Delete Group
-			//GroupHelpers.DeleteGroup.Delete_Group(_client, _groupArtifactId);
+			//Delete Group
+			GroupHelpers.DeleteGroup.Delete_Group(_client, _groupArtifactId);
 		}
 
 
