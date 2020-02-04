@@ -1,13 +1,12 @@
 ﻿using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
-using System.IO;
-using System.Reflection;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
+using TestHelpersKepler;
+using TestHelpersKepler.Services;
+using TestHelpersKepler.Interfaces;
 
 namespace Relativity.Test.Helpers.Example.NUnit
 {

@@ -20,8 +20,8 @@ namespace Relativity.Test.Helpers
 {
 	public class KeplerHelper
 	{
-		//private readonly string _fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-		private readonly string _fileLocation = @"S:\temp_kepler_files";
+		private readonly string _fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+		//private readonly string _fileLocation = @"S:\temp_kepler_files";
 
 		public bool ForceDbContext()
 		{
@@ -96,7 +96,10 @@ namespace Relativity.Test.Helpers
 
 		public void UploadKeplerFiles()
 		{
-			InstallKeplerTestRap();
+			var fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			//var fileLocation = @"S:\temp_kepler_files";
+
+			InstallKeplerTestRap(fileLocation);
 
 			var keplerDlls = new List<string>
 			{
@@ -105,11 +108,11 @@ namespace Relativity.Test.Helpers
 			};
 			foreach (var file in keplerDlls)
 			{
-				InstallKeplerResourceFile(file);
+				InstallKeplerResourceFile(file, fileLocation);
 			}
 		}
 
-		private int InstallKeplerTestRap()
+		private int InstallKeplerTestRap(string fileLocation)
 		{
 			try
 			{
@@ -124,7 +127,7 @@ namespace Relativity.Test.Helpers
 					ConfigurationHelper.REST_SERVER_ADDRESS, ConfigurationHelper.ADMIN_USERNAME,
 					ConfigurationHelper.DEFAULT_PASSWORD);
 
-				var keplerTestRapFilePath = _fileLocation + @"\" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
+				var keplerTestRapFilePath = fileLocation + @"\" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
 				var fileStream = File.OpenRead(keplerTestRapFilePath);
 
 				var keplerTestRapArtifactId = applicationInstallHelper
@@ -138,7 +141,7 @@ namespace Relativity.Test.Helpers
 			}
 		}
 
-		private bool InstallKeplerResourceFile(string keplerDll)
+		private bool InstallKeplerResourceFile(string keplerDll, string fileLocation)
 		{
 			using (IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>())
 			{
@@ -147,7 +150,7 @@ namespace Relativity.Test.Helpers
 					var rfRequest = new ResourceFileRequest
 					{
 						AppGuid = new Guid(Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_GUID),
-						FullFilePath = Path.Combine(_fileLocation, keplerDll),
+						FullFilePath = Path.Combine(fileLocation, keplerDll),
 						FileName = keplerDll
 					};
 
