@@ -3,59 +3,75 @@ using Relativity.API;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using kCura.Relativity.Client;
+using TestHelpersKepler;
+using TestHelpersKepler.Interfaces;
+using TestHelpersKepler.Services;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
 	public class TestHelperIntegrationTests
 	{
 		private IHelper SuT;
+		private int _workspaceOneId;
+		private int _workspaceTwoId;
+		private IServicesMgr _servicesManager;
+		private readonly string _workspaceName = $"IntTest_{Guid.NewGuid()}";
+		private ILogFactory _logFactory;
 
 		[OneTimeSetUp]
 		public void SetUp()
 		{
+			//Arrange
 			SuT = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+
+			_servicesManager = SuT.GetServicesManager();
+
+			_workspaceOneId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
+				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
+				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+
+			_workspaceTwoId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
+				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
+				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 		}
 
 		[OneTimeTearDown]
 		public void TearDown()
 		{
+			//Delete Workspaces
+			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceOneId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceTwoId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+
+			_servicesManager = null;
 			SuT = null;
 		}
 
 		[Test]
 		public void GetLoggerFactoryTest()
 		{
-			// Arrange
-			ILogFactory logFactory;
-
 			// Act
-			logFactory = SuT.GetLoggerFactory();
-			logFactory.GetLogger().LogDebug("GetLoggerFactoryTest: Test Log");
+			_logFactory = SuT.GetLoggerFactory();
+			_logFactory.GetLogger().LogDebug("GetLoggerFactoryTest: Test Log");
 
 			// Assert
-			Assert.IsTrue(logFactory != null);
+			Assert.IsTrue(_logFactory != null);
 		}
 
 		[Test]
 		public void GetGuidTest()
 		{
-			// Arrange
-			string _workspaceName = $"IntTest_{Guid.NewGuid()}";
-			IServicesMgr servicesManager = SuT.GetServicesManager();
-			int _workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager,
-				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-
 			// Act
 			// Get the Guid of the workspace
-			Guid guid = SuT.GetGuid(-1, _workspaceId);
+			Guid guidOne = SuT.GetGuid(-1, _workspaceOneId);
+			Guid guidTwo = SuT.GetGuid(-1, _workspaceTwoId);
 
 			// Assert
-			Assert.NotNull(guid);
-			Assert.AreNotEqual(new Guid("00000000-0000-0000-0000-000000000000"), guid);
+			Assert.NotNull(guidOne);
+			Assert.AreNotEqual(new Guid("00000000-0000-0000-0000-000000000000"), guidOne);
 
-			//Delete Workspace
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Assert.NotNull(guidTwo);
+			Assert.AreNotEqual(new Guid("00000000-0000-0000-0000-000000000000"), guidTwo);
+
 		}
 	}
 }

@@ -184,11 +184,22 @@
     <None Include="test.runsettings">
       <SubType>Designer</SubType>
     </None>
+    <None Include="TestHelpers_Kepler_App.rap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Relativity.Test.Helpers\Relativity.Test.Helpers.csproj">
       <Project>{500fcc47-7792-47e0-8308-ff7632c65cc9}</Project>
       <Name>Relativity.Test.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Interfaces\TestHelpersKepler.Interfaces.csproj">
+      <Project>{0976bdeb-2534-490e-9ec0-7cad0411e1bc}</Project>
+      <Name>TestHelpersKepler.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Services\TestHelpersKepler.Services.csproj">
+      <Project>{ef257f9d-9598-4cb1-8a7b-571364408c7a}</Project>
+      <Name>TestHelpersKepler.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
