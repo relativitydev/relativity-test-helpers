@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -23,6 +24,28 @@ namespace Relativity.Test.Helpers
 		public bool ForceDbContext()
 		{
 			return ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
+		}
+
+		public int GetWorkspaceIdFromDbContext(IDBContext dbContext)
+		{
+			SqlConnection connection = dbContext.GetConnection();
+			var connectionString = connection.ConnectionString;
+
+			var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+			var initialCatalog = connectionStringBuilder.InitialCatalog;
+
+			var workspaceIdString = initialCatalog.Remove(0, 4);
+
+			int workspaceId;
+
+			if (workspaceIdString.Equals(""))
+			{
+				workspaceId = -1;
+				return workspaceId;
+			}
+			int.TryParse(workspaceIdString, out workspaceId);
+
+			return workspaceId;
 		}
 
 		#region Kepler Compatibility Check

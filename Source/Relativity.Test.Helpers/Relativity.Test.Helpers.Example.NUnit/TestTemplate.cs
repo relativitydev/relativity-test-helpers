@@ -97,15 +97,10 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Create Whole number field
 			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
 
-
-			//for Dt search
-			var testAppGuid = "53D74B1C-30F6-4DC2-AB64-A20150EA02D3";
-
 			_workspaceId = 1017834;
 			var DtSearchAppArtifactId = 1038135;
 
 			var guid = helper.GetGuid(_workspaceId, DtSearchAppArtifactId);
-
 		}
 
 		#endregion
