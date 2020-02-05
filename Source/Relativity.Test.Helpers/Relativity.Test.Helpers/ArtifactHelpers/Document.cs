@@ -18,10 +18,50 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 	public class Document : IDocumentHelper
 	{
-		
+		private static bool? _keplerCompatible;
+
+		#region Public Methods
+
 		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
-			#region DBContext Methods
+			var keplerHelper = new KeplerHelper();
+
+			if (keplerHelper.ForceDbContext()) return GetDocumentIdentifierFieldColumnNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);
+
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (!_keplerCompatible.Value) return GetDocumentIdentifierFieldColumnNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);
+
+			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
+			return GetDocumentIdentifierFieldColumnName(fieldArtifactTypeID, workspaceId, keplerHelper);
+		}
+
+		public static string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		{
+			var keplerHelper = new KeplerHelper();
+
+			if (keplerHelper.ForceDbContext()) return GetDocumentIdentifierFieldNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);
+
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (!_keplerCompatible.Value) return GetDocumentIdentifierFieldNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);
+
+			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
+			return GetDocumentIdentifierFieldName(fieldArtifactTypeID, workspaceId, keplerHelper);
+		}
+
+		#endregion
+
+		#region DBContext Methods
+
+		private static string GetDocumentIdentifierFieldColumnNameWithDbContext(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		{
 
 			string sql = @"
             SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
@@ -37,7 +77,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
 			return columnName;
 		}
-		public static string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		private static string GetDocumentIdentifierFieldNameWithDbContext(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
 			const string sql = @"
             SELECT [TextIdentifier] FROM [EDDSDBO].[ExtendedField] WITH(NOLOCK)
@@ -56,12 +96,13 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#region Kepler methods
 
-		public static string GetDocumentIdentifierFieldColumnName(int fieldArtifactTypeID, int workspaceID)
+		public static string GetDocumentIdentifierFieldColumnName(int fieldArtifactTypeID, int workspaceID, KeplerHelper keplerHelper)
 		{
 			try
 			{
-				const string routeName = Constants.Kepler.RouteNames.GetDocumentIdentifierFieldColumnNameAsync;
+				keplerHelper.UploadKeplerFiles();
 
+				const string routeName = Constants.Kepler.RouteNames.GetDocumentIdentifierFieldColumnNameAsync;
 
 				GetDocumentIdentifierFieldColumnNameRequestModel requestModel = new GetDocumentIdentifierFieldColumnNameRequestModel
 				{
@@ -81,10 +122,13 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public static string GetDocumentIdentifierFieldName(int fieldArtifactTypeID, int workspaceID)
+		public static string GetDocumentIdentifierFieldName(int fieldArtifactTypeID, int workspaceID, KeplerHelper keplerHelper)
 		{
 			try
 			{
+
+				keplerHelper.UploadKeplerFiles();
+
 				const string routeName = Constants.Kepler.RouteNames.GetDocumentIdentifierFieldNameAsync;
 
 				GetDocumentIdentifierFieldNameRequestModel requestModel = new GetDocumentIdentifierFieldNameRequestModel
