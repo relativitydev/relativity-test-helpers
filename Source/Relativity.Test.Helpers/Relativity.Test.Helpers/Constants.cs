@@ -20,10 +20,15 @@ namespace Relativity.Test.Helpers
 				public const string GetDocumentIdentifierFieldNameAsync = "GetDocumentIdentifierFieldNameAsync";
 			}
 
-			public const string DEFAULT_APP_GUID = "3E86B18F-8B55-45C4-9A57-9E0CBD7BAF46";
+			public class KeplerTestRap
+			{
+				public const string KEPLER_TEST_APP_GUID = "151e017c-fcaa-49e6-ae20-3c2b5e721711";
+				public const string KEPLER_TEST_APP_NAME = "TestHelpers_Kepler_App";
+			}
+
 			public const string SERVICES_DLL_NAME = "TestHelpersKepler.Services.dll";
 			public const string INTERFACES_DLL_NAME = "TestHelpersKepler.Interfaces.dll";
-			public const string KEPLER_APP_NAME = "TestHelpers_Kepler_App";
+			public const string MINIMUM_KEPLER_COMPATIBLE_VERSION = "10.3.170.1";
 		}
 	}
 }

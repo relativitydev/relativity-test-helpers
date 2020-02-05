@@ -8,7 +8,6 @@ namespace TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models
 {
 	public class GetGuidRequestModel : BaseRequestModel
 	{
-		public int artifactID { get; set; }
-		public int workspaceID { get; set; }
+		public int ArtifactId { get; set; }
 	}
 }

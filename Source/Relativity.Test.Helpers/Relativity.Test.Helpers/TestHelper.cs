@@ -28,9 +28,7 @@ namespace Relativity.Test.Helpers
 		private readonly string _username;
 		private readonly string _password;
 		private readonly AppConfigSettings _alternateConfig;
-
-		private readonly string _defaultAppGuid = Constants.Kepler.DEFAULT_APP_GUID;
-		private readonly string _keplerFileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+		private bool? _keplerCompatible;
 
 		private readonly List<string> _keplerFileNames = new List<string>()
 		{
@@ -42,6 +40,7 @@ namespace Relativity.Test.Helpers
 		{
 			_username = username;
 			_password = password;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(string configSectionName)
@@ -49,6 +48,7 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(Dictionary<string, string> configDictionary)
@@ -56,6 +56,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(configDictionary);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(TestContext testContext)
@@ -63,6 +64,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(testContext);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			_keplerCompatible = null;
 		}
 
 		public static IHelper ForUser(string username, string password)
@@ -100,24 +102,50 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
+			var keplerHelper = new KeplerHelper();
+
+			if (keplerHelper.ForceDbContext())
+			{
+				return GetGuidFromDbContext(workspaceID, artifactID);
+			}
+
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (_keplerCompatible.Value)
+			{
+				keplerHelper.UploadKeplerFiles();
+				return GetGuidFromKeplerService(workspaceID, artifactID);
+			}
+
+			return GetGuidFromDbContext(workspaceID, artifactID);
+		}
+
+		private Guid GetGuidFromDbContext(int workspaceId, int artifactId)
+		{
+			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
+			var context = GetDBContext(workspaceId);
+			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactId));
+			return result;
+		}
+
+		public Guid GetGuidFromKeplerService(int workspaceId, int artifactId)
+		{
 			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
 
-			//var requestModel = new GetGuidRequestModel
-			//{
-			//	artifactID = artifactID,
-			//	workspaceID = workspaceID
-			//};
+			var requestModel = new GetGuidRequestModel
+			{
+				ArtifactId = artifactId,
+				WorkspaceId = workspaceId
+			};
 
-			//IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
-			//var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
-			//GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
+			IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
+			var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
+			GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
 
-			//return responseModel.Guid;
-
-			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-			var context = GetDBContext(workspaceID);
-			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactID));
-			return result;
+			return responseModel.Guid;
 		}
 
 		public ISecretStore GetSecretStore()
@@ -171,51 +199,6 @@ namespace Relativity.Test.Helpers
 		public IStringSanitizer GetStringSanitizer(int workspaceID)
 		{
 			throw new NotImplementedException();
-		}
-
-		private void InstallKeplerResourceFiles(List<string> keplerFiles)
-		{
-			foreach (var keplerDllName in keplerFiles)
-			{
-				using (IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>())
-				{
-					var rfRequest = new ResourceFileRequest
-					{
-						AppGuid = new Guid(_defaultAppGuid),
-						FullFilePath = Path.Combine(_keplerFileLocation, keplerDllName),
-						FileName = keplerDllName
-					};
-					try
-					{
-						rsapiClient.PushResourceFiles(rsapiClient.APIOptions, new List<ResourceFileRequest>() { rfRequest });
-						Console.WriteLine($"{nameof(InstallKeplerResourceFiles)} - File ({keplerDllName}) - was uploaded successfully");
-					}
-					catch (Exception ex)
-					{
-						throw new TestHelpersException($"{nameof(InstallKeplerResourceFiles)} - Could not upload ({keplerDllName}) - Exception: {ex.Message}");
-					}
-				}
-			}
-		}
-
-		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
-		{
-			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
-			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
-
-			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
-				username: ConfigurationHelper.ADMIN_USERNAME,
-				password: ConfigurationHelper.DEFAULT_PASSWORD);
-
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
-				relativityServicesUri: relativityServicesUri,
-				relativityRestUri: relativityRestUri,
-				credentials: usernamePasswordCredentials);
-
-			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
-				settings: serviceFactorySettings);
-
-			return serviceFactory;
 		}
 	}
 }
