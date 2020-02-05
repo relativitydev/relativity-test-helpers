@@ -153,7 +153,7 @@ namespace Relativity.Test.Helpers
 					var results = rsapiClient.PushResourceFiles(rsapiClient.APIOptions, new List<ResourceFileRequest> { rfRequest });
 
 					//sleep for 20 seconds to allow kepler to initialize
-					System.Threading.Thread.Sleep(20000);
+					System.Threading.Thread.Sleep(Constants.Kepler.TWENTY_SECONDS);
 
 					return results.Success;
 				}
