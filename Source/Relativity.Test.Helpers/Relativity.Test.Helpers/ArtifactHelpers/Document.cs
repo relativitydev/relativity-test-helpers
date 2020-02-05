@@ -22,7 +22,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#region Public Methods
 
-		private static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		public static string GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
 			var keplerHelper = new KeplerHelper();
 
@@ -36,10 +36,10 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			if (!_keplerCompatible.Value) return GetDocumentIdentifierFieldColumnNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);
 
 			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
-			return GetDocumentIdentifierFieldColumnName(workspaceId, fieldArtifactTypeID, keplerHelper);
+			return GetDocumentIdentifierFieldColumnName(fieldArtifactTypeID, workspaceId, keplerHelper);
 		}
 
-		private static string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		public static string GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
 		{
 			var keplerHelper = new KeplerHelper();
 
@@ -53,7 +53,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			if (!_keplerCompatible.Value) return GetDocumentIdentifierFieldNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);
 
 			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
-			return GetDocumentIdentifierFieldColumnName(workspaceId, fieldArtifactTypeID, keplerHelper);
+			return GetDocumentIdentifierFieldName(fieldArtifactTypeID, workspaceId, keplerHelper);
 		}
 
 		#endregion

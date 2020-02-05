@@ -18,8 +18,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 	[TestFixture]
 	public class FieldsHelperIntegrationTests
 	{
-		private IFieldsHelper SuT;
-		private IHttpRequestHelper _httpRequestHelper;
 		private IHelper _testHelper;
 		private IServicesMgr _servicesManager;
 		private IRSAPIClient _rsapiClient;
