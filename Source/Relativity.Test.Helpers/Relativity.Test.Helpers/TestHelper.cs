@@ -104,23 +104,18 @@ namespace Relativity.Test.Helpers
 		{
 			var keplerHelper = new KeplerHelper();
 
-			if (keplerHelper.ForceDbContext())
-			{
-				return GetGuidFromDbContext(workspaceID, artifactID);
-			}
-
+			if (keplerHelper.ForceDbContext()) return GetGuidFromDbContext(workspaceID, artifactID);
+			
 			if (_keplerCompatible == null)
 			{
 				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
 			}
 
-			if (_keplerCompatible.Value)
-			{
-				keplerHelper.UploadKeplerFiles();
-				return GetGuidFromKeplerService(workspaceID, artifactID);
-			}
+			if (!_keplerCompatible.Value) return GetGuidFromDbContext(workspaceID, artifactID);
 
-			return GetGuidFromDbContext(workspaceID, artifactID);
+			keplerHelper.UploadKeplerFiles();
+			return GetGuidFromKeplerService(workspaceID, artifactID);
+
 		}
 
 		private Guid GetGuidFromDbContext(int workspaceId, int artifactId)

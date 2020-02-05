@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using kCura.Vendor.Castle.Core.Internal;
 using Newtonsoft.Json;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 using Relativity.Test.Helpers.Exceptions;
@@ -23,10 +24,49 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	public class Fields : IFieldsHelper
 	{
+		private static bool? _keplerCompatible;
+
+		#region Public Methods
+
+		public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
+		{
+			var keplerHelper = new KeplerHelper();
+
+			if (keplerHelper.ForceDbContext()) return GetFieldArtifactIDWithDbContext(fieldname, workspaceDbContext);
+
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (!_keplerCompatible.Value) return GetFieldArtifactIDWithDbContext(fieldname, workspaceDbContext);
+
+			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
+			return GetFieldArtifactID(fieldname, workspaceId, keplerHelper);
+		}
+
+		public static int GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
+		{
+			var keplerHelper = new KeplerHelper();
+
+			if (keplerHelper.ForceDbContext()) return GetFieldCountWithDbContext(workspaceDbContext, fieldArtifactId);
+
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (!_keplerCompatible.Value) return GetFieldCountWithDbContext(workspaceDbContext, fieldArtifactId);
+
+			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
+			return GetFieldCount(fieldArtifactId, workspaceId, keplerHelper);
+		}
+
+		#endregion
 
 		#region DbContext Methods
 
-		public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
+		private static int GetFieldArtifactIDWithDbContext(String fieldname, IDBContext workspaceDbContext)
 		{
 			string sqlquery = @"SELECT [ArtifactID] FROM [EDDSDBO].[Field] Where[DisplayName] like @fieldname";
 			var sqlParams = new List<SqlParameter>
@@ -37,7 +77,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			return artifactTypeId;
 		}
 
-		public static int GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
+		public static int GetFieldCountWithDbContext(IDBContext workspaceDbContext, int fieldArtifactId)
 		{
 			string sqlquery = String.Format(@"select count(*) from [EDDSDBO].[ExtendedField] where ArtifactID = @fieldArtifactId");
 			var sqlParams = new List<SqlParameter>
@@ -52,10 +92,12 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#region Kepler Methods
 
-		public static int GetFieldArtifactId(string fieldname, int workspaceId)
+		public static int GetFieldArtifactID(string fieldname, int workspaceId, KeplerHelper keplerHelper)
 		{
 			try
 			{
+				keplerHelper.UploadKeplerFiles();
+
 				const string routeName = Constants.Kepler.RouteNames.GetFieldArtifactIdAsync;
 
 				FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
@@ -76,10 +118,12 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public static int GetFieldCount(int artifactId, int workspaceId)
+		public static int GetFieldCount(int artifactId, int workspaceId, KeplerHelper keplerHelper)
 		{
 			try
 			{
+				keplerHelper.UploadKeplerFiles();
+
 				const string routeName = Constants.Kepler.RouteNames.GetFieldCountAsync;
 
 				FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
