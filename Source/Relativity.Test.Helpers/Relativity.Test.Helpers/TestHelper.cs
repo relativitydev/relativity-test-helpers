@@ -131,7 +131,7 @@ namespace Relativity.Test.Helpers
 			return result;
 		}
 
-		public Guid GetGuidFromKeplerService(int workspaceId, int artifactId)
+		private Guid GetGuidFromKeplerService(int workspaceId, int artifactId)
 		{
 			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
 
