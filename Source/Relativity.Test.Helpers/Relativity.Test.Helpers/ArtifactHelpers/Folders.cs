@@ -23,9 +23,32 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	public class Folders : IFoldersHelper
 	{
-		
+		private static bool? _keplerCompatible;
+
+		#region Public Methods
+
+		public static string GetFolderName(int folderArtifactId, IDBContext workspaceDbContext)
+		{
+			var keplerHelper = new KeplerHelper();
+
+			if (keplerHelper.ForceDbContext()) return GetFolderNameWithDbContext(folderArtifactId, workspaceDbContext);
+
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (!_keplerCompatible.Value) return GetFolderNameWithDbContext(folderArtifactId, workspaceDbContext);
+
+			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
+			return GetFolderName(folderArtifactId, workspaceId, keplerHelper);
+		}
+
+		#endregion
+
+
 		#region DbContext Methods
-		public static String GetFolderName(Int32 folderArtifactID, IDBContext workspaceDbContext)
+		private static String GetFolderNameWithDbContext(Int32 folderArtifactID, IDBContext workspaceDbContext)
 		{
 			string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);
 
@@ -36,10 +59,12 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		#endregion
 
 		#region Kepler Methods
-		public static string GetFolderName(int folderArtifactId, int workspaceId)
+		public static string GetFolderName(int folderArtifactId, int workspaceId, KeplerHelper keplerHelper)
 		{
 			try
 			{
+				keplerHelper.UploadKeplerFiles();
+
 				const string routeName = Constants.Kepler.RouteNames.GetFolderNameAsync;
 
 				GetFolderNameRequestModel requestModel = new GetFolderNameRequestModel
