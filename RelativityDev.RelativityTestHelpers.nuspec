@@ -27,6 +27,8 @@
     <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\Relativity.Test.Helpers.dll" target="lib\net462\" />
     <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\$configuration$\TestHelpersKepler.Interfaces.dll" target="lib\net462\" />
     <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\$configuration$\TestHelpersKepler.Services.dll" target="lib\net462\" />
-    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\TestHelpers_Kepler_App.rap" target="content" />
   </files>
+  <contentFiles> 
+      <files include="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\TestHelpers_Kepler_App.rap"/> 
+  </contentFiles> 
 </package>
