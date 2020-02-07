@@ -30,5 +30,5 @@
   </files>
   <contentFiles> 
       <files include="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\$configuration$\TestHelpers_Kepler_App.rap"/> 
-    </contentFiles> 
+  </contentFiles> 
 </package>
