@@ -13,7 +13,7 @@ using User = kCura.Relativity.Client.DTOs.User;
 namespace Relativity.Test.Helpers.NUnit.Integration.UserHelpers
 {
 	[TestFixture]
-	public class UserIntegrationTests
+	public class UserHelpersIntegrationTests
 	{
 		private IHelper testHelper;
 		private IServicesMgr servicesMgr;
