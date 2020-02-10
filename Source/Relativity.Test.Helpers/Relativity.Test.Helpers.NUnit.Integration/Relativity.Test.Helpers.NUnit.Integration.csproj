@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArtifactHelpers\FieldsHelperIntegrationTests.cs" />
+    <Compile Include="GroupHelpers\GroupHelpersIntegrationTests.cs" />
     <Compile Include="Kepler\ApplicationInstallHelperTests.cs" />
     <Compile Include="Kepler\OAuth2HelperTests.cs" />
     <Compile Include="Mail\GmailMailHelperTests.cs" />
@@ -171,7 +172,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestImportApiHelper.cs" />
     <Compile Include="Mail\MailTrapMailHelperTests.cs" />
-    <Compile Include="UserHelpers\UserIntegrationTests.cs" />
+    <Compile Include="UserHelpers\UserHelpersIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
