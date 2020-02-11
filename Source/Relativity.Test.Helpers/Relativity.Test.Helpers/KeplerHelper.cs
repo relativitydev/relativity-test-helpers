@@ -118,7 +118,7 @@ namespace Relativity.Test.Helpers
 		{
 			var fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-			InstallKeplerTestRap(fileLocation);
+			InstallKeplerTestRap();
 
 			var keplerDlls = new List<string>
 			{
@@ -131,7 +131,7 @@ namespace Relativity.Test.Helpers
 			}
 		}
 
-		private int InstallKeplerTestRap(string fileLocation)
+		private int InstallKeplerTestRap()
 		{
 			try
 			{
@@ -146,7 +146,11 @@ namespace Relativity.Test.Helpers
 					ConfigurationHelper.REST_SERVER_ADDRESS, ConfigurationHelper.ADMIN_USERNAME,
 					ConfigurationHelper.DEFAULT_PASSWORD);
 
-				var keplerTestRapFilePath = fileLocation + @"\" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
+				var fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				var index = fileLocation.IndexOf("bin");
+				var rapFilePath = fileLocation.Remove(index);
+
+				var keplerTestRapFilePath = rapFilePath + @"\" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
 				var fileStream = File.OpenRead(keplerTestRapFilePath);
 
 				var keplerTestRapArtifactId = applicationInstallHelper
