@@ -60,24 +60,24 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#region DBContext Methods
 
-		private static string GetDocumentIdentifierFieldColumnNameWithDbContext(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+		private static string GetDocumentIdentifierFieldColumnNameWithDbContext(IDBContext workspaceDbContext, int fieldArtifactTypeID)
 		{
-
 			string sql = @"
             SELECT AVF.ColumnName FROM [EDDSDBO].[ExtendedField] EF WITH(NOLOCK)
             JOIN [EDDSDBO].[ArtifactViewField] AVF WITH(NOLOCK)
             ON EF.TextIdentifier = AVF.HeaderName
-            WHERE EF.IsIdentifier = 1 AND EF.FieldArtifactTypeID = '@fieldArtifactTypeID'";
+            WHERE EF.IsIdentifier = 1 AND EF.FieldArtifactTypeID = @fieldArtifactTypeID";
 
 			var sqlParams = new List<SqlParameter>
 			{
-				new SqlParameter("@fieldArtifactTypeID", SqlDbType.NVarChar) {Value = fieldArtifactTypeID}
+				new SqlParameter("@fieldArtifactTypeID", SqlDbType.Int) {Value = fieldArtifactTypeID}
 			};
 
-			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<String>(sql, sqlParams);
+			var columnName = workspaceDbContext.ExecuteSqlStatementAsScalar<string>(sql, sqlParams);
 			return columnName;
 		}
-		private static string GetDocumentIdentifierFieldNameWithDbContext(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+
+		private static string GetDocumentIdentifierFieldNameWithDbContext(IDBContext workspaceDbContext, int fieldArtifactTypeID)
 		{
 			const string sql = @"
             SELECT [TextIdentifier] FROM [EDDSDBO].[ExtendedField] WITH(NOLOCK)

@@ -50,7 +50,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		#region DbContext Methods
 		private static String GetFolderNameWithDbContext(Int32 folderArtifactID, IDBContext workspaceDbContext)
 		{
-			string sql = String.Format("select Name from folder where ArtifactID = {0}", folderArtifactID);
+			string sql = String.Format("select Name from eddsdbo.folder where ArtifactID = {0}", folderArtifactID);
 
 			string folderName = workspaceDbContext.ExecuteSqlStatementAsScalar(sql).ToString();
 
