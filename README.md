@@ -1,6 +1,6 @@
-﻿# Version X Updates
+﻿# Version 7.4 Updates
 
-Starting in Version X, TestHelpers will use the [Relativity Kepler Framework](https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Kepler_framework.htm) to replace the methods in Relativity.TestHelpers that use DBContext. This was done in order to make these methods compatible with RelativityOne, and creating Kepler Services instead of using DbContext to run SQL queries is Relativity development best practice.
+Starting in Version 7.4.0.1, TestHelpers will use the [Relativity Kepler Framework](https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Kepler_framework.htm) to replace the methods in Relativity.TestHelpers that use DBContext. This was done in order to make these methods compatible with RelativityOne, and creating Kepler Services instead of using DbContext to run SQL queries is Relativity development best practice.
 
 If you are currently using one of the changed methods (e.g. `ArtifactHelpers.Fields.GetFieldArtifactID(yourFieldname, yourDbContext);`), the method will automatically use a Kepler service instead of DbContext, and you will not have to change your tests. Alternatively, you can still force the use of DbContext and not use Kepler by setting the new `app.config` value ForceDbContext to true like so: `<add key="ForceDbContext" value="true" />.` If you wish to remove DbContext from your tests entirely, you can call the corresponding overloaded method: `ArtifactHelpers.Fields.GetFieldArtifactID(yourFieldName, yourWorkspaceId, new Keplerhelper());`
 
