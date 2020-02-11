@@ -4,7 +4,7 @@ Starting in Version X, TestHelpers will use the [Relativity Kepler Framework](ht
 
 If you are currently using one of the changed methods (e.g. `ArtifactHelpers.Fields.GetFieldArtifactID(yourFieldname, yourDbContext);`), the method will automatically use a Kepler service instead of DbContext, and you will not have to change your tests. Alternatively, you can still force the use of DbContext and not use Kepler by setting the new `app.config` value ForceDbContext to true like so: `<add key="ForceDbContext" value="true" />.` If you wish to remove DbContext from your tests entirely, you can call the corresponding overloaded method: `ArtifactHelpers.Fields.GetFieldArtifactID(yourFieldName, yourWorkspaceId, new Keplerhelper());`
 
-In order to use Kepler services, an empty application, `TestHelpers_Kepler_App.rap`, will be automatically uploaded to the Application Library of your test environment. `TestHelpersKepler.Interfaces.dll` and `TestHelpersKepler.Services.dll` will also be automatically uploaded to the resource files and linked to `TestHelpers_Kepler_App.rap`.
+In order to use Kepler services, an empty application `TestHelpers_Kepler_App.rap` will be automatically uploaded to the Application Library of your test environment. `TestHelpersKepler.Interfaces.dll` and `TestHelpersKepler.Services.dll` will also be automatically uploaded to the resource files and linked to the `TestHelpers_Kepler_App.rap`.
 
 List of changed methods:
 
