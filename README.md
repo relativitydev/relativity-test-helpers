@@ -7,29 +7,52 @@ This is also available as a [nuget package].(https://www.nuget.org/packages/Rela
 This project requires references to Relativity's Relativity® SDK dlls. These dlls are not part of the open source project and can be obtained by contacting support@relativity.com, getting it from your Relativity instance, or installing the SDK from the [Community Portal](https://community.relativity.com/s/files).
 Under "relativity-integration-test-helpers\Source\Relativity.Test.Helpers\" you will need to create a "Packages" folder if one does not exist and you will need to add the following dlls to this folder. Once you do that you should be able to run your integration tests against an environment.
 
-• FreeImageNET.dll
-• kCura.Relativity.Client.dll
-• Relativity.API.dll
-• Ionic.Zip.dll
-• itextsharp.dll
-• kCura.Data.dll
-• kCura.Data.RowDataGateway.dll
-• kCura.ImageValidator.dll
-• kCura.Injection.dll
-• kCura.OI.FileID.dll
-• kCura.Relativity.DataReaderClient.dll
-• kCura.Relativity.ImportAPI.dll
-• kCura.Utility.dll
-• kCura.Windows.Forms.dll
-• kCura.Windows.Process.dll
-• kCura.WinEDDS.dll
-• kCura.WinEDDS.ImportExtension.dll
-• Newtonsoft.Json.dll
-• Relativity.API.dll
-• Relativity.dll
-• Relativity.Services.DataContracts.dll
-• Relativity.Services.ServiceProxy.dll
+• FreeImageNET.dll  
+• kCura.Relativity.Client.dll  
+• Relativity.API.dll  
+• Ionic.Zip.dll  
+• itextsharp.dll  
+• kCura.Data.dll  
+• kCura.Data.RowDataGateway.dll  
+• kCura.ImageValidator.dll  
+• kCura.Injection.dll  
+• kCura.OI.FileID.dll  
+• kCura.Relativity.DataReaderClient.dll  
+• kCura.Relativity.ImportAPI.dll  
+• kCura.Utility.dll  
+• kCura.Windows.Forms.dll  
+• kCura.Windows.Process.dll  
+• kCura.WinEDDS.dll  
+• kCura.WinEDDS.ImportExtension.dll  
+• Newtonsoft.Json.dll  
+• Relativity.API.dll  
+• Relativity.dll  
+• Relativity.Services.DataContracts.dll  
+• Relativity.Services.ServiceProxy.dll  
 
+# Version 7.4 Updates
+
+Starting in Version 7.4.0.1, TestHelpers will use the [Relativity Kepler Framework](https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Kepler_framework.htm) to replace the methods in Relativity.TestHelpers that use DBContext. This was done in order to make these methods compatible with RelativityOne, and creating Kepler Services instead of using DbContext to run SQL queries is Relativity development best practice.
+
+If you are currently using one of the changed methods (e.g. `ArtifactHelpers.Fields.GetFieldArtifactID(yourFieldname, yourDbContext);`), the method will automatically use a Kepler service instead of DbContext, and you will not have to change your tests. Alternatively, you can still force the use of DbContext and not use Kepler by setting the new `app.config` value ForceDbContext to true like so: `<add key="ForceDbContext" value="true" />.` If you wish to remove DbContext from your tests entirely, you can call the corresponding overloaded method: `ArtifactHelpers.Fields.GetFieldArtifactID(yourFieldName, yourWorkspaceId, new Keplerhelper());`
+
+In order to use Kepler services, an empty application `TestHelpers_Kepler_App.rap` will be automatically uploaded to the Application Library of your test environment. `TestHelpersKepler.Interfaces.dll` and `TestHelpersKepler.Services.dll` will also be automatically uploaded to the resource files and linked to the `TestHelpers_Kepler_App.rap`.
+
+List of changed methods:
+
+```csharp
+Relativity.Test.Helpers.ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+
+Relativity.Test.Helpers.ArtifactHelpers.Document.GetDocumentIdentifierFieldName(IDBContext workspaceDbContext, Int32 fieldArtifactTypeID)
+
+Relativity.Test.Helpers.ArtifactHelpers.Field.GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
+
+Relativity.Test.Helpers.ArtifactHelpers.Field.GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
+
+Relativity.Test.Helpers.ArtifactHelpers.Folder.GetFolderName(int folderArtifactId, IDBContext workspaceDbContext)
+
+Relativity.Test.Helpers.TestHelper.GetGuid(int workspaceID, int artifactID)
+```
 
 
 # Utilizing MailHelper for tests
