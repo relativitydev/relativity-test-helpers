@@ -1,13 +1,15 @@
 ﻿using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
 using System.Reflection;
-//using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using IServicesMgr = Relativity.API.IServicesMgr;
+using TestHelpersKepler;
+using TestHelpersKepler.Services;
+using TestHelpersKepler.Interfaces;
 
 namespace Relativity.Test.Helpers.Example.NUnit
 {
@@ -49,7 +51,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 		#region TestfixtureSetup
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Execute_TestFixtureSetup()
 		{
 			//Setup for testing
@@ -95,6 +97,10 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Create Whole number field
 			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
 
+			_workspaceId = 1017834;
+			var DtSearchAppArtifactId = 1038135;
+
+			var guid = helper.GetGuid(_workspaceId, DtSearchAppArtifactId);
 		}
 
 		#endregion
@@ -102,7 +108,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		#region TestfixtureTeardown
 
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace

@@ -1,5 +1,4 @@
-﻿using DbContextHelper;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
@@ -7,6 +6,19 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection;
+using System.Text;
+using kCura.Relativity.Client;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Relativity.Services.ServiceProxy;
+using Relativity.Test.Helpers.Exceptions;
+using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
+using TestHelpersKepler.Services;
+using DbContextHelper;
 
 
 namespace Relativity.Test.Helpers
@@ -16,11 +28,19 @@ namespace Relativity.Test.Helpers
 		private readonly string _username;
 		private readonly string _password;
 		private readonly AppConfigSettings _alternateConfig;
+		private bool? _keplerCompatible;
+
+		private readonly List<string> _keplerFileNames = new List<string>()
+		{
+			Constants.Kepler.SERVICES_DLL_NAME,
+			Constants.Kepler.INTERFACES_DLL_NAME
+		};
 
 		public TestHelper(string username, string password)
 		{
 			_username = username;
 			_password = password;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(string configSectionName)
@@ -28,6 +48,7 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(Dictionary<string, string> configDictionary)
@@ -35,6 +56,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(configDictionary);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			_keplerCompatible = null;
 		}
 
 		public TestHelper(TestContext testContext)
@@ -42,6 +64,7 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(testContext);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
+			_keplerCompatible = null;
 		}
 
 		public static IHelper ForUser(string username, string password)
@@ -79,10 +102,45 @@ namespace Relativity.Test.Helpers
 
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
+			var keplerHelper = new KeplerHelper();
+
+			if (keplerHelper.ForceDbContext()) return GetGuidFromDbContext(workspaceID, artifactID);
+			
+			if (_keplerCompatible == null)
+			{
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			}
+
+			if (!_keplerCompatible.Value) return GetGuidFromDbContext(workspaceID, artifactID);
+
+			keplerHelper.UploadKeplerFiles();
+			return GetGuidFromKeplerService(workspaceID, artifactID);
+
+		}
+
+		private Guid GetGuidFromDbContext(int workspaceId, int artifactId)
+		{
 			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-			var context = GetDBContext(workspaceID);
-			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactID));
+			var context = GetDBContext(workspaceId);
+			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactId));
 			return result;
+		}
+
+		private Guid GetGuidFromKeplerService(int workspaceId, int artifactId)
+		{
+			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
+
+			var requestModel = new GetGuidRequestModel
+			{
+				ArtifactId = artifactId,
+				WorkspaceId = workspaceId
+			};
+
+			IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
+			var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
+			GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
+
+			return responseModel.Guid;
 		}
 
 		public ISecretStore GetSecretStore()
@@ -138,6 +196,4 @@ namespace Relativity.Test.Helpers
 			throw new NotImplementedException();
 		}
 	}
-
-
 }

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,8 +49,8 @@
     <Reference Include="kCura, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.10.3.107.60\lib\net462\kCura.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.Client, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.10.3.107.60\lib\net462\kCura.Relativity.Client.dll</HintPath>
+    <Reference Include="kCura.Relativity.Client, Version=10.3.191.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Rsapi.10.3.191.8\lib\net462\kCura.Relativity.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -65,8 +66,8 @@
     <Reference Include="kCura.Data.RowDataGateway">
       <HintPath>..\lib\kCura.Data.RowDataGateway.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="nunit.util, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.util.dll</HintPath>
@@ -85,8 +86,8 @@
     <Reference Include="Relativity, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Other.10.3.107.60\lib\net462\Relativity.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.API, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Api.10.3.107.60\lib\net462\Relativity.API.dll</HintPath>
+    <Reference Include="Relativity.API, Version=10.3.191.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Api.10.3.191.8\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.DataExchange.Client.SDK, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.4.0\lib\net462\Relativity.DataExchange.Client.SDK.dll</HintPath>
@@ -178,6 +179,14 @@
       <Project>{500fcc47-7792-47e0-8308-ff7632c65cc9}</Project>
       <Name>Relativity.Test.Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Interfaces\TestHelpersKepler.Interfaces.csproj">
+      <Project>{0976bdeb-2534-490e-9ec0-7cad0411e1bc}</Project>
+      <Name>TestHelpersKepler.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Services\TestHelpersKepler.Services.csproj">
+      <Project>{ef257f9d-9598-4cb1-8a7b-571364408c7a}</Project>
+      <Name>TestHelpersKepler.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -185,6 +194,9 @@
     </None>
     <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
+    <None Include="TestHelpers_Kepler_App.rap">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -217,6 +229,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets'))" />
     <Error Condition="!Exists('..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.12.0\build\NUnit.props'))" />
   </Target>
   <Import Project="..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets" Condition="Exists('..\packages\Relativity.OutsideIn.2019.3.0\build\Relativity.OutsideIn.targets')" />
   <Import Project="..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets" Condition="Exists('..\packages\Relativity.DataExchange.Client.SDK.1.4.0\build\Relativity.DataExchange.Client.SDK.targets')" />

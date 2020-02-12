@@ -119,24 +119,31 @@ namespace Relativity.Test.Helpers.Kepler
 						libraryApplicationInstallId = await GetLibraryApplicationIdAsync(applicationName);
 					}
 
-					InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(AdminWorkspaceId, libraryApplicationInstallId, request);
-
-					if (response.Results.Count == workspaces.Count)
+					if (workspaceId != -1)
 					{
-						string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId}.");
-						Console.WriteLine(info);
+						InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(AdminWorkspaceId, libraryApplicationInstallId, request);
+
+						if (response.Results.Count == workspaces.Count)
+						{
+							string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId}.");
+							Console.WriteLine(info);
+						}
+						else
+						{
+							string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId} " +
+							                            $"since one or more workspaces already have the same version of this application installed.");
+							Console.WriteLine(info);
+						}
+
+						workspaceApplicationInstallId = response.Results.First().ApplicationInstallID;
+
+						status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, libraryApplicationInstallId, workspaceApplicationInstallId)).Result;
+						Console.WriteLine($@"Workspace Installation has terminated with the following status: {status}.");
 					}
 					else
 					{
-						string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId} " +
-																				$"since one or more workspaces already have the same version of this application installed.");
-						Console.WriteLine(info);
+						workspaceApplicationInstallId = libraryApplicationInstallId;
 					}
-
-					workspaceApplicationInstallId = response.Results.First().ApplicationInstallID;
-
-					status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, libraryApplicationInstallId, workspaceApplicationInstallId)).Result;
-					Console.WriteLine($@"Workspace Installation has terminated with the following status: {status}.");
 				}
 				else
 				{
