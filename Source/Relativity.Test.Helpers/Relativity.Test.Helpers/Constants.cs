@@ -28,7 +28,7 @@ namespace Relativity.Test.Helpers
 
 			public const string SERVICES_DLL_NAME = "TestHelpersKepler.Services.dll";
 			public const string INTERFACES_DLL_NAME = "TestHelpersKepler.Interfaces.dll";
-			public const string MINIMUM_KEPLER_COMPATIBLE_VERSION = "10.3.170.1";
+			public const string MINIMUM_KEPLER_COMPATIBLE_VERSION = "10.3.191.8";
 			public const int TWENTY_SECONDS = 20000;
 		}
 	}
