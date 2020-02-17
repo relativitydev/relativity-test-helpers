@@ -7,6 +7,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Relativity.API;
 using Relativity.Test.Helpers.ArtifactHelpers;
+using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
@@ -19,7 +20,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private string _workspaceName;
 		private IDBContext _dbContext;
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void SetUp()
 		{
 			testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
@@ -33,7 +34,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 		}
 
-		[TearDown]
+		[OneTimeTearDown]
 		public void TearDown()
 		{
 			////Delete Workspace
@@ -45,7 +46,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		}
 
 		[Test]
-		public void GetFolderName()
+		public void GetFolderNameTest()
 		{
 			// Arrange
 			int rootFolderArtifactId = Folders.GetRootFolderArtifactID(_workspaceId, _servicesManager,
@@ -56,6 +57,21 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			// Assert
 			Assert.AreEqual(_workspaceName, folderName);
+		}
+
+		[Test]
+		public void CreateFolderTest()
+		{
+			var testFolderName = "test_folder";
+			int folderArtifactId = Folders.CreateFolder(_servicesManager, _workspaceId, testFolderName);
+
+			Assert.IsNotNull(folderArtifactId);
+		}
+
+		[Test]
+		public void CreateFolderTest_Failure()
+		{
+			Assert.Throws<TestHelpersException>(()=>Folders.CreateFolder(_servicesManager, _workspaceId, null));
 		}
 	}
 }
