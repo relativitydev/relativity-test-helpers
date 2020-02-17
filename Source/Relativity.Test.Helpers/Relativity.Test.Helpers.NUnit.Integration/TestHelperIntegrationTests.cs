@@ -3,6 +3,7 @@ using Relativity.API;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using kCura.Relativity.Client;
+using Relativity.Test.Helpers.WorkspaceHelpers;
 using TestHelpersKepler;
 using TestHelpersKepler.Interfaces;
 using TestHelpersKepler.Services;
@@ -26,11 +27,11 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 
 			_servicesManager = SuT.GetServicesManager();
 
-			_workspaceOneId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
+			_workspaceOneId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
 				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
 				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 
-			_workspaceTwoId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
+			_workspaceTwoId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
 				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
 				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 		}
@@ -39,8 +40,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		public void TearDown()
 		{
 			//Delete Workspaces
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceOneId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceTwoId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			DeleteWorkspace.DeleteTestWorkspace(_workspaceOneId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			DeleteWorkspace.DeleteTestWorkspace(_workspaceTwoId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			_servicesManager = null;
 			SuT = null;

@@ -173,6 +173,7 @@
     <Compile Include="TestImportApiHelper.cs" />
     <Compile Include="Mail\MailTrapMailHelperTests.cs" />
     <Compile Include="UserHelpers\UserHelpersIntegrationTests.cs" />
+    <Compile Include="WorkspaceHelpers\CreateWorkspaceHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
