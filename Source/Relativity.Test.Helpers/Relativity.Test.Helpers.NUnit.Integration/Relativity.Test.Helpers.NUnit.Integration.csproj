@@ -158,6 +158,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArtifactHelpers\ClientHelperIntegrationTests.cs" />
     <Compile Include="ArtifactHelpers\FieldsHelperIntegrationTests.cs" />
     <Compile Include="GroupHelpers\GroupHelpersIntegrationTests.cs" />
     <Compile Include="Kepler\ApplicationInstallHelperTests.cs" />
