@@ -10,6 +10,7 @@ using NUnit.Framework.Internal;
 using Relativity.API;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
+using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using Relativity.Test.Helpers.WorkspaceHelpers;
@@ -84,6 +85,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		}
 
 		[Test]
+		public void GetFieldArtifactIdTest_Invalid()
+		{
+			//ACT
+			var invalidFieldName = "";
+
+			//ASSERT
+			Assert.Throws<TestHelpersException>(() => Fields.GetFieldArtifactID(invalidFieldName, _dbContext));
+		}
+
+		[Test]
 		public void GetFieldCountTest()
 		{
 			//ACT
@@ -91,6 +102,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			//ASSERT
 			Assert.AreEqual(fieldCount, _productionSortOrderFieldCount);
+		}
+
+		[Test]
+		public void GetFieldCountTest_Invalid()
+		{
+			//ACT
+			var invalidfieldArtifactId = -1;
+
+			//ASSERT
+			Assert.Throws<TestHelpersException>(() => Fields.GetFieldCount(_dbContext, invalidfieldArtifactId));
 		}
 
 		[Test]
