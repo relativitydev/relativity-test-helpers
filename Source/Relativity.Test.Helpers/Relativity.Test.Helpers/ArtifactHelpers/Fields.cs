@@ -32,7 +32,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			if (fieldname.IsNullOrEmpty())
 			{
-				throw new TestHelpersException("Field Name must have a value");
+				throw new ArgumentNullException(nameof(fieldname), "Field name cannot be null or empty.");
 			}
 
 			var keplerHelper = new KeplerHelper();
@@ -54,7 +54,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		{
 			if (fieldArtifactId <= 0)
 			{
-				throw new TestHelpersException("Invalid Field Artifact Id");
+				throw new ArgumentOutOfRangeException(nameof(fieldArtifactId),"Invalid Field Artifact Id");
 			}
 
 			var keplerHelper = new KeplerHelper();

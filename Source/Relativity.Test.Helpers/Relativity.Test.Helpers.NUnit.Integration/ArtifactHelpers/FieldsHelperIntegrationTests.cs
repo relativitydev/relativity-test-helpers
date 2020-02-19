@@ -91,7 +91,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidFieldName = "";
 
 			//ASSERT
-			Assert.Throws<TestHelpersException>(() => Fields.GetFieldArtifactID(invalidFieldName, _dbContext));
+			Assert.Throws<ArgumentNullException>(() => Fields.GetFieldArtifactID(invalidFieldName, _dbContext));
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidfieldArtifactId = -1;
 
 			//ASSERT
-			Assert.Throws<TestHelpersException>(() => Fields.GetFieldCount(_dbContext, invalidfieldArtifactId));
+			Assert.Throws<ArgumentOutOfRangeException>(() => Fields.GetFieldCount(_dbContext, invalidfieldArtifactId));
 		}
 
 		[Test]
