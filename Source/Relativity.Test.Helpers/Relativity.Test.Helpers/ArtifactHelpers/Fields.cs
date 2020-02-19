@@ -30,6 +30,11 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
 		{
+			if (fieldname.IsNullOrEmpty())
+			{
+				throw new ArgumentNullException(nameof(fieldname), "Field name cannot be null or empty.");
+			}
+
 			var keplerHelper = new KeplerHelper();
 
 			if (keplerHelper.ForceDbContext()) return GetFieldArtifactIDWithDbContext(fieldname, workspaceDbContext);
@@ -47,6 +52,11 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public static int GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
 		{
+			if (fieldArtifactId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(fieldArtifactId),"Invalid Field Artifact Id");
+			}
+
 			var keplerHelper = new KeplerHelper();
 
 			if (keplerHelper.ForceDbContext()) return GetFieldCountWithDbContext(workspaceDbContext, fieldArtifactId);

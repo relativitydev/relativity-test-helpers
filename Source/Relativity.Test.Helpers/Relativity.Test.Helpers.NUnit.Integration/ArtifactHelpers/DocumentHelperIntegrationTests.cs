@@ -70,5 +70,31 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			// Assert
 			Assert.AreEqual(controlNumber, fieldName);
 		}
+
+		[Test]
+		public void GetDocumentIdentifetFieldColumnName_InvalidFieldType()
+		{
+			// Arrange
+			const int fieldArtifactTypeId = 0;
+
+			// Act
+			string columnName = Document.GetDocumentIdentifierFieldColumnName(_dbContext, fieldArtifactTypeId);
+
+			// Assert
+			Assert.AreEqual(null, columnName);
+		}
+
+		[Test]
+		public void GetDocumentIdentifetFieldName_InvalidFieldType()
+		{
+			// Arrange
+			const int fieldArtifactTypeId = 0;
+
+			// Act
+			string columnName = Document.GetDocumentIdentifierFieldName(_dbContext, fieldArtifactTypeId);
+
+			// Assert
+			Assert.AreEqual(null, columnName);
+		}
 	}
 }
