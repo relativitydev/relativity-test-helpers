@@ -3,12 +3,19 @@ using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Relativity.Services.Folder;
+using Relativity.Services.Objects.DataContracts;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 using Relativity.Test.Helpers.Exceptions;
+using Relativity.Test.Helpers.SharedTestHelpers;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
+using Folder = kCura.Relativity.Client.DTOs.Folder;
 //using IServicesMgr = Relativity.Test.Helpers.Interface.IServicesMgr;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
@@ -42,6 +49,59 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
 			return GetFolderName(folderArtifactId, workspaceId, keplerHelper);
+		}
+
+		public static int GetRootFolderArtifactID(int workspaceID, IServicesMgr svgMgr, string userName, string password)
+		{
+			try
+			{
+				using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(userName, password))
+				{
+					client.APIOptions.WorkspaceID = workspaceID;
+					Query<Folder> query = new Query<Folder>();
+					query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
+					query.Fields = FieldValue.NoFields;
+					QueryResultSet<Folder> ResultSet = client.Repositories.Folder.Query(query);
+
+					if (!ResultSet.Success)
+					{
+						throw new TestHelpersException("Folder was not found");
+					}
+					else if (ResultSet.TotalCount == 0)
+					{
+						throw new TestHelpersException("folder count was 0, so the folder was not found");
+					}
+					return ResultSet.Results.FirstOrDefault().Artifact.ArtifactID;
+				}
+			}
+			catch (Exception exception)
+			{
+				throw new TestHelpersException($"Error Getting Root Folder ArtifactID [{nameof(workspaceID)}:{workspaceID}]", exception);
+			}
+		}
+
+		public static int CreateFolder(IServicesMgr svcMgr, int workspaceId, string folderName)
+		{
+			try
+			{
+				var folder = new Relativity.Services.Folder.Folder
+				{
+					Name = folderName
+				};
+
+				int folderId;
+				using (IFolderManager folderManager = svcMgr.GetProxy<IFolderManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
+				{
+					folderId = folderManager.CreateSingleAsync(workspaceId, folder).Result;
+				}
+
+				return folderId;
+			}
+			catch (Exception ex)
+			{
+				throw new TestHelpersException($"Error creating folder [{nameof(folderName)}:{folderName}]", ex);
+			}
+			
 		}
 
 		#endregion
@@ -86,35 +146,5 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 		}
 
 		#endregion
-
-		public static int GetRootFolderArtifactID(int workspaceID, IServicesMgr svgMgr, string userName, string password)
-		{
-			try
-			{
-				using (IRSAPIClient client = svgMgr.GetProxy<IRSAPIClient>(userName, password))
-				{
-					client.APIOptions.WorkspaceID = workspaceID;
-					Query<Folder> query = new Query<Folder>();
-					query.Condition = new TextCondition(FolderFieldNames.Name, TextConditionEnum.EqualTo, WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(client, workspaceID));
-					query.Fields = FieldValue.NoFields;
-					QueryResultSet<Folder> ResultSet = client.Repositories.Folder.Query(query);
-
-					if (!ResultSet.Success)
-					{
-						throw new TestHelpersException("Folder was not found");
-					}
-					else if (ResultSet.TotalCount == 0)
-					{
-						throw new TestHelpersException("folder count was 0, so the folder was not found");
-					}
-					return ResultSet.Results.FirstOrDefault().Artifact.ArtifactID;
-				}
-			}
-			catch (Exception exception)
-			{
-				throw new TestHelpersException($"Error Getting Root Folder ArtifactID [{nameof(workspaceID)}:{workspaceID}]", exception);
-			}
-		}
-
 	}
 }

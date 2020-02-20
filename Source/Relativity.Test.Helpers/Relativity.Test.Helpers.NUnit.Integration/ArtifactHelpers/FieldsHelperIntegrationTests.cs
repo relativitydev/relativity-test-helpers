@@ -10,8 +10,12 @@ using NUnit.Framework.Internal;
 using Relativity.API;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
+using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using Relativity.Test.Helpers.WorkspaceHelpers;
+using Field = kCura.Relativity.Client.Field;
+using FieldType = Relativity.Services.Interfaces.Field.Models.FieldType;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
@@ -40,7 +44,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			_rsapiClient = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			//Create workspace
-			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
 			_rsapiClient.APIOptions.WorkspaceID = _workspaceId;
 
 			//Query for field ID to be used in test
@@ -62,7 +66,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void Teardown()
 		{
 			//Delete workspace
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			_servicesManager = null;
 			_rsapiClient = null;
@@ -81,6 +85,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		}
 
 		[Test]
+		public void GetFieldArtifactIdTest_Invalid()
+		{
+			//ACT
+			var invalidFieldName = "";
+
+			//ASSERT
+			Assert.Throws<ArgumentNullException>(() => Fields.GetFieldArtifactID(invalidFieldName, _dbContext));
+		}
+
+		[Test]
 		public void GetFieldCountTest()
 		{
 			//ACT
@@ -88,6 +102,114 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			//ASSERT
 			Assert.AreEqual(fieldCount, _productionSortOrderFieldCount);
+		}
+
+		[Test]
+		public void GetFieldCountTest_Invalid()
+		{
+			//ACT
+			var invalidfieldArtifactId = -1;
+
+			//ASSERT
+			Assert.Throws<ArgumentOutOfRangeException>(() => Fields.GetFieldCount(_dbContext, invalidfieldArtifactId));
+		}
+
+		[Test]
+		public void CreateFieldDateTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_Date(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.Date);
+		}
+		[Test]
+		public void CreateFieldUserTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_User(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.User);
+
+		}
+		[Test]
+		public void CreateFieldFixedLengthTextTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_FixedLengthText(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.FixedLength);
+
+		}
+		[Test]
+		public void CreateFieldLongTextTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_LongText(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.LongText);
+
+		}
+		[Test]
+		public void CreateFieldWholeNumberTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_WholeNumber(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.WholeNumber);
+
+		}
+		[Test]
+		public void CreateFieldYesNoTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_YesNO(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.YesNo);
+
+		}
+		[Test]
+		public void CreateFieldSingleChoiceTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_SingleChoice(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.SingleChoice);
+
+		}
+		[Test]
+		public void CreateFieldMultipleChoiceTest()
+		{
+			//Act
+			var fieldId = Fields.CreateField_MultipleChoice(_rsapiClient, _workspaceId);
+
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.MultipleChoice);
+
+		}
+
+		private FieldType ReadField(int fieldId, int workspaceId)
+		{
+			using (var fieldManager = _servicesManager.GetProxy<Services.Interfaces.Field.IFieldManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
+			{
+				var response = fieldManager.ReadAsync(workspaceId, fieldId).Result;
+				var fieldType = response.FieldType;
+				return fieldType;
+			}
 		}
 	}
 }
