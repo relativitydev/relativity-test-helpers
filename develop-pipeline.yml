@@ -4,9 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- develop
+- earlyAccess
 
-name: $(developPackageVersion)-DEV-$(rev:r)
+name: $(earlyAccessPackageVersion)-EA-$(rev:r)
 
 pool:
   vmImage: 'windows-latest'
@@ -42,7 +42,7 @@ steps:
     packagesToPack: '**/*.nuspec'
     versioningScheme: byEnvVar
     versionEnvVar: Build.BuildNumber
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/earlyAccess'))
 
 - task: NuGetCommand@2
   inputs:
