@@ -25,10 +25,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const string EmailDomain = "smtp.mailtrap.io";
 
 		// The following below should be changed for this test
-		//private const string ApiKey = "<YOUR_API_KEY>";
-		//private const string EmailAddress = "<YOUR_TARGET_EMAIL>"; // Can really be any address since MailTrap will capture it
-		//private const string EmailUsername = "<YOUR_USERNAME>";
-		//private const string EmailPassword = "<YOUR_PASSWORD>";
 		private readonly string ApiKey = TestContext.Parameters["MailTrapTestApiKey"];
 		private readonly string EmailAddress = TestContext.Parameters["MailTrapTestEmailAddress"]; // Can really be any address since MailTrap will capture it
 		private readonly string EmailUsername = TestContext.Parameters["MailTrapTestEmailUsername"];
