@@ -24,8 +24,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		// The following below should be changed for this test
 		//private const string EmailAddress = "<YOUR_GMAIL_ADDRESS>";
 		//private const string EmailPassword = "<YOUR_GMAIL_PASSWORD>";
-		private readonly string EmailAddress = TestContext.Parameters["GmailMailTest_EmailAddress"];
-		private readonly string EmailPassword = TestContext.Parameters["GmailMailTest_EmailPassword"];
+		private readonly string EmailAddress = TestContext.Parameters["GmailMailTestEmailAddress"];
+		private readonly string EmailPassword = TestContext.Parameters["GmailMailTestEmailPassword"];
 
 		[OneTimeSetUp]
 		public void SetUp()
