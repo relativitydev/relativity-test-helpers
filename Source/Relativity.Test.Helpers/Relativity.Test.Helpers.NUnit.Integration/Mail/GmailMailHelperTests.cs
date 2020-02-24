@@ -22,8 +22,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const string EmailDomain = "smtp.gmail.com";
 
 		// The following below should be changed for this test
-		//private const string EmailAddress = "<YOUR_GMAIL_ADDRESS>";
-		//private const string EmailPassword = "<YOUR_GMAIL_PASSWORD>";
 		private readonly string EmailAddress = TestContext.Parameters["GmailMailTestEmailAddress"];
 		private readonly string EmailPassword = TestContext.Parameters["GmailMailTestEmailPassword"];
 
