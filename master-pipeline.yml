@@ -37,7 +37,7 @@ steps:
       **\bin\**\Relativity.Test.Helpers.NUnit.Integration.dll
     searchFolder: '$(System.DefaultWorkingDirectory)'
     distributionBatchType: basedOnAssembly
-    runSettingsFile: 'Relativity.Test.Helpers\Relativity.Test.Helpers.NUnit.Integration\test.runsettings'
+    runSettingsFile: 'Source\Relativity.Test.Helpers\Relativity.Test.Helpers.NUnit.Integration\test.runsettings'
     overrideTestrunParameters: 
       -TestWorkspaceName $(testWorkspaceName)
       -TestWorkspaceTemplateName $(testWorkspaceTemplateName)
