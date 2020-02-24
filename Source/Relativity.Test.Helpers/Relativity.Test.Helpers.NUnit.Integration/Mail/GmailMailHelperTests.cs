@@ -8,6 +8,7 @@ using System.Net.Mail;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 {
+	[TestFixture]
 	public class GmailMailHelperTests
 	{
 		private IMailHelper Sut;

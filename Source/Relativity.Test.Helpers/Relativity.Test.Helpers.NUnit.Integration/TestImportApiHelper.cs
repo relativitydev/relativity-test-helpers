@@ -14,6 +14,7 @@ using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
+	[TestFixture]
 	public class TestImportApiHelper
 	{
 		private TestHelper Sut;
