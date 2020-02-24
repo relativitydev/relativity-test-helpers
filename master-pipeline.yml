@@ -58,18 +58,18 @@ steps:
       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
 
-# - task: NuGetCommand@2
-#   inputs:
-#     command: 'pack'
-#     feedsToUse: 'select'
-#     packagesToPack: '**/*.nuspec'
-#     versioningScheme: byBuildNumber
-#   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    feedsToUse: 'select'
+    packagesToPack: '**/*.nuspec'
+    versioningScheme: byBuildNumber
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
-# - task: NuGetCommand@2
-#   inputs:
-#     command: 'push'
-#     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-#     nuGetFeedType: 'external'
-#     publishFeedCredentials: 'relativityDevNuget'
-#   condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'relativityDevNuget'
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
