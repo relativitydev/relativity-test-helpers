@@ -25,10 +25,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 		private const string EmailDomain = "smtp.mailtrap.io";
 
 		// The following below should be changed for this test
-		private const string ApiKey = "<YOUR_API_KEY>";
-		private const string EmailAddress = "<YOUR_TARGET_EMAIL>"; // Can really be any address since MailTrap will capture it
-		private const string EmailUsername = "<YOUR_USERNAME>";
-		private const string EmailPassword = "<YOUR_PASSWORD>";
+		//private const string ApiKey = "<YOUR_API_KEY>";
+		//private const string EmailAddress = "<YOUR_TARGET_EMAIL>"; // Can really be any address since MailTrap will capture it
+		//private const string EmailUsername = "<YOUR_USERNAME>";
+		//private const string EmailPassword = "<YOUR_PASSWORD>";
+		private readonly string ApiKey = TestContext.Parameters["MailTrapTest_ApiKey"];
+		private readonly string EmailAddress = TestContext.Parameters["MailTrapTest_EmailAddress"]; // Can really be any address since MailTrap will capture it
+		private readonly string EmailUsername = TestContext.Parameters["MailTrapTest_EmailUsername"];
+		private readonly string EmailPassword = TestContext.Parameters["MailTrapTest_EmailPassword"];
 		private const int SleepTimerInSeconds = 5; //Sleep because MailTraip limits actions per second
 
 		[OneTimeSetUp]

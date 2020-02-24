@@ -34,12 +34,19 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private int _productionSortOrderFieldArtifactId;
 		private const int _productionSortOrderFieldCount = 1;
 
+		private KeplerHelper _keplerHelper;
+		private bool useDbContext;
+
 		[OneTimeSetUp]
 		public void SetUp()
 		{
 			//ARRANGE
-
-			_testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			_testHelper = new TestHelper(configDictionary);
 			_servicesManager = _testHelper.GetServicesManager();
 			_rsapiClient = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
@@ -58,8 +65,13 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			if (!results.Success) throw new Exception("Failed to query for field.");
 			_productionSortOrderFieldArtifactId = results.Results.First().Artifact.ArtifactID;
 
-			_dbContext = _testHelper.GetDBContext(_workspaceId);
-
+			_keplerHelper = new KeplerHelper();
+			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
+			if (useDbContext)
+			{
+				_dbContext = _testHelper.GetDBContext(_workspaceId);
+			}
 		}
 
 		[OneTimeTearDown]
@@ -78,7 +90,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void GetFieldArtifactIdTest()
 		{
 			//ACT
-			var fieldArtifactId = Fields.GetFieldArtifactID(_testFieldName, _dbContext);
+			int fieldArtifactId;
+			if (useDbContext)
+			{
+				fieldArtifactId = Fields.GetFieldArtifactID(_testFieldName, _dbContext);
+			}
+			else
+			{
+				fieldArtifactId = Fields.GetFieldArtifactID(_testFieldName, _workspaceId, _keplerHelper);
+			}
 
 			//ASSERT
 			Assert.AreEqual(fieldArtifactId, _productionSortOrderFieldArtifactId);
@@ -91,14 +111,30 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidFieldName = "";
 
 			//ASSERT
-			Assert.Throws<ArgumentNullException>(() => Fields.GetFieldArtifactID(invalidFieldName, _dbContext));
+			if (useDbContext)
+			{
+				Assert.Throws<ArgumentNullException>(() => Fields.GetFieldArtifactID(invalidFieldName, _dbContext));
+			}
+			else
+			{
+				int fieldArtifactId = Fields.GetFieldArtifactID(invalidFieldName, _workspaceId, _keplerHelper);
+				Assert.AreEqual(0, fieldArtifactId);
+			}
 		}
 
 		[Test]
 		public void GetFieldCountTest()
 		{
 			//ACT
-			var fieldCount = Fields.GetFieldCount(_dbContext, _productionSortOrderFieldArtifactId);
+			int fieldCount;
+			if (useDbContext)
+			{
+				fieldCount = Fields.GetFieldCount(_dbContext, _productionSortOrderFieldArtifactId);
+			}
+			else
+			{
+				fieldCount = Fields.GetFieldCount(_productionSortOrderFieldArtifactId, _workspaceId, _keplerHelper);
+			}
 
 			//ASSERT
 			Assert.AreEqual(fieldCount, _productionSortOrderFieldCount);
@@ -111,7 +147,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidfieldArtifactId = -1;
 
 			//ASSERT
-			Assert.Throws<ArgumentOutOfRangeException>(() => Fields.GetFieldCount(_dbContext, invalidfieldArtifactId));
+			if (useDbContext)
+			{
+				Assert.Throws<ArgumentOutOfRangeException>(() => Fields.GetFieldCount(_dbContext, invalidfieldArtifactId));
+			}
+			else
+			{
+				int fieldCount = Fields.GetFieldCount(invalidfieldArtifactId, _workspaceId, _keplerHelper);
+				Assert.AreEqual(0, fieldCount);
+			}
 		}
 
 		[Test]
