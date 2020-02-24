@@ -13,6 +13,7 @@ using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
+	[TestFixture]
 	public class FoldersHelperIntegrationTests
 	{
 		private IHelper testHelper;

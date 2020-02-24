@@ -6,6 +6,7 @@ using System;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
+	[TestFixture]
 	public class TestEHHelperIntegrationTests
 	{
 		private IEHHelper SuT;
