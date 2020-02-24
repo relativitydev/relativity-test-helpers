@@ -2,6 +2,7 @@
 using Relativity.API;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
+using System.Collections.Generic;
 using kCura.Relativity.Client;
 using Relativity.Test.Helpers.WorkspaceHelpers;
 using TestHelpersKepler;
@@ -23,7 +24,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		public void SetUp()
 		{
 			//Arrange
-			SuT = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			SuT = new TestHelper(configDictionary);
 
 			_servicesManager = SuT.GetServicesManager();
 

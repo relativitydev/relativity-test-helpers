@@ -18,17 +18,31 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private IServicesMgr _servicesManager;
 		private int _workspaceId;
 		private IDBContext _dbContext;
+		private KeplerHelper _keplerHelper;
+		private bool useDbContext;
 
 		[SetUp]
 		public void SetUp()
 		{
-			testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			testHelper = new TestHelper(configDictionary);
 			_workspaceName = $"IntTest_{Guid.NewGuid()}";
 			_servicesManager = testHelper.GetServicesManager();
 			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
 				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
 				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-			_dbContext = testHelper.GetDBContext(_workspaceId);
+			_keplerHelper = new KeplerHelper();
+
+			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
+			if (useDbContext)
+			{
+				_dbContext = testHelper.GetDBContext(_workspaceId);
+			}
 		}
 
 		[TearDown]
@@ -51,7 +65,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			const string controlNumber = "ControlNumber";
 
 			// Act
-			string columnName = Document.GetDocumentIdentifierFieldColumnName(_dbContext, fieldArtifactTypeId);
+			string columnName = "";
+			if (useDbContext)
+			{
+				columnName = Document.GetDocumentIdentifierFieldColumnName(_dbContext, fieldArtifactTypeId);
+			}
+			else
+			{ 
+				columnName = Document.GetDocumentIdentifierFieldColumnName(fieldArtifactTypeId, _workspaceId, _keplerHelper);
+			}
 
 			// Assert
 			Assert.AreEqual(controlNumber, columnName);
@@ -65,7 +87,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			const string controlNumber = "Control Number";
 
 			// Act
-			string fieldName = Document.GetDocumentIdentifierFieldName(_dbContext, fieldArtifactTypeId);
+			string fieldName = "";
+			if (useDbContext)
+			{
+				fieldName = Document.GetDocumentIdentifierFieldName(_dbContext, fieldArtifactTypeId);
+			}
+			else
+			{
+				fieldName = Document.GetDocumentIdentifierFieldName(fieldArtifactTypeId, _workspaceId, _keplerHelper);
+			}
 
 			// Assert
 			Assert.AreEqual(controlNumber, fieldName);
@@ -78,7 +108,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			const int fieldArtifactTypeId = 0;
 
 			// Act
-			string columnName = Document.GetDocumentIdentifierFieldColumnName(_dbContext, fieldArtifactTypeId);
+			string columnName = "";
+			if (useDbContext)
+			{
+				columnName = Document.GetDocumentIdentifierFieldColumnName(_dbContext, fieldArtifactTypeId);
+			}
+			else
+			{
+				columnName = Document.GetDocumentIdentifierFieldColumnName(fieldArtifactTypeId, _workspaceId, _keplerHelper);
+			}
 
 			// Assert
 			Assert.AreEqual(null, columnName);
@@ -91,10 +129,18 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			const int fieldArtifactTypeId = 0;
 
 			// Act
-			string columnName = Document.GetDocumentIdentifierFieldName(_dbContext, fieldArtifactTypeId);
+			string fieldName = "";
+			if (useDbContext)
+			{
+				fieldName = Document.GetDocumentIdentifierFieldName(_dbContext, fieldArtifactTypeId);
+			}
+			else
+			{
+				fieldName = Document.GetDocumentIdentifierFieldName(fieldArtifactTypeId, _workspaceId, _keplerHelper);
+			}
 
 			// Assert
-			Assert.AreEqual(null, columnName);
+			Assert.AreEqual(null, fieldName);
 		}
 	}
 }

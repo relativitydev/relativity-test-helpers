@@ -21,7 +21,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 		[SetUp]
 		public void SetUp()
 		{
-			testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			testHelper = new TestHelper(configDictionary);
 			servicesMgr = testHelper.GetServicesManager();
 			rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System);
 			CleanUpTestGroups();

@@ -5,6 +5,7 @@ using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -31,7 +32,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			_rapFilePath = Path.Combine(executableLocation, $"Files/{_rapFileName}");
 			_fileStream = File.OpenRead(_rapFilePath);
 
-			_testHelper = new TestHelper(TestContext.CurrentContext);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			_testHelper = new TestHelper(configDictionary);
 
 			IApplicationInstallManager applicationInstallManager = _testHelper.GetServicesManager().CreateProxy<IApplicationInstallManager>(ExecutionIdentity.System);
 			ILibraryApplicationManager libraryApplicationManager = _testHelper.GetServicesManager().CreateProxy<ILibraryApplicationManager>(ExecutionIdentity.System);
