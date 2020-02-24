@@ -11,6 +11,7 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 {
+	[TestFixture]
 	public class GroupHelpersIntegrationTests
 	{
 		private IHelper testHelper;

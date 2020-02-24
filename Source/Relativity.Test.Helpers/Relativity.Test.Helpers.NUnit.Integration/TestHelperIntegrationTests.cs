@@ -11,6 +11,7 @@ using TestHelpersKepler.Services;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
+	[TestFixture]
 	public class TestHelperIntegrationTests
 	{
 		private IHelper SuT;

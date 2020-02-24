@@ -13,6 +13,7 @@ using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 {
+	[TestFixture]
 	public class CreateWorkspaceHelperTests
 	{
 		private IRSAPIClient _client;

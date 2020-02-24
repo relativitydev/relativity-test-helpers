@@ -9,6 +9,7 @@ using System.Threading;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.Mail
 {
+	[TestFixture]
 	public class MailTrapMailHelperTests
 	{
 		private IMailHelper Sut;

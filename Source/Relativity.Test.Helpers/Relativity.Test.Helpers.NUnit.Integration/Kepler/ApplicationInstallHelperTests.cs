@@ -13,6 +13,7 @@ using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 {
+	[TestFixture]
 	public class ApplicationInstallHelperTests
 	{
 		private TestHelper _testHelper;
