@@ -14,6 +14,7 @@ using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
+	[TestFixture]
 	public class TestImportApiHelper
 	{
 		private TestHelper Sut;
@@ -21,7 +22,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			Sut = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			Sut = new TestHelper(configDictionary);
 		}
 
 		[OneTimeTearDown]

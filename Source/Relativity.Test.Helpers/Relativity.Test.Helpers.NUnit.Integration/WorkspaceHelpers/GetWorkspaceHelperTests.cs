@@ -14,6 +14,7 @@ using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 {
+	[TestFixture]
 	public class GetWorkspaceHelperTests
 	{
 		private IRSAPIClient _client;
@@ -26,7 +27,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			_testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			_testHelper = new TestHelper(configDictionary);
 			_servicesManager = _testHelper.GetServicesManager();
 			_client = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,

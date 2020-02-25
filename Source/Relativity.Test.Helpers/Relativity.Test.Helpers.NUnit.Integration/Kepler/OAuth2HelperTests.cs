@@ -1,4 +1,5 @@
-﻿using kCura.Relativity.Client;
+﻿using System.Collections.Generic;
+using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
 using Relativity.Services.Security;
@@ -21,7 +22,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 		[OneTimeSetUp]
 		public void SetUp()
 		{
-			_testHelper = new TestHelper(TestContext.CurrentContext);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			_testHelper = new TestHelper(configDictionary);
 
 			IOAuth2ClientManager oAuth2ClientManager = _testHelper.GetServicesManager().CreateProxy<IOAuth2ClientManager>(ExecutionIdentity.System);
 			IRSAPIClient rsapiClient = _testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System);

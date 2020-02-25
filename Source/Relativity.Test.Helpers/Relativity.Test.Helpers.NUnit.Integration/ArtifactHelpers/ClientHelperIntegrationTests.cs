@@ -14,6 +14,7 @@ using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
+	[TestFixture]
 	public class ClientHelperIntegrationTests
 	{
 		private IHelper testHelper;
@@ -27,7 +28,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		[SetUp]
 		public void SetUp()
 		{
-			testHelper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			testHelper = new TestHelper(configDictionary);
 			_client = testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			_serviceFactory = GetServiceFactory();
 		}
@@ -35,8 +41,12 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		[TearDown]
 		public void TearDown()
 		{
-			Client.Delete_Client(_serviceFactory, _clientArtifactId);
+			if (_clientArtifactId != 0)
+			{
+				Client.Delete_Client(_serviceFactory, _clientArtifactId);
+			}
 
+			_clientArtifactId = 0;
 			testHelper = null;
 			_servicesManager = null;
 			_client = null;
