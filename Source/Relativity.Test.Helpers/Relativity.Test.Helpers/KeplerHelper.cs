@@ -84,7 +84,7 @@ namespace Relativity.Test.Helpers
 				{
 					BaseAddress =
 						new Uri(
-							$"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity")
+							$"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS}/Relativity")
 				};
 
 				string encoded = System.Convert.ToBase64String(
