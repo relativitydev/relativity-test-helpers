@@ -59,6 +59,7 @@ namespace Relativity.Test.Helpers
 			_keplerCompatible = null;
 		}
 
+		[Obsolete("This constructor is deprecated. Use the TestHelper(Dictionary<string, string> configDictionary constructor instead.")]
 		public TestHelper(TestContext testContext)
 		{
 			ConfigurationHelper.SetupConfiguration(testContext);
