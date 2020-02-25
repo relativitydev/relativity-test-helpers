@@ -59,14 +59,6 @@ namespace Relativity.Test.Helpers
 			_keplerCompatible = null;
 		}
 
-		public TestHelper(TestContext testContext)
-		{
-			ConfigurationHelper.SetupConfiguration(testContext);
-			_username = ConfigurationHelper.ADMIN_USERNAME;
-			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			_keplerCompatible = null;
-		}
-
 		public static IHelper ForUser(string username, string password)
 		{
 			return new TestHelper(username, password);

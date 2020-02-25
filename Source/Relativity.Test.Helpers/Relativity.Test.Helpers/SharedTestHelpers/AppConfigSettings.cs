@@ -31,16 +31,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			}
 		}
 
-		public AppConfigSettings(TestContext testContext)
-		{
-			_appSettings = new NameValueCollection();
-
-			foreach (string testParameterName in TestContext.Parameters.Names)
-			{
-				_appSettings.Add(testParameterName, TestContext.Parameters[testParameterName]);
-			}
-		}
-
 		public override string TestDataLocation
 		{
 			get { return _appSettings["TestDataLocation"]; }
