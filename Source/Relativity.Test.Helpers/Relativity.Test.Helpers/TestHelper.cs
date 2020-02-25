@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using Relativity.API;
+﻿using Relativity.API;
 using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
 using Relativity.Test.Helpers.SharedTestHelpers;

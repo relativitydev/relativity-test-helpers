@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.SharedTestHelpers
 {
