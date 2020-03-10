@@ -49,3 +49,9 @@ steps:
       -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'testHelpersArtifacts'
+    publishLocation: 'Container'
