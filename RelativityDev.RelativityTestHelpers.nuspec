@@ -24,10 +24,10 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\release\Relativity.Test.Helpers.dll" target="lib\net462\" />
-    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\release\TestHelpersKepler.Interfaces.dll" target="lib\net462\" />
-    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\release\TestHelpersKepler.Services.dll" target="lib\net462\" />
-    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\release\TestHelpers_Kepler_App.rap" target="build\" />
+    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\**\Relativity.Test.Helpers.dll" target="lib\net462\" />
+    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\**\TestHelpersKepler.Interfaces.dll" target="lib\net462\" />
+    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\**\TestHelpersKepler.Services.dll" target="lib\net462\" />
+    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\**\TestHelpers_Kepler_App.rap" target="build\" />
 	<file src="RelativityDev.RelativityTestHelpers.targets" target="build\" />
   </files>
 </package>
