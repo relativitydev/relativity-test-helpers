@@ -49,6 +49,11 @@ steps:
 #       -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
 #       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
 #       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '**\bin\Debug\**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:
