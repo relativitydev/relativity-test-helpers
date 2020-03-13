@@ -1,5 +1,10 @@
 # Build Pipeline for Relativity Test Helpers
 
+pr:
+- develop
+- master
+- earlyAccess*
+
 pool:
   vmImage: 'windows-latest'
 
