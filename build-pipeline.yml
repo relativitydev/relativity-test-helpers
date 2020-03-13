@@ -67,6 +67,12 @@ steps:
     Contents: '*.targets*'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: 'versions.json'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(build.artifactStagingDirectory)'
