@@ -70,7 +70,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: 'versions.json'
+    Contents: 'variables.json'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
