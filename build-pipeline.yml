@@ -27,33 +27,33 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# - task: VSTest@2
-#   inputs:
-#     testSelector: 'testAssemblies'
-#     testAssemblyVer2: |
-#       **\bin\**\Relativity.Test.Helpers.NUnit.Integration.dll
-#     searchFolder: '$(System.DefaultWorkingDirectory)'
-#     distributionBatchType: basedOnAssembly
-#     runSettingsFile: 'Source\Relativity.Test.Helpers\Relativity.Test.Helpers.NUnit.Integration\test.runsettings'
-#     overrideTestrunParameters: 
-#       -TestWorkspaceName $(testWorkspaceName)
-#       -TestWorkspaceTemplateName $(testWorkspaceTemplateName)
-#       -AdminUsername $(adminUsername)
-#       -AdminPassword $(adminPassword)
-#       -SQLUserName $(sqlUserName)
-#       -SQLPassword $(sqlPassword)
-#       -SQLServerAddress $(sqlServerAddress)
-#       -RSAPIServerAddress $(rsapiServerAddress)
-#       -RESTServerAddress $(restServerAddress)
-#       -ServerBindingType $(serverBindingType)
-#       -RelativityInstanceAddress $(relativityInstanceAddress)
-#       -ForceDbContext $(forceDbContext)
-#       -GmailMailTestEmailAddress $(gmailMailTestEmailAddress)
-#       -GmailMailTestEmailPassword $(gmailMailTestEmailPassword)
-#       -MailTrapTestApiKey $(mailTrapTestApiKey)
-#       -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
-#       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
-#       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\bin\**\Relativity.Test.Helpers.NUnit.Integration.dll
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    distributionBatchType: basedOnAssembly
+    runSettingsFile: 'Source\Relativity.Test.Helpers\Relativity.Test.Helpers.NUnit.Integration\test.runsettings'
+    overrideTestrunParameters: 
+      -TestWorkspaceName $(testWorkspaceName)
+      -TestWorkspaceTemplateName $(testWorkspaceTemplateName)
+      -AdminUsername $(adminUsername)
+      -AdminPassword $(adminPassword)
+      -SQLUserName $(sqlUserName)
+      -SQLPassword $(sqlPassword)
+      -SQLServerAddress $(sqlServerAddress)
+      -RSAPIServerAddress $(rsapiServerAddress)
+      -RESTServerAddress $(restServerAddress)
+      -ServerBindingType $(serverBindingType)
+      -RelativityInstanceAddress $(relativityInstanceAddress)
+      -ForceDbContext $(forceDbContext)
+      -GmailMailTestEmailAddress $(gmailMailTestEmailAddress)
+      -GmailMailTestEmailPassword $(gmailMailTestEmailPassword)
+      -MailTrapTestApiKey $(mailTrapTestApiKey)
+      -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
+      -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
+      -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
