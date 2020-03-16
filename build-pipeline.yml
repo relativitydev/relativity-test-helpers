@@ -1,10 +1,5 @@
 # Build Pipeline for Relativity Test Helpers
 
-pr:
-- develop
-- master
-- earlyAccess*
-
 pool:
   vmImage: 'windows-latest'
 
@@ -83,3 +78,4 @@ steps:
     PathtoPublish: '$(build.artifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+    
