@@ -1,9 +1,15 @@
-# Build Pipeline for Relativity Test Helpers
+# Build Pipeline for Relativity Test Helpers - Builds and runs tests only on Saturdays at 6:00am CT
 
-pr:
-- develop
-- master
-- earlyAccess*
+pr: none
+trigger: none
+
+schedules:
+- cron: "0 6 * * 6"
+  displayName: Weekly Saturday build
+  branches:
+    include:
+    - master
+  always: true
 
 pool:
   vmImage: 'windows-latest'
@@ -54,32 +60,3 @@ steps:
       -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: '**\bin\Release\**'
-    TargetFolder: '$(build.artifactstagingdirectory)'
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: '*.nuspec*'
-    TargetFolder: '$(build.artifactstagingdirectory)'
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: '*.targets*'
-    TargetFolder: '$(build.artifactstagingdirectory)'
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: 'variables.json'
-    TargetFolder: '$(build.artifactstagingdirectory)'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(build.artifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
