@@ -1,0 +1,63 @@
+# Build Pipeline for Relativity Test Helpers - Builds and runs tests only on Saturdays at 6:00am CT
+
+pr: none
+trigger: none
+
+schedules:
+# Runs every saturday at 6:00am Central Time (11:00am UTC is 6:00am CT)
+- cron: "0 11 * * 6"
+  displayName: Weekly Saturday build
+  branches:
+    include:
+    - master
+  always: true
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@0
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\bin\**\Relativity.Test.Helpers.NUnit.Integration.dll
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    distributionBatchType: basedOnAssembly
+    runSettingsFile: 'Source\Relativity.Test.Helpers\Relativity.Test.Helpers.NUnit.Integration\test.runsettings'
+    overrideTestrunParameters: 
+      -TestWorkspaceName $(testWorkspaceName)
+      -TestWorkspaceTemplateName $(testWorkspaceTemplateName)
+      -AdminUsername $(adminUsername)
+      -AdminPassword $(adminPassword)
+      -SQLUserName $(sqlUserName)
+      -SQLPassword $(sqlPassword)
+      -SQLServerAddress $(sqlServerAddress)
+      -RSAPIServerAddress $(rsapiServerAddress)
+      -RESTServerAddress $(restServerAddress)
+      -ServerBindingType $(serverBindingType)
+      -RelativityInstanceAddress $(relativityInstanceAddress)
+      -ForceDbContext $(forceDbContext)
+      -GmailMailTestEmailAddress $(gmailMailTestEmailAddress)
+      -GmailMailTestEmailPassword $(gmailMailTestEmailPassword)
+      -MailTrapTestApiKey $(mailTrapTestApiKey)
+      -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
+      -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
+      -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)

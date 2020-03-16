@@ -1,12 +1,4 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
-trigger:
-- master
-
-name: $(masterPackageVersion)
+# Build Pipeline for Relativity Test Helpers
 
 pool:
   vmImage: 'windows-latest'
@@ -57,19 +49,33 @@ steps:
       -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
-
-- task: NuGetCommand@2
+- task: CopyFiles@2
   inputs:
-    command: 'pack'
-    feedsToUse: 'select'
-    packagesToPack: '**/*.nuspec'
-    versioningScheme: byBuildNumber
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '**\bin\Release\**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
 
-- task: NuGetCommand@2
+- task: CopyFiles@2
   inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'relativityDevNuget'
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '*.nuspec*'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '*.targets*'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: 'variables.json'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(build.artifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+    
