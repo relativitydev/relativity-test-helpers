@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using Relativity.API;
+﻿using Relativity.API;
 using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
 using Relativity.Test.Helpers.SharedTestHelpers;
@@ -54,14 +53,6 @@ namespace Relativity.Test.Helpers
 		public TestHelper(Dictionary<string, string> configDictionary)
 		{
 			ConfigurationHelper.SetupConfiguration(configDictionary);
-			_username = ConfigurationHelper.ADMIN_USERNAME;
-			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			_keplerCompatible = null;
-		}
-
-		public TestHelper(TestContext testContext)
-		{
-			ConfigurationHelper.SetupConfiguration(testContext);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
 			_keplerCompatible = null;
