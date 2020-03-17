@@ -235,7 +235,9 @@
     <Compile Include="Mail\MailTrapInboxModel.cs" />
     <Compile Include="Mail\MailTrapMailHelper.cs" />
     <Compile Include="Mail\MailTrapMessageModel.cs" />
+    <Compile Include="RetryHelper\IRetryLogicHelper.cs" />
     <Compile Include="RetryHelper\RetryHelper.cs" />
+    <Compile Include="RetryHelper\RetryLogicHelper.cs" />
     <Compile Include="ServiceFactory\Extentions\ServiceManagerExtension.cs" />
     <Compile Include="ServiceFactory\ServicesManager.cs" />
     <Compile Include="ServiceFactory\URLHelper.cs" />
