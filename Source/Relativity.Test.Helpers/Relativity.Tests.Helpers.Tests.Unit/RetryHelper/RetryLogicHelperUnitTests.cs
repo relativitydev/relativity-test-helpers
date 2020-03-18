@@ -20,7 +20,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.RetryHelper
 
 		private const string OAuth2Id = "OAuth2Id";
 		private const string OAuth2Secret = "OAuth2Secret";
-		private readonly Guid AppGuid = new Guid("20378139-2b25-4c8e-9c31-4aba4cc30162");
+		private readonly Guid AppGuid = new Guid("99999999-9a99-9a9a-9a99-9aaa9aa99999");
 
 		[SetUp]
 		public void SetUp()
