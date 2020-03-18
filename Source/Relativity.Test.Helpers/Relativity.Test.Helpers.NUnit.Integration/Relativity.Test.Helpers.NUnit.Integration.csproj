@@ -164,6 +164,7 @@
     <Compile Include="Kepler\ApplicationInstallHelperTests.cs" />
     <Compile Include="Kepler\OAuth2HelperTests.cs" />
     <Compile Include="Mail\GmailMailHelperTests.cs" />
+    <Compile Include="RetryHelper\RetryLogicHelperTests.cs" />
     <Compile Include="TestConstants.cs" />
     <Compile Include="ArtifactHelpers\DocumentHelperIntegrationTests.cs" />
     <Compile Include="TestEHHelperIntegrationTests.cs" />

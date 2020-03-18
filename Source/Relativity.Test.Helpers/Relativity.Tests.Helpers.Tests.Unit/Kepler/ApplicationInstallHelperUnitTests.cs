@@ -25,7 +25,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		private const string ApplicationName = "FakeApp";
 		private const string RelativityVersionPreKeplerApi = "10.0.318.5";
 		private const string RelativityVersionPostKeplerApi = "10.3.170.1";
-		private readonly Guid ApplicationGuid = new Guid("884a7b32-1bfe-4d8d-8229-6e012bfc08ef");
+		private readonly Guid ApplicationGuid = new Guid("99999999-9a99-9a9a-9a99-9aaa9aa99999");
 		private const int AdminWorkspaceId = -1;
 		private const int LibraryApplicationId = 111;
 		private const int WorkspaceApplicationId = 222;
