@@ -52,7 +52,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: '**\bin\Release\**'
+    Contents: '**\bin\**'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: CopyFiles@2
