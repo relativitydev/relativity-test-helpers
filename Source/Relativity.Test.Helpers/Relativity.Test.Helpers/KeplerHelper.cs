@@ -146,33 +146,35 @@ namespace Relativity.Test.Helpers
 
 				string keplerRapFileParentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-				if (keplerRapFileParentFolder != null)
-				{
-					DirectoryInfo keplerRapFileParentFolderDirectoryInfo = new DirectoryInfo(keplerRapFileParentFolder);
-					if (keplerRapFileParentFolderDirectoryInfo.Exists)
-					{
-						const string keplerRapFileNameWithExtension = Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
-						string keplerRapFilePath = Path.Combine(keplerRapFileParentFolder, keplerRapFileNameWithExtension);
-
-						FileStream fileStream = File.OpenRead(keplerRapFilePath);
-
-						int keplerTestRapArtifactId = applicationInstallHelper.InstallApplicationAsync(
-							applicationName: Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME,
-							fileStream: fileStream,
-							workspaceId: -1,
-							unlockApps: true).Result;
-
-						return keplerTestRapArtifactId;
-					}
-					else
-					{
-						throw new TestHelpersException($"{nameof(keplerRapFileParentFolder)} directory doesn't exist");
-					}
-				}
-				else
+				if (keplerRapFileParentFolder == null)
 				{
 					throw new TestHelpersException("Bin folder path string is empty");
 				}
+
+				DirectoryInfo keplerRapFileParentFolderDirectoryInfo = new DirectoryInfo(keplerRapFileParentFolder);
+				if (!keplerRapFileParentFolderDirectoryInfo.Exists)
+				{
+					throw new TestHelpersException($"{nameof(keplerRapFileParentFolder)} directory doesn't exist");
+				}
+
+				const string keplerRapFileNameWithExtension = Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
+
+				string keplerRapFullFilePath = Path.Combine(keplerRapFileParentFolder, keplerRapFileNameWithExtension);
+				FileInfo keplerRapFilePathFileInfo = new FileInfo(keplerRapFullFilePath);
+				if (!keplerRapFilePathFileInfo.Exists)
+				{
+					throw new TestHelpersException($"RAP File ({nameof(keplerRapFullFilePath)}) doesn't exist");
+				}
+
+				FileStream fileStream = File.OpenRead(keplerRapFullFilePath);
+
+				int keplerTestRapArtifactId = applicationInstallHelper.InstallApplicationAsync(
+					applicationName: Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME,
+					fileStream: fileStream,
+					workspaceId: -1,
+					unlockApps: true).Result;
+
+				return keplerTestRapArtifactId;
 			}
 			catch (Exception ex)
 			{

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using Relativity.Test.Helpers.WorkspaceHelpers;
+using System;
+using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
@@ -72,7 +69,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 				columnName = Document.GetDocumentIdentifierFieldColumnName(_dbContext, fieldArtifactTypeId);
 			}
 			else
-			{ 
+			{
 				columnName = Document.GetDocumentIdentifierFieldColumnName(fieldArtifactTypeId, _workspaceId, _keplerHelper);
 			}
 
@@ -103,7 +100,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		}
 
 		[Test]
-		public void GetDocumentIdentifetFieldColumnName_InvalidFieldType()
+		public void GetDocumentIdentifierFieldColumnName_InvalidFieldType()
 		{
 			// Arrange
 			const int fieldArtifactTypeId = 0;
@@ -124,7 +121,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		}
 
 		[Test]
-		public void GetDocumentIdentifetFieldName_InvalidFieldType()
+		public void GetDocumentIdentifierFieldName_InvalidFieldType()
 		{
 			// Arrange
 			const int fieldArtifactTypeId = 0;
