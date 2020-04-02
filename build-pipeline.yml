@@ -1,0 +1,83 @@
+# Build Pipeline for Relativity Test Helpers
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@0
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\bin\**\Relativity.Test.Helpers.NUnit.Integration.dll
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    distributionBatchType: basedOnAssembly
+    runSettingsFile: 'Source\Relativity.Test.Helpers\Relativity.Test.Helpers.NUnit.Integration\test.runsettings'
+    overrideTestrunParameters: 
+      -TestWorkspaceName $(testWorkspaceName)
+      -TestWorkspaceTemplateName $(testWorkspaceTemplateName)
+      -AdminUsername $(adminUsername)
+      -AdminPassword $(adminPassword)
+      -SQLUserName $(sqlUserName)
+      -SQLPassword $(sqlPassword)
+      -SQLServerAddress $(sqlServerAddress)
+      -RSAPIServerAddress $(rsapiServerAddress)
+      -RESTServerAddress $(restServerAddress)
+      -ServerBindingType $(serverBindingType)
+      -RelativityInstanceAddress $(relativityInstanceAddress)
+      -ForceDbContext $(forceDbContext)
+      -GmailMailTestEmailAddress $(gmailMailTestEmailAddress)
+      -GmailMailTestEmailPassword $(gmailMailTestEmailPassword)
+      -MailTrapTestApiKey $(mailTrapTestApiKey)
+      -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
+      -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
+      -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '**\bin\**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '*.nuspec*'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '*.targets*'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: 'variables.json'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(build.artifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+    

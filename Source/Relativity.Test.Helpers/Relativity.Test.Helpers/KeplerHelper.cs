@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using OutsideIn.Options;
+﻿using kCura.Relativity.Client;
 using Relativity.API;
 using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers
 {
@@ -118,7 +116,7 @@ namespace Relativity.Test.Helpers
 		{
 			var fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-			InstallKeplerTestRap();
+			InstallKeplerRap();
 
 			var keplerDlls = new List<string>
 			{
@@ -131,36 +129,56 @@ namespace Relativity.Test.Helpers
 			}
 		}
 
-		private int InstallKeplerTestRap()
+		private int InstallKeplerRap()
 		{
 			try
 			{
-				IApplicationInstallManager applicationInstallManager =
-					GetServiceFactory().CreateProxy<IApplicationInstallManager>();
-				ILibraryApplicationManager libraryApplicationManager =
-					GetServiceFactory().CreateProxy<ILibraryApplicationManager>();
+				IApplicationInstallManager applicationInstallManager = GetServiceFactory().CreateProxy<IApplicationInstallManager>();
+				ILibraryApplicationManager libraryApplicationManager = GetServiceFactory().CreateProxy<ILibraryApplicationManager>();
 				IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>();
 
-				var applicationInstallHelper = new ApplicationInstallHelper(rsapiClient, applicationInstallManager,
-					libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE,
-					ConfigurationHelper.REST_SERVER_ADDRESS, ConfigurationHelper.ADMIN_USERNAME,
-					ConfigurationHelper.DEFAULT_PASSWORD);
+				ApplicationInstallHelper applicationInstallHelper = new ApplicationInstallHelper(
+					rsapiClient: rsapiClient,
+					applicationInstallManager: applicationInstallManager,
+					libraryApplicationManager: libraryApplicationManager, protocol: ConfigurationHelper.SERVER_BINDING_TYPE,
+					serverAddress: ConfigurationHelper.REST_SERVER_ADDRESS, username: ConfigurationHelper.ADMIN_USERNAME,
+					password: ConfigurationHelper.DEFAULT_PASSWORD);
 
-				var fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-				var index = fileLocation.IndexOf("bin");
-				var rapFilePath = fileLocation.Remove(index);
+				string keplerRapFileParentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-				var keplerTestRapFilePath = rapFilePath + @"\" + Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
-				var fileStream = File.OpenRead(keplerTestRapFilePath);
+				if (keplerRapFileParentFolder == null)
+				{
+					throw new TestHelpersException("Bin folder path string is empty");
+				}
 
-				var keplerTestRapArtifactId = applicationInstallHelper
-					.InstallApplicationAsync(Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME, fileStream, -1, true).Result;
+				DirectoryInfo keplerRapFileParentFolderDirectoryInfo = new DirectoryInfo(keplerRapFileParentFolder);
+				if (!keplerRapFileParentFolderDirectoryInfo.Exists)
+				{
+					throw new TestHelpersException($"{nameof(keplerRapFileParentFolder)} directory doesn't exist");
+				}
+
+				const string keplerRapFileNameWithExtension = Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME + ".rap";
+
+				string keplerRapFullFilePath = Path.Combine(keplerRapFileParentFolder, keplerRapFileNameWithExtension);
+				FileInfo keplerRapFilePathFileInfo = new FileInfo(keplerRapFullFilePath);
+				if (!keplerRapFilePathFileInfo.Exists)
+				{
+					throw new TestHelpersException($"RAP File ({nameof(keplerRapFullFilePath)}) doesn't exist");
+				}
+
+				FileStream fileStream = File.OpenRead(keplerRapFullFilePath);
+
+				int keplerTestRapArtifactId = applicationInstallHelper.InstallApplicationAsync(
+					applicationName: Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME,
+					fileStream: fileStream,
+					workspaceId: -1,
+					unlockApps: true).Result;
 
 				return keplerTestRapArtifactId;
 			}
 			catch (Exception ex)
 			{
-				throw new TestHelpersException($"{nameof(InstallKeplerTestRap)} - Application installation failed for RAP {Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME} - Exception: {ex.Message}");
+				throw new TestHelpersException($"{nameof(InstallKeplerRap)} - Application installation failed for RAP {Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME} - Exception: {ex.Message}");
 			}
 		}
 
@@ -215,6 +233,5 @@ namespace Relativity.Test.Helpers
 		}
 
 		#endregion
-
 	}
 }

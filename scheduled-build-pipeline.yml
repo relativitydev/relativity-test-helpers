@@ -1,12 +1,16 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+# Build Pipeline for Relativity Test Helpers - Builds and runs tests only on Saturdays at 6:00am CT
 
-trigger:
-- master
+pr: none
+trigger: none
 
-name: $(masterPackageVersion)
+schedules:
+# Runs every saturday at 6:00am Central Time (11:00am UTC is 6:00am CT)
+- cron: "0 11 * * 6"
+  displayName: Weekly Saturday build
+  branches:
+    include:
+    - master
+  always: true
 
 pool:
   vmImage: 'windows-latest'
@@ -57,19 +61,3 @@ steps:
       -MailTrapTestEmailAddress $(mailTrapTestEmailAddress)
       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'pack'
-    feedsToUse: 'select'
-    packagesToPack: '**/*.nuspec'
-    versioningScheme: byBuildNumber
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'relativityDevNuget'
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
