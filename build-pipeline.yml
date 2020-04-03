@@ -8,13 +8,16 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+# Install NuGet Installer tool
 steps:
 - task: NuGetToolInstaller@0
 
+# Restore NuGet packages for the Visual Studio Solution
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
+# Build Visual Studio Solution
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -22,6 +25,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# Run Integration tests only when merging from develop to Master. This is achieved by setting a 'condition' to the task
 - task: VSTest@2
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
@@ -51,30 +55,35 @@ steps:
       -MailTrapTestEmailUsername $(mailTrapTestEmailUsername)
       -MailTrapTestEmailPassword $(mailTrapTestEmailPassword)
 
+# Copy the required Project DLL's to Artifact Staging Directory
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
     Contents: '**\bin\**'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
+# Copy NuGet spec file to Artifact Staging Directory
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
     Contents: '*.nuspec*'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
+# Copy NuGet targets file to Artifact Staging Directory
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
     Contents: '*.targets*'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
+# Copy the variables.json file which contains the version numbers for the NuGet package to Artifact Staging Directory
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
     Contents: 'variables.json'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
+# Publish Artifact Staging Directory to a Container to be accessed in Release pipeline for publishing NuGet package
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(build.artifactStagingDirectory)'
