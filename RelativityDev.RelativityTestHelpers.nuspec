@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RelativityDev.RelativityTestHelpers</id>
-    <version>6.0.0.1</version>
+    <version>7.4.2.1</version>
     <authors>RelativityDev</authors>
     <owners>RelativityDev</owners>
     <licenseUrl>https://github.com/relativitydev/relativity-test-helpers/blob/master/LICENSE</licenseUrl>
