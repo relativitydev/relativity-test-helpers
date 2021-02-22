@@ -193,7 +193,6 @@
     <Compile Include="ArtifactHelpers\ClientHelper.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\Fields.cs" />
-    <Compile Include="ArtifactHelpers\Interfaces\IClientHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IDocumentHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFieldsHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFoldersHelper.cs" />

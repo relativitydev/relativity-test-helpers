@@ -6,7 +6,7 @@ using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
-	public class ClientHelper : IClientHelper
+	public class ClientHelper
 	{
 		public int CreateClient(Services.ServiceProxy.ServiceFactory serviceFactory, string name)
 		{

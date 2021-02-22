@@ -162,7 +162,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpersTest.cs" />
-    <Compile Include="ArtifactHelpers\ClientHelperTests.cs" />
     <Compile Include="ArtifactHelpers\DocumentHelperTests.cs" />
     <Compile Include="ArtifactHelpers\FieldsHelperTests.cs" />
     <Compile Include="ArtifactHelpers\FoldersHelperTests.cs" />
