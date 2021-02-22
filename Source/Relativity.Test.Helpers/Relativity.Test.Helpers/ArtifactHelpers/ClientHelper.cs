@@ -8,7 +8,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 {
 	public class ClientHelper
 	{
-		public int CreateClient(Services.ServiceProxy.ServiceFactory serviceFactory, string name)
+		public static int CreateClient(Services.ServiceProxy.ServiceFactory serviceFactory, string name)
 		{
 			try
 			{
@@ -36,7 +36,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public void DeleteClient(Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
+		public static void DeleteClient(Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
 		{
 			try
 			{
