@@ -42,7 +42,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			{
 				using (IClientManager proxy = serviceFactory.CreateProxy<IClientManager>())
 				{
-					proxy.DeleteSingleAsync(artifactId).Wait();
+					proxy.DeleteSingleAsync(artifactId).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
 			}
 			catch (Exception ex)
