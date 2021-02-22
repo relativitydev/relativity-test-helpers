@@ -14,7 +14,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			{
 				using (IClientManager proxy = serviceFactory.CreateProxy<IClientManager>())
 				{
-					List<ChoiceRef> choiceRefs = proxy.GetStatusChoicesForClientAsync().Result;
+					List<ChoiceRef> choiceRefs = proxy.GetStatusChoicesForClientAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 					ChoiceRef statusRef = choiceRefs.Find(x => x.Name == "Active");
 
 					var newClient = new Services.Client.Client
@@ -25,7 +25,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 						Notes = "Created with Relativity Test Helpers."
 					};
 
-					var clientArtifactId = proxy.CreateSingleAsync(newClient).Result;
+					var clientArtifactId = proxy.CreateSingleAsync(newClient).ConfigureAwait(false).GetAwaiter().GetResult();
 
 					return clientArtifactId;
 				}
