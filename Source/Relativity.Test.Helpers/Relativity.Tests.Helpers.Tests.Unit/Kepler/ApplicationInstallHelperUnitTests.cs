@@ -59,7 +59,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
-			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
+			Sut = new ApplicationInstallHelper(_mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
 
 			// Act
 			bool result = await Sut.DoesLibraryApplicationExistAsync(ApplicationName);
@@ -80,7 +80,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
-			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
+			Sut = new ApplicationInstallHelper(_mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
 
 			int workspaceId = 100999;
 			int applicationId = 101010;
@@ -104,7 +104,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
-			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
+			Sut = new ApplicationInstallHelper(_mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
 
 			// Act
 			await Sut.DeleteApplicationFromLibraryIfItExistsAsync(ApplicationName);
@@ -126,7 +126,7 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
-			Sut = new ApplicationInstallHelper(_mockRsapiClient.Object, _mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
+			Sut = new ApplicationInstallHelper(_mockApplicationInstallManager.Object, _mockLibraryApplicationManager.Object, Protocol, ServerAddress, Username, Password, _mockHttpMessageHandler.Object);
 
 			// bin location
 			string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
