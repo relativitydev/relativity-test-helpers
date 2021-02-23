@@ -28,7 +28,6 @@ namespace Relativity.Test.Helpers.Kepler
 
 		private readonly IApplicationInstallManager _applicationInstallManager;
 		private readonly ILibraryApplicationManager _libraryApplicationManager;
-		//private readonly IRSAPIClient _rsapiClient;
 		private readonly string _protocol;
 		private readonly string _serverAddress;
 		private readonly string _username;
