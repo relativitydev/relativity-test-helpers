@@ -138,7 +138,6 @@ namespace Relativity.Test.Helpers
 				IRSAPIClient rsapiClient = GetServiceFactory().CreateProxy<IRSAPIClient>();
 
 				ApplicationInstallHelper applicationInstallHelper = new ApplicationInstallHelper(
-					rsapiClient: rsapiClient,
 					applicationInstallManager: applicationInstallManager,
 					libraryApplicationManager: libraryApplicationManager, protocol: ConfigurationHelper.SERVER_BINDING_TYPE,
 					serverAddress: ConfigurationHelper.REST_SERVER_ADDRESS, username: ConfigurationHelper.ADMIN_USERNAME,
