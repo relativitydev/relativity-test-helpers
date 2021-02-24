@@ -50,7 +50,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			_serviceFactory = GetServiceFactory();
 
 			//Create workspace
-			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).ConfigureAwait(false).GetAwaiter().GetResult();
 			_rsapiClient.APIOptions.WorkspaceID = _workspaceId;
 
 			//Query for field ID to be used in test
@@ -65,7 +65,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			_productionSortOrderFieldArtifactId = results.Results.First().Artifact.ArtifactID;
 
 			_keplerHelper = new KeplerHelper();
-			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
 			if (useDbContext)
 			{
@@ -251,7 +251,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		{
 			using (var fieldManager = _servicesManager.GetProxy<Services.Interfaces.Field.IFieldManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
 			{
-				var response = fieldManager.ReadAsync(workspaceId, fieldId).Result;
+				var response = fieldManager.ReadAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
 				var fieldType = response.FieldType;
 				return fieldType;
 			}

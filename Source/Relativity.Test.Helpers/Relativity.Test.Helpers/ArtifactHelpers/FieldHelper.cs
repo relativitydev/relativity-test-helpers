@@ -36,7 +36,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			if (_keplerCompatible == null)
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (!_keplerCompatible.Value) return GetFieldArtifactIDWithDbContext(fieldname, workspaceDbContext);
@@ -58,7 +58,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			if (_keplerCompatible == null)
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (!_keplerCompatible.Value) return GetFieldCountWithDbContext(workspaceDbContext, fieldArtifactId);
