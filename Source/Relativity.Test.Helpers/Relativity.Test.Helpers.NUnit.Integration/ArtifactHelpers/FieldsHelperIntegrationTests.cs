@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using Relativity.API;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ArtifactHelpers;
-using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
-using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using Relativity.Test.Helpers.WorkspaceHelpers;
-using Field = kCura.Relativity.Client.Field;
 using FieldType = Relativity.Services.Interfaces.Field.Models.FieldType;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers

@@ -1,33 +1,22 @@
-﻿using kCura.Relativity.Client;
-using Relativity.API;
-using Relativity.Test.Helpers.ArtifactHelpers.Request;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using kCura.Vendor.Castle.Core.Internal;
 using Newtonsoft.Json;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 using Relativity.Test.Helpers.Exceptions;
-using Renci.SshNet;
-using DTOs = kCura.Relativity.Client.DTOs;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
-using Relativity.Services.Field;
 using Relativity.Services.Interfaces.Field;
 using Relativity.Services.Interfaces.Field.Models;
 using Relativity.Services.Interfaces.Shared.Models;
-using FieldType = kCura.Relativity.Client.FieldType;
-using Formatting = Newtonsoft.Json.Formatting;
+using Relativity.API;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
 	/// <summary>
-	/// 
 	/// Helpers to interact with Fields in Relativity
-	/// 
 	/// </summary>
-	/// 
 	public class FieldHelper : IFieldsHelper
 	{
 		private static bool? _keplerCompatible;
@@ -162,42 +151,6 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#endregion
 
-		public static int CreateField(IRSAPIClient client, FieldRequest request)
-		{
-			try
-			{
-				int fieldID = 0;
-				//Set the workspace ID
-				client.APIOptions.WorkspaceID = request.WorkspaceID;
-				//Create a Field DTO
-				DTOs.Field fieldDTO = new DTOs.Field();
-				//Set secondary fields
-				request.HydrateFieldDTO(fieldDTO);
-				//Create the field
-				DTOs.WriteResultSet<DTOs.Field> resultSet = client.Repositories.Field.Create(fieldDTO);
-				//Check for success
-				if (resultSet.Success)
-				{
-					fieldID = resultSet.Results.FirstOrDefault().Artifact.ArtifactID;
-				}
-				else
-				{
-					TestHelpersException innEx = resultSet.Results.Any() ? new TestHelpersException(resultSet.Results.First().Message) : null;
-					throw new TestHelpersException(resultSet.Message, innEx);
-				}
-				return fieldID;
-			}
-			catch (Exception exception)
-			{
-				throw new TestHelpersException($"Error Creating Field [{nameof(request)}:{request}]");
-			}
-		}
-
-		public static int CreateField_Date(IRSAPIClient client, int workspaceID)
-		{
-			FieldRequest fieldRequest = new FieldRequest(workspaceID, FieldType.Date);
-			return CreateField(client, fieldRequest);
-		}
 		public static int CreateFieldDate(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
 		{
 			try
@@ -235,11 +188,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception("Error creating field.", ex);
 			}
 		}
-		public static int CreateField_User(IRSAPIClient client, int workspaceID)
-		{
-			FieldRequest fieldRequest = new FieldRequest(workspaceID, FieldType.User);
-			return CreateField(client, fieldRequest);
-		}
+		
 		public static int CreateFieldUser(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
 		{
 			try
