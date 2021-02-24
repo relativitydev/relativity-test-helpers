@@ -207,7 +207,6 @@
     <Compile Include="Kepler\IApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IOAuth2Helper.cs" />
     <Compile Include="Kepler\OAuth2Helper.cs" />
-    <Compile Include="ArtifactHelpers\Request\FieldRequest.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthenticationProvider.cs" />
     <Compile Include="Authentication\UserInfo.cs" />
