@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using NUnit.Framework;
 using Relativity.API;
+using Relativity.Services.FieldManager;
+using Relativity.Services.Interfaces.Field.Models;
+using Relativity.Services.Interfaces.Shared.Models;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
@@ -19,15 +25,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 	{
 		private IHelper _testHelper;
 		private IServicesMgr _servicesManager;
-		private IRSAPIClient _rsapiClient;
 		private IDBContext _dbContext;
 
 		private int _workspaceId;
 		private readonly string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 
-		private const string _testFieldName = "Production::Sort Order";
-		private int _productionSortOrderFieldArtifactId;
-		private const int _productionSortOrderFieldCount = 1;
+		private const string _testFieldName = "IntegrationTestFieldName";
+		private int _testFieldId;
+		private int _testFieldCount = 1;
 
 		private KeplerHelper _keplerHelper;
 		private bool useDbContext;
@@ -45,25 +50,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			}
 			_testHelper = new TestHelper(configDictionary);
 			_servicesManager = _testHelper.GetServicesManager();
-			_rsapiClient = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			_serviceFactory = GetServiceFactory();
 
 			//Create workspace
 			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).ConfigureAwait(false).GetAwaiter().GetResult();
-			_rsapiClient.APIOptions.WorkspaceID = _workspaceId;
 
 			//Query for field ID to be used in test
-			var fieldNameCondition = new TextCondition("Name", TextConditionEnum.EqualTo, _testFieldName);
-			var query = new Query<RDO> { ArtifactTypeID = 14, Condition = fieldNameCondition };
-			query.Fields.Add(new FieldValue("Artifact ID"));
-			query.Fields.Add(new FieldValue("Name"));
-
-			//Query and throw exception if the query fails
-			var results = _rsapiClient.Repositories.RDO.Query(query);
-			if (!results.Success) throw new Exception("Failed to query for field.");
-			_productionSortOrderFieldArtifactId = results.Results.First().Artifact.ArtifactID;
-
+			_testFieldId = CreateTestField(_serviceFactory, _testFieldName, _workspaceId);
+			
 			_keplerHelper = new KeplerHelper();
 			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
@@ -76,11 +71,13 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		[OneTimeTearDown]
 		public void Teardown()
 		{
+			//delete test field
+			DeleteTestField(_serviceFactory, _testFieldId, _workspaceId);
+
 			//Delete workspace
 			DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			_servicesManager = null;
-			_rsapiClient = null;
 			_dbContext = null;
 			_testHelper = null;
 			_serviceFactory = null;
@@ -101,7 +98,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			}
 
 			//ASSERT
-			Assert.AreEqual(fieldArtifactId, _productionSortOrderFieldArtifactId);
+			Assert.AreEqual(fieldArtifactId, _testFieldId);
 		}
 
 		[Test]
@@ -129,15 +126,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			int fieldCount;
 			if (useDbContext)
 			{
-				fieldCount = FieldHelper.GetFieldCount(_dbContext, _productionSortOrderFieldArtifactId);
+				fieldCount = FieldHelper.GetFieldCount(_dbContext, _testFieldId);
 			}
 			else
 			{
-				fieldCount = FieldHelper.GetFieldCount(_productionSortOrderFieldArtifactId, _workspaceId, _keplerHelper);
+				fieldCount = FieldHelper.GetFieldCount(_testFieldId, _workspaceId, _keplerHelper);
 			}
 
 			//ASSERT
-			Assert.AreEqual(fieldCount, _productionSortOrderFieldCount);
+			Assert.AreEqual(fieldCount, _testFieldCount);
 		}
 
 		[Test]
@@ -257,7 +254,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			}
 		}
 
-		//helper method
+		//helper methods
+
 		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
 		{
 			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
@@ -276,6 +274,57 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 				settings: serviceFactorySettings);
 
 			return serviceFactory;
+		}
+
+		public int CreateTestField(Services.ServiceProxy.ServiceFactory serviceFactory, string fieldName, int workspaceId)
+		{
+			try
+			{
+				int fieldId;
+				var fieldRequest = new WholeNumberFieldRequest()
+				{
+					Name = fieldName,
+					ObjectType = new ObjectTypeIdentifier { ArtifactTypeID = 10 }, //document artifact type ID
+					IsRequired = false,
+					OpenToAssociations = false,
+					IsLinked = false,
+					FilterType = FilterType.None,
+					AllowSortTally = true,
+					Width = null,
+					AllowGroupBy = false,
+					AllowPivot = false,
+					Wrapping = true,
+					RelativityApplications = new List<ObjectIdentifier>(),
+					Keywords = "test helpers",
+					Notes = "Created for FieldsHelper Integration Tests"
+				};
+
+				using (Services.Interfaces.Field.IFieldManager fieldManager = serviceFactory.CreateProxy<Services.Interfaces.Field.IFieldManager>())
+				{
+					fieldId = fieldManager.CreateWholeNumberFieldAsync(workspaceId, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+
+				return fieldId;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Error creating test field.", ex);
+			}
+		}
+
+		public void DeleteTestField(Services.ServiceProxy.ServiceFactory serviceFactory, int fieldId, int workspaceId)
+		{
+			try
+			{
+				using (Services.Interfaces.Field.IFieldManager fieldManager = serviceFactory.CreateProxy<Services.Interfaces.Field.IFieldManager>())
+				{
+					fieldManager.DeleteAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Error deleting test field.", ex);
+			}
 		}
 	}
 }
