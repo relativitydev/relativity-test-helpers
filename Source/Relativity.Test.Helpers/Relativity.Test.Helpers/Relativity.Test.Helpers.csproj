@@ -191,7 +191,7 @@
     <Compile Include="Application\ApplicationInstallException.cs" />
     <Compile Include="ArtifactHelpers\ClientHelper.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
-    <Compile Include="ArtifactHelpers\Fields.cs" />
+    <Compile Include="ArtifactHelpers\FieldHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IDocumentHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFieldsHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFoldersHelper.cs" />
@@ -207,7 +207,6 @@
     <Compile Include="Kepler\IApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IOAuth2Helper.cs" />
     <Compile Include="Kepler\OAuth2Helper.cs" />
-    <Compile Include="ArtifactHelpers\Request\FieldRequest.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthenticationProvider.cs" />
     <Compile Include="Authentication\UserInfo.cs" />

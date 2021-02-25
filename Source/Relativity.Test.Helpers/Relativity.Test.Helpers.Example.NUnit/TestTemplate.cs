@@ -5,6 +5,7 @@ using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
 using System.Reflection;
+using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using IServicesMgr = Relativity.API.IServicesMgr;
 using TestHelpersKepler;
@@ -45,6 +46,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private int _longtextartid;
 		private int _yesnoartid;
 		private int _wholeNumberArtId;
+		private Services.ServiceProxy.ServiceFactory _serviceFactory;
 
 		#endregion
 
@@ -62,6 +64,9 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			// implement_IHelper
 			//create client
 			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+
+			//use helper method to instantiate a new service factory
+			_serviceFactory = GetServiceFactory();
 
 			//Create new user 
 			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
@@ -89,13 +94,13 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
-			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_FixedLengthText(_client, _workspaceId);
+			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldFixedLengthText(_serviceFactory, _workspaceId);
 
 			//Create Long Text Field
-			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_LongText(_client, _workspaceId);
+			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldLongText(_serviceFactory, _workspaceId);
 
 			//Create Whole number field
-			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.Fields.CreateField_WholeNumber(_client, _workspaceId);
+			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldWholeNumber(_serviceFactory, _workspaceId);
 
 			_workspaceId = 1017834;
 			var DtSearchAppArtifactId = 1038135;
@@ -119,6 +124,8 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			//Delete Group
 			GroupHelpers.DeleteGroup.Delete_Group(_client, _groupArtifactId);
+
+			_serviceFactory = null;
 		}
 
 
@@ -139,6 +146,26 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 		#endregion
 
+		//helper method to create a service factory
+		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
+		{
+			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
+			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
+
+			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
+				username: ConfigurationHelper.ADMIN_USERNAME,
+				password: ConfigurationHelper.DEFAULT_PASSWORD);
+
+			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
+				relativityServicesUri: relativityServicesUri,
+				relativityRestUri: relativityRestUri,
+				credentials: usernamePasswordCredentials);
+
+			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
+				settings: serviceFactorySettings);
+
+			return serviceFactory;
+		}
 	}
 
 }
