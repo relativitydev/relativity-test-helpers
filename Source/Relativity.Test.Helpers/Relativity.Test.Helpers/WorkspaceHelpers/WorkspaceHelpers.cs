@@ -30,8 +30,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 					};
 					QueryResult result = objectManager.QueryAsync(-1, queryRequest, 1, 10).Result;
 
-					string name = result.Objects.First().FieldValues.Find(x => x.Field.Name == "Name").Value.ToString();
-					return name;
+					return result.Objects.First().FieldValues.Find(x => x.Field.Name == "Name").Value.ToString();
 				}
 			}
 			catch (Exception ex)
