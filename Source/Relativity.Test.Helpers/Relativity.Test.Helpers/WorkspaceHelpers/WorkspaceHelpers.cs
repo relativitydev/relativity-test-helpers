@@ -1,22 +1,44 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
+﻿using Relativity.API;
+using Relativity.Services;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
+using Relativity.Test.Helpers.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using NumericConditionEnum = Relativity.Services.NumericConditionEnum;
+using QueryResult = Relativity.Services.Objects.DataContracts.QueryResult;
 
 namespace Relativity.Test.Helpers.WorkspaceHelpers
 {
 	public class WorkspaceHelpers
 	{
-		public static string GetWorkspaceName(IRSAPIClient client, int workspaceArtifactId)
+		public static string GetWorkspaceName(IServicesMgr servicesMgr, int workspaceArtifactId)
 		{
-			var oldId = client.APIOptions.WorkspaceID;
 			try
 			{
-				client.APIOptions.WorkspaceID = -1;
-				Workspace workspace = client.Repositories.Workspace.ReadSingle(workspaceArtifactId);
-				return workspace.Name;
+				using (IObjectManager objectManager = servicesMgr.CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
+				{
+					QueryRequest queryRequest = new QueryRequest()
+					{
+						ObjectType = new ObjectTypeRef { ArtifactTypeID = Constants.ArtifactTypeIds.Workspace },
+						Condition = new Relativity.Services.WholeNumberCondition("ArtifactId", NumericConditionEnum.EqualTo, workspaceArtifactId).ToQueryString(),
+						Fields = new List<FieldRef>()
+						{
+							new FieldRef { Name = "Name" }
+						},
+					};
+					QueryResult result = objectManager.QueryAsync(-1, queryRequest, 1, 10).Result;
+
+					string name = result.Objects.First().FieldValues.Find(x => x.Field.Name == "Name").Value.ToString();
+					return name;
+				}
 			}
-			finally
+			catch (Exception ex)
 			{
-				client.APIOptions.WorkspaceID = oldId;
+				string errorMessage = $"Could not find workspace name in {nameof(GetWorkspaceName)} for {nameof(workspaceArtifactId)} of {workspaceArtifactId} - {ex.Message}";
+				Console.WriteLine(errorMessage);
+				throw new TestHelpersException(errorMessage);
 			}
 
 		}

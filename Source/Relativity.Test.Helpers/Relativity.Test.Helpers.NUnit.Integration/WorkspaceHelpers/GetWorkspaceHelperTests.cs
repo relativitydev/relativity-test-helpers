@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
+﻿using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.ArtifactHelpers;
-using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using Relativity.Test.Helpers.WorkspaceHelpers;
+using System;
+using System.Collections.Generic;
+using Relativity.Test.Helpers.Exceptions;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 {
@@ -52,7 +48,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 		[Test]
 		public void GetWorkspaceTest()
 		{
-			var workspaceName = Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_client, _workspaceId);
+			var workspaceName = Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_servicesManager, _workspaceId);
 
 			Assert.AreEqual(_workspaceName, workspaceName);
 		}
@@ -60,7 +56,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 		[Test]
 		public void GetWorkspaceTest_Failure()
 		{
-			Assert.Throws<APIException>(() => Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_client, 0));
+			Assert.Throws<TestHelpersException>(() => Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_servicesManager, 0));
 		}
 	}
 }

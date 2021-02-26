@@ -90,7 +90,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
-			var folderName = Relativity.Test.Helpers.ArtifactHelpers.Folders.GetFolderName(_rootFolderArtifactID, dbContext);
+			var folderName = Relativity.Test.Helpers.ArtifactHelpers.FoldersHelper.GetFolderName(_rootFolderArtifactID, dbContext);
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
