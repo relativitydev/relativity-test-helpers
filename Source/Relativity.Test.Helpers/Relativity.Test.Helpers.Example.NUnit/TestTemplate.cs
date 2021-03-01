@@ -72,7 +72,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
 
 			//Create new group
-			Relativity.Test.Helpers.GroupHelpers.CreateGroup.Create_Group(_client, _groupName);
+			Relativity.Test.Helpers.GroupHelpers.GroupHelper.CreateGroup(_serviceFactory, _groupName);
 
 
 			//Create workspace
@@ -123,7 +123,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			UserHelpers.DeleteUser.Delete_User(_client, _userArtifactId);
 
 			//Delete Group
-			GroupHelpers.DeleteGroup.Delete_Group(_client, _groupArtifactId);
+			GroupHelpers.GroupHelper.DeleteGroup(_serviceFactory, _groupArtifactId);
 
 			_serviceFactory = null;
 		}

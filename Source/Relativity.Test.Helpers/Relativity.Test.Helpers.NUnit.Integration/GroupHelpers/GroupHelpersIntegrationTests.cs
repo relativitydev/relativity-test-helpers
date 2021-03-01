@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using NUnit.Framework;
 using Relativity.API;
+using Relativity.Services.Interfaces.Group;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
+using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using QueryResult = kCura.Relativity.Client.QueryResult;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 {
@@ -16,8 +20,9 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 	{
 		private IHelper testHelper;
 		private IServicesMgr servicesMgr;
-		private IRSAPIClient rsapiClient;
 		private string groupName = "Test Helpers Integration Test Group";
+
+		private Services.ServiceProxy.ServiceFactory serviceFactory;
 
 		[SetUp]
 		public void SetUp()
@@ -29,7 +34,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 			}
 			testHelper = new TestHelper(configDictionary);
 			servicesMgr = testHelper.GetServicesManager();
-			rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System);
+			serviceFactory = GetServiceFactory();
 			CleanUpTestGroups();
 		}
 
@@ -38,15 +43,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 		{
 			testHelper = null;
 			servicesMgr = null;
-			rsapiClient = null;
+			serviceFactory = null;
 		}
 
 		[Test]
 		public void CreateGroupAndDeleteGroupTest()
 		{
 			// Act
-			int groupArtifactId = Relativity.Test.Helpers.GroupHelpers.CreateGroup.Create_Group(rsapiClient, groupName);
-			bool deleteGroupResult = Relativity.Test.Helpers.GroupHelpers.DeleteGroup.Delete_Group(rsapiClient, groupArtifactId);
+			int groupArtifactId = Relativity.Test.Helpers.GroupHelpers.GroupHelper.CreateGroup(serviceFactory, groupName);
+			bool deleteGroupResult = Relativity.Test.Helpers.GroupHelpers.GroupHelper.DeleteGroup(serviceFactory, groupArtifactId);
 
 			// Assert
 			Assert.IsTrue(groupArtifactId > 0);
@@ -55,29 +60,28 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 
 		public void CleanUpTestGroups()
 		{
-			rsapiClient.APIOptions.WorkspaceID = -1;
-			Condition groupQueryCondition = new TextCondition(GroupFieldNames.Name, TextConditionEnum.EqualTo, groupName);
-			Query<kCura.Relativity.Client.DTOs.Group> groupQuery = new Query<kCura.Relativity.Client.DTOs.Group>(FieldValue.AllFields, groupQueryCondition, new List<Sort>());
 			try
 			{
-				QueryResultSet<kCura.Relativity.Client.DTOs.Group> queryResultSet = rsapiClient.Repositories.Group.Query(groupQuery);
-				if (!queryResultSet.Success)
+				using (IObjectManager objectManager = serviceFactory.CreateProxy<IObjectManager>())
 				{
-					throw new Exception("Failed to Query for Test Groups");
-				}
-
-				if (queryResultSet.Results.Count > 0)
-				{
-					List<int> groupArtifactIds = new List<int>();
-					foreach (Result<kCura.Relativity.Client.DTOs.Group> groupResult in queryResultSet.Results)
+					QueryRequest clientQueryRequest = new QueryRequest
 					{
-						groupArtifactIds.Add(groupResult.Artifact.ArtifactID);
-					}
-
-					WriteResultSet<kCura.Relativity.Client.DTOs.Group> deleteResultSet = rsapiClient.Repositories.Group.Delete(groupArtifactIds);
-					if (!deleteResultSet.Success)
+						ObjectType = new ObjectTypeRef
+						{
+							ArtifactTypeID = 3
+						},
+						Condition = $"'Name' == '{groupName}'"
+					};
+					Services.Objects.DataContracts.QueryResult queryResult = objectManager.QueryAsync(-1, clientQueryRequest, 0, 10).GetAwaiter().GetResult();
+					if (queryResult.TotalCount > 0)
 					{
-						throw new Exception("Failed to Delete Test Groups");
+						foreach (var obj in queryResult.Objects)
+						{
+							using (IGroupManager groupManager = serviceFactory.CreateProxy<IGroupManager>())
+							{
+								groupManager.DeleteAsync(obj.ArtifactID).Wait();
+							}
+						}
 					}
 				}
 			}
@@ -85,6 +89,26 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 			{
 				throw new Exception("Error Cleaning Up Test Groups", ex);
 			}
+		}
+
+		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
+		{
+			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
+			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
+
+			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
+				username: ConfigurationHelper.ADMIN_USERNAME,
+				password: ConfigurationHelper.DEFAULT_PASSWORD);
+
+			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
+				relativityServicesUri: relativityServicesUri,
+				relativityRestUri: relativityRestUri,
+				credentials: usernamePasswordCredentials);
+
+			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
+				settings: serviceFactorySettings);
+
+			return serviceFactory;
 		}
 	}
 }
