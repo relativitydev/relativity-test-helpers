@@ -32,7 +32,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 							ArtifactTypeID = 5
 						}
 					};
-					QueryResult queryResult = objectManager.QueryAsync(-1, clientQueryRequest, 0, 10).GetAwaiter().GetResult();
+					QueryResult queryResult = objectManager.QueryAsync(-1, clientQueryRequest, 0, 10).ConfigureAwait(false).GetAwaiter().GetResult();
 					if (queryResult.TotalCount == 0)
 					{
 						throw new Exception("Failed to query for Client.");
@@ -56,7 +56,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 						}
 					};
 					Services.Interfaces.Group.Models.GroupResponse response =
-						groupManager.CreateAsync(request).GetAwaiter().GetResult();
+						groupManager.CreateAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
 					groupArtifactId = response.ArtifactID;
 				}
 
