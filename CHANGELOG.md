@@ -5,6 +5,11 @@
 
 -------------------------
 
+## 2021-03-01
+- REL-518428 - Removed RSAPI from Group class and renamed to GroupHelper class. Also updated integration tests.
+
+-------------------------
+
 ## 2021-02-26
 - REL-518423 - Removed RSAPI from Folder class and renamed to FoldersHelper class. Also updated integration tests and indirect RSAPI usage in WorkspaceHelper
 
