@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Relativity.API, Version=10.3.191.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Relativity.Api.10.3.191.8\lib\net462\Relativity.API.dll</HintPath>
+    <Reference Include="Relativity.API, Version=15.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Relativity.API.15.0.0\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Kepler, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Relativity.Kepler.2.3.2\lib\net462\Relativity.Kepler.dll</HintPath>
