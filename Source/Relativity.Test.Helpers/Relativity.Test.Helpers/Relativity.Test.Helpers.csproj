@@ -216,7 +216,7 @@
     <Compile Include="HelperClass\TestEHHelper.cs" />
     <Compile Include="ImportAPIHelper\Constants.cs" />
     <Compile Include="ImportAPIHelper\ImportDocument.cs" />
-    <Compile Include="ArtifactHelpers\Folders.cs" />
+    <Compile Include="ArtifactHelpers\FoldersHelper.cs" />
     <Compile Include="ImportAPIHelper\Request\ImportJobRequest.cs" />
     <Compile Include="Mail\GmailInboxModel.cs" />
     <Compile Include="Mail\GmailMailHelper.cs" />

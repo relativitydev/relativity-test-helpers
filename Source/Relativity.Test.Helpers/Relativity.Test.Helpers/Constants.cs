@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Relativity.Test.Helpers
+﻿namespace Relativity.Test.Helpers
 {
 	public class Constants
 	{
+		public class ArtifactTypeIds
+		{
+			public const int Workspace = 8;
+		}
+
 		public class Kepler
 		{
 			public class RouteNames

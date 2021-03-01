@@ -64,18 +64,18 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void GetFolderNameTest()
 		{
 			// Arrange
-			int rootFolderArtifactId = Folders.GetRootFolderArtifactID(_workspaceId, _servicesManager,
+			int rootFolderArtifactId = FoldersHelper.GetRootFolderArtifactID(_workspaceId, _servicesManager,
 				ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			// Act
 			string folderName = "";
 			if (useDbContext)
 			{
-				folderName = Folders.GetFolderName(rootFolderArtifactId, _dbContext);
+				folderName = FoldersHelper.GetFolderName(rootFolderArtifactId, _dbContext);
 			}
 			else
 			{
-				folderName = Folders.GetFolderName(rootFolderArtifactId, _workspaceId, _keplerHelper);
+				folderName = FoldersHelper.GetFolderName(rootFolderArtifactId, _workspaceId, _keplerHelper);
 			}
 
 			// Assert
@@ -86,7 +86,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFolderTest()
 		{
 			var testFolderName = "test_folder";
-			int folderArtifactId = Folders.CreateFolder(_servicesManager, _workspaceId, testFolderName);
+			int folderArtifactId = FoldersHelper.CreateFolder(_servicesManager, _workspaceId, testFolderName);
 
 			Assert.IsNotNull(folderArtifactId);
 		}
@@ -94,7 +94,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		[Test]
 		public void CreateFolderTest_Failure()
 		{
-			Assert.Throws<TestHelpersException>(()=>Folders.CreateFolder(_servicesManager, _workspaceId, null));
+			Assert.Throws<TestHelpersException>(()=>FoldersHelper.CreateFolder(_servicesManager, _workspaceId, null));
 		}
 	}
 }
