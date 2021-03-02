@@ -1,16 +1,13 @@
 ﻿using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
+using Relativity.Services.ServiceProxy;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
 using System.Reflection;
-using Relativity.Services.ServiceProxy;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using IServicesMgr = Relativity.API.IServicesMgr;
-using TestHelpersKepler;
-using TestHelpersKepler.Services;
-using TestHelpersKepler.Interfaces;
 
 namespace Relativity.Test.Helpers.Example.NUnit
 {
@@ -76,7 +73,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 
 			//Create workspace
-			_workspaceId = WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(helper.GetServicesManager(), _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
 			dbContext = helper.GetDBContext(_workspaceId);
 			_client.APIOptions.WorkspaceID = _workspaceId;
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -117,7 +114,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace
-			WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(_workspaceId, servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			WorkspaceHelpers.WorkspaceHelpers.Delete(servicesManager, _workspaceId);
 
 			//Delete User
 			UserHelpers.DeleteUser.Delete_User(_client, _userArtifactId);

@@ -2,7 +2,6 @@
 using Relativity.API;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.WorkspaceHelpers;
 using System;
 using System.Collections.Generic;
 
@@ -30,9 +29,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			testHelper = new TestHelper(configDictionary);
 			_workspaceName = $"IntTest_{Guid.NewGuid()}";
 			_servicesManager = testHelper.GetServicesManager();
-			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
-				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
 			_keplerHelper = new KeplerHelper();
 
 			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().Result;
@@ -47,7 +44,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void TearDown()
 		{
 			//Delete Workspace
-			DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceId);
 
 			testHelper = null;
 			_dbContext = null;

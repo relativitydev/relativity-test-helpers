@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
+﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.WorkspaceHelpers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
@@ -56,7 +51,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			// Act
 			try
 			{
-				workspaceId = CreateWorkspace.CreateWorkspaceAsync(sampleWorkspaceName, ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, Sut.GetServicesManager(), ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD).Result;
+				workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(Sut.GetServicesManager(), sampleWorkspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
 
 				Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(workspaceId, numberOfDocumentsToCreate, folderName, nativeFilePath);
 
@@ -72,7 +67,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 					numberOfDocumentsCreated = result.TotalCount;
 				}
 
-				DeleteWorkspace.DeleteTestWorkspace(workspaceId, Sut.GetServicesManager(), ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+				Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(Sut.GetServicesManager(), workspaceId);
 			}
 			catch (Exception ex)
 			{

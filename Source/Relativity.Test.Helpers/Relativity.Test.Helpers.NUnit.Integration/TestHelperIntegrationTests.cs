@@ -1,13 +1,7 @@
 ﻿using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
-using kCura.Relativity.Client;
-using Relativity.Test.Helpers.WorkspaceHelpers;
-using TestHelpersKepler;
-using TestHelpersKepler.Interfaces;
-using TestHelpersKepler.Services;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
@@ -33,22 +27,16 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			SuT = new TestHelper(configDictionary);
 
 			_servicesManager = SuT.GetServicesManager();
-
-			_workspaceOneId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
-				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
-
-			_workspaceTwoId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
-				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceOneId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
+			_workspaceTwoId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
 		}
 
 		[OneTimeTearDown]
 		public void TearDown()
 		{
 			//Delete Workspaces
-			DeleteWorkspace.DeleteTestWorkspace(_workspaceOneId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			DeleteWorkspace.DeleteTestWorkspace(_workspaceTwoId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceOneId);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceTwoId);
 
 			_servicesManager = null;
 			SuT = null;

@@ -1,12 +1,11 @@
 ﻿using kCura.Relativity.Client;
 using NUnit.Framework;
 using Relativity.API;
+using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.WorkspaceHelpers;
 using System;
 using System.Collections.Generic;
-using Relativity.Test.Helpers.Exceptions;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 {
@@ -31,16 +30,13 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 			_testHelper = new TestHelper(configDictionary);
 			_servicesManager = _testHelper.GetServicesManager();
 			_client = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
-				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
 		}
 
 		[OneTimeTearDown]
 		public void Teardown()
 		{
-			DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME,
-				ConfigurationHelper.DEFAULT_PASSWORD);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceId);
 			_testHelper = null;
 			_servicesManager = null;
 		}
