@@ -1,8 +1,6 @@
-﻿using kCura.Relativity.Client;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Services.ServiceProxy;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
@@ -26,7 +24,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 	{
 
 		#region Variables
-		private IRSAPIClient _client;
 		private int _workspaceId;
 		private Int32 _rootFolderArtifactID;
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
@@ -58,15 +55,11 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			servicesManager = helper.GetServicesManager();
 			_eddsDbContext = helper.GetDBContext(-1);
 
-			// implement_IHelper
-			//create client
-			_client = helper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-
 			//use helper method to instantiate a new service factory
 			_serviceFactory = GetServiceFactory();
 
 			//Create new user 
-			_userArtifactId = Relativity.Test.Helpers.UserHelpers.CreateUser.CreateNewUser(_client);
+			_userArtifactId = Relativity.Test.Helpers.UserHelpers.UserHelper.Create(helper.GetServicesManager());
 
 			//Create new group
 			Relativity.Test.Helpers.GroupHelpers.GroupHelper.CreateGroup(_serviceFactory, _groupName);
@@ -75,7 +68,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Create workspace
 			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(helper.GetServicesManager(), _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
 			dbContext = helper.GetDBContext(_workspaceId);
-			_client.APIOptions.WorkspaceID = _workspaceId;
+
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var nativeFilePath = "";
 			var nativeName = @"\\\\FakeFilePath\Natives\SampleTextFile.txt";
@@ -117,7 +110,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			WorkspaceHelpers.WorkspaceHelpers.Delete(servicesManager, _workspaceId);
 
 			//Delete User
-			UserHelpers.DeleteUser.Delete_User(_client, _userArtifactId);
+			UserHelpers.UserHelper.Delete(servicesManager, _userArtifactId);
 
 			//Delete Group
 			GroupHelpers.GroupHelper.DeleteGroup(_serviceFactory, _groupArtifactId);

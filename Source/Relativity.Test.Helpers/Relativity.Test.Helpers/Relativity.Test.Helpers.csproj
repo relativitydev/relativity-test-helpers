@@ -189,6 +189,7 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationHelpers.cs" />
     <Compile Include="Application\ApplicationInstallException.cs" />
+    <Compile Include="ArtifactHelpers\ChoiceHelper.cs" />
     <Compile Include="ArtifactHelpers\ClientHelper.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
     <Compile Include="ArtifactHelpers\FieldHelper.cs" />
@@ -242,8 +243,7 @@
     <Compile Include="Logging\TestLogFactory.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserHelpers\CreateUser.cs" />
-    <Compile Include="UserHelpers\DeleteUser.cs" />
+    <Compile Include="UserHelpers\UserHelper.cs" />
     <Compile Include="WorkspaceHelpers\WorkspaceHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
