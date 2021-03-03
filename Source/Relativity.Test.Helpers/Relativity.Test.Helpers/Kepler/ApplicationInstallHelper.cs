@@ -1,9 +1,6 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
-using Relativity.Kepler.Transport;
+﻿using Relativity.Kepler.Transport;
 using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Services.Interfaces.LibraryApplication.Models;
-using Relativity.Test.Helpers.Application;
 using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -13,7 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Kepler
@@ -45,8 +41,8 @@ namespace Relativity.Test.Helpers.Kepler
 		/// <param name="username"></param>
 		/// <param name="password"></param>
 		/// <param name="httpMessageHandler"></param>
-		
-		public ApplicationInstallHelper( IApplicationInstallManager applicationInstallManager, ILibraryApplicationManager libraryApplicationManager, string protocol, string serverAddress, string username, string password, HttpMessageHandler httpMessageHandler = null)
+
+		public ApplicationInstallHelper(IApplicationInstallManager applicationInstallManager, ILibraryApplicationManager libraryApplicationManager, string protocol, string serverAddress, string username, string password, HttpMessageHandler httpMessageHandler = null)
 		{
 			_applicationInstallManager = applicationInstallManager ?? throw new ArgumentNullException($"Parameter ({nameof(applicationInstallManager)}) cannot be null");
 			_libraryApplicationManager = libraryApplicationManager ?? throw new ArgumentNullException($"Parameter ({nameof(libraryApplicationManager)}) cannot be null");
@@ -94,53 +90,53 @@ namespace Relativity.Test.Helpers.Kepler
 				int libraryApplicationInstallId;
 				InstallStatusCode status;
 
-					InstallApplicationRequest request = new InstallApplicationRequest
-					{
-						WorkspaceIDs = workspaces,
-						UnlockApplications = unlockApps
-					};
+				InstallApplicationRequest request = new InstallApplicationRequest
+				{
+					WorkspaceIDs = workspaces,
+					UnlockApplications = unlockApps
+				};
 
-				
-					if (!await DoesLibraryApplicationExistAsync(applicationName))
-					{
-						libraryApplicationInstallId = await CreateLibraryApplicationAsync(fileStream);
 
-						// The following function will poll for the installation status until the installation reaches a terminal state.
-						status = PollForTerminalStatusAsync(async () => await _libraryApplicationManager.GetLibraryInstallStatusAsync(AdminWorkspaceId, libraryApplicationInstallId)).Result;
-						Console.WriteLine($@"Library Installation has terminated with the following status: {status}.");
+				if (!await DoesLibraryApplicationExistAsync(applicationName))
+				{
+					libraryApplicationInstallId = await CreateLibraryApplicationAsync(fileStream);
+
+					// The following function will poll for the installation status until the installation reaches a terminal state.
+					status = PollForTerminalStatusAsync(async () => await _libraryApplicationManager.GetLibraryInstallStatusAsync(AdminWorkspaceId, libraryApplicationInstallId)).ConfigureAwait(false).GetAwaiter().GetResult();
+					Console.WriteLine($@"Library Installation has terminated with the following status: {status}.");
+				}
+				else
+				{
+					libraryApplicationInstallId = await GetLibraryApplicationIdAsync(applicationName);
+				}
+
+				if (workspaceId != -1)
+				{
+					InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(AdminWorkspaceId, libraryApplicationInstallId, request);
+
+					if (response.Results.Count == workspaces.Count)
+					{
+						string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId}.");
+						Console.WriteLine(info);
 					}
 					else
 					{
-						libraryApplicationInstallId = await GetLibraryApplicationIdAsync(applicationName);
+						string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId} " +
+																				$"since one or more workspaces already have the same version of this application installed.");
+						Console.WriteLine(info);
 					}
 
-					if (workspaceId != -1)
-					{
-						InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(AdminWorkspaceId, libraryApplicationInstallId, request);
+					workspaceApplicationInstallId = response.Results.First().ApplicationInstallID;
 
-						if (response.Results.Count == workspaces.Count)
-						{
-							string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId}.");
-							Console.WriteLine(info);
-						}
-						else
-						{
-							string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId} " +
-							                            $"since one or more workspaces already have the same version of this application installed.");
-							Console.WriteLine(info);
-						}
+					status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, libraryApplicationInstallId, workspaceApplicationInstallId)).ConfigureAwait(false).GetAwaiter().GetResult();
+					Console.WriteLine($@"Workspace Installation has terminated with the following status: {status}.");
+				}
+				else
+				{
+					workspaceApplicationInstallId = libraryApplicationInstallId;
+				}
 
-						workspaceApplicationInstallId = response.Results.First().ApplicationInstallID;
-
-						status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, libraryApplicationInstallId, workspaceApplicationInstallId)).Result;
-						Console.WriteLine($@"Workspace Installation has terminated with the following status: {status}.");
-					}
-					else
-					{
-						workspaceApplicationInstallId = libraryApplicationInstallId;
-					}
-
-					return workspaceApplicationInstallId;
+				return workspaceApplicationInstallId;
 			}
 			catch (Exception ex)
 			{
@@ -163,9 +159,9 @@ namespace Relativity.Test.Helpers.Kepler
 				{
 					int applicationId = await GetLibraryApplicationIdAsync(applicationName);
 
-						await _libraryApplicationManager.DeleteAsync(AdminWorkspaceId, applicationId);
-						string info = string.Format($"Library Application with ArtifactID ({applicationId}) and applicationName ({applicationName}) is being deleted.");
-						Console.WriteLine(info);
+					await _libraryApplicationManager.DeleteAsync(AdminWorkspaceId, applicationId);
+					string info = string.Format($"Library Application with ArtifactID ({applicationId}) and applicationName ({applicationName}) is being deleted.");
+					Console.WriteLine(info);
 				}
 				else
 				{
@@ -223,17 +219,17 @@ namespace Relativity.Test.Helpers.Kepler
 				{
 					List<LibraryApplicationResponse> allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
 
-						if (allApps.Exists(x => x.Name.Equals(applicationName)))
-						{
-							LibraryApplicationResponse app = allApps.Find(x => x.Name.Equals(applicationName));
+					if (allApps.Exists(x => x.Name.Equals(applicationName)))
+					{
+						LibraryApplicationResponse app = allApps.Find(x => x.Name.Equals(applicationName));
 
-							GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.ArtifactID, workspaceApplicationInstallId);
-							result = appStatus.InstallStatus.Code == InstallStatusCode.Completed;
-						}
-						else
-						{
-							result = false;
-						}
+						GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.ArtifactID, workspaceApplicationInstallId);
+						result = appStatus.InstallStatus.Code == InstallStatusCode.Completed;
+					}
+					else
+					{
+						result = false;
+					}
 
 				}
 				else

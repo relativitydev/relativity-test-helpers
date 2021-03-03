@@ -71,9 +71,6 @@
     <Reference Include="FreeImageNET, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.4.0\lib\net462\FreeImageNET.dll</HintPath>
     </Reference>
-    <Reference Include="kCura, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Other.10.3.107.60\lib\net462\kCura.dll</HintPath>
-    </Reference>
     <Reference Include="kCura.Relativity.Client, Version=11.2.256.10, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Rsapi.11.2.256.10\lib\net462\kCura.Relativity.Client.dll</HintPath>
     </Reference>
@@ -92,9 +89,6 @@
     </Reference>
     <Reference Include="Polly, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.3.1\lib\net45\Polly.dll</HintPath>
-    </Reference>
-    <Reference Include="Relativity, Version=10.3.107.60, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Other.10.3.107.60\lib\net462\Relativity.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.API, Version=15.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.API.15.0.0\lib\net462\Relativity.API.dll</HintPath>

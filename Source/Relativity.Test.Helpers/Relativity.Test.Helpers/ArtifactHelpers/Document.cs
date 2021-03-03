@@ -1,11 +1,11 @@
-﻿using Relativity.API;
+﻿using Newtonsoft.Json;
+using Relativity.API;
+using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
+using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Newtonsoft.Json;
-using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
-using Relativity.Test.Helpers.Exceptions;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
@@ -30,7 +30,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			if (_keplerCompatible == null)
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (!_keplerCompatible.Value) return GetDocumentIdentifierFieldColumnNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);
@@ -47,7 +47,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			if (_keplerCompatible == null)
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (!_keplerCompatible.Value) return GetDocumentIdentifierFieldNameWithDbContext(workspaceDbContext, fieldArtifactTypeID);

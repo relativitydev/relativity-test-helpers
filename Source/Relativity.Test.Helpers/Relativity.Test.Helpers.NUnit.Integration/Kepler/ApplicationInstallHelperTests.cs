@@ -46,7 +46,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			Sut = new ApplicationInstallHelper(applicationInstallManager, libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
 			string workspaceName = "Test-" + Guid.NewGuid().ToString();
-			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_testHelper.GetServicesManager(), workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_testHelper.GetServicesManager(), workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			// Delete just in case it already exists
 			Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName).Wait();

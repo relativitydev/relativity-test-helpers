@@ -5,6 +5,12 @@
 
 -------------------------
 
+## 2021-03-03
+- REL-518429 - Removed RSAPI from User Helper classes and moved their main code into UserHelper.  Updated tests as well to account for this.
+- Converged all usage of ServiceFactory & IServicesMgr to IServicesMgr
+
+-------------------------
+
 ## 2021-03-02
 - REL-518430 - Removed RSAPI from Workspace classes and moved their main code into WorkspaceHelpers.  Updated tests as well to account for this.
 

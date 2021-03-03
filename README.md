@@ -174,7 +174,7 @@ httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("
 
 // Other HttpClient setup and overhead here...
 
-HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+HttpResponseMessage response = httpClient.PostAsync(url, content).ConfigureAwait(false).GetAwaiter().GetResult();
 ````
 
 # ApplicationInstallHelper
