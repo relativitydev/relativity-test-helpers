@@ -5,6 +5,11 @@
 
 -------------------------
 
+## 2021-03-03
+- REL-518432 - Removed RSAPI address from the Configuration Helper. Switch current uses to use Instance Address instead.
+
+-------------------------
+
 ## 2021-03-02
 - REL-518430 - Removed RSAPI from Workspace classes and moved their main code into WorkspaceHelpers.  Updated tests as well to account for this.
 
