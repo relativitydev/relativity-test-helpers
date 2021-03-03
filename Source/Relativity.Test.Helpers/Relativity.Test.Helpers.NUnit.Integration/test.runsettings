@@ -13,7 +13,6 @@
 		<Parameter name="TestingServiceRapPath" value="C:\Users\user.name\Downloads" />
 		<Parameter name="UploadTestingServiceRap" value="MyApp.rap" />
 		<Parameter name="EmailTo" value="your.email.account@relativity.com" />
-		<Parameter name="RSAPIServerAddress" value="172.99.99.99" />
 		<Parameter name="RESTServerAddress" value="172.99.99.99" />
 		<Parameter name="ServerBindingType" value="http" />
 		<Parameter name="RelativityInstanceAddress" value="172.99.99.99" />

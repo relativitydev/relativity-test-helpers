@@ -36,11 +36,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			get { return _settings.WorkspaceId; }
 		}
 
-		public static string RSAPI_SERVER_ADDRESS
-		{
-			get { return _settings.RsapiServerAddress; }
-		}
-
 		public static string REST_SERVER_ADDRESS
 		{
 			get { return _settings.RestServerAddress; }
