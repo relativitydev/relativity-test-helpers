@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using System;
+using System.Net.Http;
+using System.Text;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 
 namespace Relativity.Test.Helpers
 {
-	public class HttpRequestHelper: IHttpRequestHelper
+	public class HttpRequestHelper : IHttpRequestHelper
 	{
 		public string SendPostRequest(BaseRequestModel baseRequestModel, string routeName)
 		{
@@ -29,7 +26,7 @@ namespace Relativity.Test.Helpers
 				var jsonRequest = JsonConvert.SerializeObject(baseRequestModel);
 				var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-				response = httpClient.PostAsync(restAddress, content).Result;
+				response = httpClient.PostAsync(restAddress, content).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (!response.IsSuccessStatusCode)
@@ -37,7 +34,7 @@ namespace Relativity.Test.Helpers
 				throw new TestHelpersException($"Failed to hit endpoint {routeName}.");
 			}
 
-			var responseString = response.Content.ReadAsStringAsync().Result;
+			var responseString = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			return responseString;
 		}
 	}

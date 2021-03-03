@@ -46,7 +46,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			_serviceFactory = GetServiceFactory();
 
 			//Create workspace
-			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			//Query for field ID to be used in test
 			_testFieldId = CreateTestField(_serviceFactory, _testFieldName, _workspaceId);

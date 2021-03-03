@@ -31,10 +31,10 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			_workspaceName = $"IntTest_{Guid.NewGuid()}";
 			_servicesManager = testHelper.GetServicesManager();
-			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			_keplerHelper = new KeplerHelper();
-			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
 			if (useDbContext)
 			{

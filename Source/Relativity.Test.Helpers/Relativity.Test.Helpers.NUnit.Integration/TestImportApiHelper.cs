@@ -51,7 +51,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			// Act
 			try
 			{
-				workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(Sut.GetServicesManager(), sampleWorkspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
+				workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(Sut.GetServicesManager(), sampleWorkspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 				Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(workspaceId, numberOfDocumentsToCreate, folderName, nativeFilePath);
 

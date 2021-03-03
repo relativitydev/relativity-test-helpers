@@ -36,7 +36,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 		[Test]
 		public void CreateWorkspaceTest()
 		{
-			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 			Assert.IsNotNull(_workspaceId);
 		}
 

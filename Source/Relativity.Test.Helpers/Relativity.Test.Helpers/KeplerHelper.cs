@@ -171,7 +171,7 @@ namespace Relativity.Test.Helpers
 					applicationName: Constants.Kepler.KeplerTestRap.KEPLER_TEST_APP_NAME,
 					fileStream: fileStream,
 					workspaceId: -1,
-					unlockApps: true).Result;
+					unlockApps: true).ConfigureAwait(false).GetAwaiter().GetResult();
 
 				return keplerTestRapArtifactId;
 			}

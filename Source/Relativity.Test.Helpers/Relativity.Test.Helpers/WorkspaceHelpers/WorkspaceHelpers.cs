@@ -40,7 +40,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 							new FieldRef { Name = "Name" }
 						},
 					};
-					QueryResult result = objectManager.QueryAsync(-1, queryRequest, 1, 10).Result;
+					QueryResult result = objectManager.QueryAsync(-1, queryRequest, 1, 10).ConfigureAwait(false).GetAwaiter().GetResult();
 
 					return result.Objects.First().FieldValues.Find(x => x.Field.Name == "Name").Value.ToString();
 				}
