@@ -34,7 +34,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 			if (_keplerCompatible == null)
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (!_keplerCompatible.Value) return GetFolderNameWithDbContext(folderArtifactId, workspaceDbContext);
@@ -55,7 +55,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					string queryString = queryCondition.ToQueryString();
 					query.Condition = queryString;
 
-					FolderResultSet result = folderManager.QueryAsync(workspaceID, query, length).Result;
+					FolderResultSet result = folderManager.QueryAsync(workspaceID, query, length).ConfigureAwait(false).GetAwaiter().GetResult();
 
 					if (!result.Success)
 					{
@@ -86,7 +86,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				int folderId;
 				using (IFolderManager folderManager = svcMgr.GetProxy<IFolderManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
 				{
-					folderId = folderManager.CreateSingleAsync(workspaceId, folder).Result;
+					folderId = folderManager.CreateSingleAsync(workspaceId, folder).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
 
 				return folderId;

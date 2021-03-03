@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
-using Relativity.Services.FieldManager;
 using Relativity.Services.Interfaces.Field.Models;
 using Relativity.Services.Interfaces.Shared.Models;
-using Relativity.Services.Objects;
-using Relativity.Services.Objects.DataContracts;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.WorkspaceHelpers;
+using System;
+using System.Collections.Generic;
 using FieldType = Relativity.Services.Interfaces.Field.Models.FieldType;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
@@ -54,11 +46,11 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			_serviceFactory = GetServiceFactory();
 
 			//Create workspace
-			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager, SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).ConfigureAwait(false).GetAwaiter().GetResult();
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			//Query for field ID to be used in test
 			_testFieldId = CreateTestField(_serviceFactory, _testFieldName, _workspaceId);
-			
+
 			_keplerHelper = new KeplerHelper();
 			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
@@ -75,7 +67,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			DeleteTestField(_serviceFactory, _testFieldId, _workspaceId);
 
 			//Delete workspace
-			DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceId);
 
 			_servicesManager = null;
 			_dbContext = null;

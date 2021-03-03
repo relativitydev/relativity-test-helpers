@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
-using Relativity.Services.Group;
+﻿using Relativity.Services.Group;
 using Relativity.Services.Interfaces.Shared;
 using Relativity.Services.Interfaces.Shared.Models;
 using Relativity.Services.Objects;
 using Relativity.Services.Objects.DataContracts;
 using Relativity.Services.Permission;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using QueryResult = Relativity.Services.Objects.DataContracts.QueryResult;
 
 namespace Relativity.Test.Helpers.GroupHelpers
@@ -90,7 +87,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 		{
 			bool success = false;
 
-			GroupSelector groupSelector = permissionManager.GetWorkspaceGroupSelectorAsync(eddsWorkspaceArtifactID).Result;
+			GroupSelector groupSelector = permissionManager.GetWorkspaceGroupSelectorAsync(eddsWorkspaceArtifactID).ConfigureAwait(false).GetAwaiter().GetResult();
 			GroupRef groupRef = groupSelector.DisabledGroups.FirstOrDefault(x => x.Name == group.Name);
 			if (groupRef != null)
 			{
@@ -109,7 +106,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 		{
 			bool success = false;
 
-			GroupSelector groupSelector = permissionManager.GetWorkspaceGroupSelectorAsync(eddsWorkspaceArtifactID).Result;
+			GroupSelector groupSelector = permissionManager.GetWorkspaceGroupSelectorAsync(eddsWorkspaceArtifactID).ConfigureAwait(false).GetAwaiter().GetResult();
 			GroupRef groupRef = groupSelector.EnabledGroups.FirstOrDefault(x => x.Name == group.Name);
 			if (groupRef != null)
 			{
