@@ -34,8 +34,8 @@
     <Reference Include="Relativity.API, Version=15.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Relativity.API.15.0.0\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Kepler, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Relativity.Kepler.2.3.2\lib\net462\Relativity.Kepler.dll</HintPath>
+    <Reference Include="Relativity.Kepler, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Relativity.Kepler.2.10.2\lib\net462\Relativity.Kepler.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Logging, Version=2019.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Relativity.Logging.2019.5.1\lib\net462\Relativity.Logging.dll</HintPath>
