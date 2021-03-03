@@ -17,7 +17,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 	{
 		private IHelper _testHelper;
 		private IServicesMgr _servicesManager;
-		private IDBContext _dbContext;
 
 		private int _workspaceId;
 		private readonly string _workspaceName = $"IntTest_{Guid.NewGuid()}";
@@ -25,9 +24,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private const string _testFieldName = "IntegrationTestFieldName";
 		private int _testFieldId;
 		private int _testFieldCount = 1;
-
-		private KeplerHelper _keplerHelper;
-		private bool useDbContext;
 
 		private Services.ServiceProxy.ServiceFactory _serviceFactory;
 
@@ -50,14 +46,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			//Query for field ID to be used in test
 			_testFieldId = CreateTestField(_serviceFactory, _testFieldName, _workspaceId);
-
-			_keplerHelper = new KeplerHelper();
-			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
-			if (useDbContext)
-			{
-				_dbContext = _testHelper.GetDBContext(_workspaceId);
-			}
 		}
 
 		[OneTimeTearDown]
@@ -70,7 +58,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceId);
 
 			_servicesManager = null;
-			_dbContext = null;
 			_testHelper = null;
 			_serviceFactory = null;
 		}
@@ -80,14 +67,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		{
 			//ACT
 			int fieldArtifactId;
-			if (useDbContext)
-			{
-				fieldArtifactId = FieldHelper.GetFieldArtifactID(_testFieldName, _dbContext);
-			}
-			else
-			{
-				fieldArtifactId = FieldHelper.GetFieldArtifactID(_testFieldName, _workspaceId, _keplerHelper);
-			}
+			fieldArtifactId = FieldHelper.GetFieldArtifactID(_servicesManager, _testFieldName, _workspaceId);
 
 			//ASSERT
 			Assert.AreEqual(fieldArtifactId, _testFieldId);
@@ -100,15 +80,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidFieldName = "";
 
 			//ASSERT
-			if (useDbContext)
-			{
-				Assert.Throws<ArgumentNullException>(() => FieldHelper.GetFieldArtifactID(invalidFieldName, _dbContext));
-			}
-			else
-			{
-				int fieldArtifactId = FieldHelper.GetFieldArtifactID(invalidFieldName, _workspaceId, _keplerHelper);
-				Assert.AreEqual(0, fieldArtifactId);
-			}
+			Assert.Throws<ArgumentNullException>(() => FieldHelper.GetFieldArtifactID(_servicesManager, invalidFieldName, _workspaceId));
 		}
 
 		[Test]
@@ -116,14 +88,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		{
 			//ACT
 			int fieldCount;
-			if (useDbContext)
-			{
-				fieldCount = FieldHelper.GetFieldCount(_dbContext, _testFieldId);
-			}
-			else
-			{
-				fieldCount = FieldHelper.GetFieldCount(_testFieldId, _workspaceId, _keplerHelper);
-			}
+			fieldCount = FieldHelper.GetFieldCount(_servicesManager, _testFieldId, _workspaceId);
 
 			//ASSERT
 			Assert.AreEqual(fieldCount, _testFieldCount);
@@ -136,15 +101,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidfieldArtifactId = -1;
 
 			//ASSERT
-			if (useDbContext)
-			{
-				Assert.Throws<ArgumentOutOfRangeException>(() => FieldHelper.GetFieldCount(_dbContext, invalidfieldArtifactId));
-			}
-			else
-			{
-				int fieldCount = FieldHelper.GetFieldCount(invalidfieldArtifactId, _workspaceId, _keplerHelper);
-				Assert.AreEqual(0, fieldCount);
-			}
+			Assert.Throws<ArgumentOutOfRangeException>(() => FieldHelper.GetFieldCount(_servicesManager, invalidfieldArtifactId, _workspaceId));
 		}
 
 		[Test]

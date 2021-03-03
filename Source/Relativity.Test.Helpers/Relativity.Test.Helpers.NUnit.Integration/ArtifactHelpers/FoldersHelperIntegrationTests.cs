@@ -15,9 +15,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private int _workspaceId;
 		private IServicesMgr _servicesManager;
 		private string _workspaceName;
-		private IDBContext _dbContext;
-		private KeplerHelper _keplerHelper;
-		private bool useDbContext;
 
 		[OneTimeSetUp]
 		public void SetUp()
@@ -32,14 +29,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			_workspaceName = $"IntTest_{Guid.NewGuid()}";
 			_servicesManager = testHelper.GetServicesManager();
 			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
-
-			_keplerHelper = new KeplerHelper();
-			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
-			if (useDbContext)
-			{
-				_dbContext = testHelper.GetDBContext(_workspaceId);
-			}
 		}
 
 		[OneTimeTearDown]
@@ -50,7 +39,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			testHelper = null;
 			_servicesManager = null;
-			_dbContext = null;
 		}
 
 		[Test]
@@ -62,14 +50,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			// Act
 			string folderName = "";
-			if (useDbContext)
-			{
-				folderName = FoldersHelper.GetFolderName(rootFolderArtifactId, _dbContext);
-			}
-			else
-			{
-				folderName = FoldersHelper.GetFolderName(rootFolderArtifactId, _workspaceId, _keplerHelper);
-			}
+			folderName = FoldersHelper.GetFolderName(_servicesManager, rootFolderArtifactId, _workspaceId);
 
 			// Assert
 			Assert.AreEqual(_workspaceName, folderName);

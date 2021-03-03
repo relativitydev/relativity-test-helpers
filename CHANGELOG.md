@@ -7,6 +7,7 @@
 
 ## 2021-03-03
 - REL-518432 - Removed RSAPI address from the Configuration Helper. Switch current uses to use Instance Address instead.
+- REL-530844 - Removed DbContext usage from methods in ArtifactHelpers folder.
 
 -------------------------
 
