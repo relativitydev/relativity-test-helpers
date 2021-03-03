@@ -32,7 +32,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 		private const ExecutionIdentity EXECUTION_IDENTITY = ExecutionIdentity.CurrentUser;
 		private IDBContext dbContext;
-		private IServicesMgr servicesManager;
+		private IServicesMgr _servicesMgr;
 		private IDBContext _eddsDbContext;
 		private Int32 _numberOfDocuments = 5;
 		private string _foldername = "Test Folder";
@@ -55,7 +55,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		{
 			//Setup for testing
 			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			servicesManager = helper.GetServicesManager();
+			_servicesMgr = helper.GetServicesManager();
 			_eddsDbContext = helper.GetDBContext(-1);
 
 			// implement_IHelper
@@ -73,7 +73,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 
 			//Create workspace
-			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(helper.GetServicesManager(), _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesMgr, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 			dbContext = helper.GetDBContext(_workspaceId);
 			_client.APIOptions.WorkspaceID = _workspaceId;
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -114,7 +114,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace
-			WorkspaceHelpers.WorkspaceHelpers.Delete(servicesManager, _workspaceId);
+			WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesMgr, _workspaceId);
 
 			//Delete User
 			UserHelpers.DeleteUser.Delete_User(_client, _userArtifactId);
