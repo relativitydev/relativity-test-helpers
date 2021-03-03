@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using Relativity.API;
+using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
-using Relativity.Test.Helpers.SharedTestHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
@@ -25,7 +25,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			SuT = new TestHelper(configDictionary);
 			_keplerHelper = new KeplerHelper();
 
-			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
 		}
 

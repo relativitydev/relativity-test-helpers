@@ -1,23 +1,13 @@
-﻿using Relativity.API;
+﻿using DbContextHelper;
+using Newtonsoft.Json;
+using Relativity.API;
 using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Text;
-using kCura.Relativity.Client;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Relativity.Services.ServiceProxy;
-using Relativity.Test.Helpers.Exceptions;
 using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
-using TestHelpersKepler.Services;
-using DbContextHelper;
 
 
 namespace Relativity.Test.Helpers
@@ -96,10 +86,10 @@ namespace Relativity.Test.Helpers
 			var keplerHelper = new KeplerHelper();
 
 			if (keplerHelper.ForceDbContext()) return GetGuidFromDbContext(workspaceID, artifactID);
-			
+
 			if (_keplerCompatible == null)
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (!_keplerCompatible.Value) return GetGuidFromDbContext(workspaceID, artifactID);

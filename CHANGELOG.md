@@ -5,6 +5,11 @@
 
 -------------------------
 
+## 2021-03-02
+- REL-518430 - Removed RSAPI from Workspace classes and moved their main code into WorkspaceHelpers.  Updated tests as well to account for this.
+
+-------------------------
+
 ## 2021-03-01
 - REL-518428 - Removed RSAPI from Group class and renamed to GroupHelper class. Also updated integration tests.
 

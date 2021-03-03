@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 {
@@ -46,7 +45,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 
 			Sut = new ApplicationInstallHelper(applicationInstallManager, libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 
-			_workspaceId = CreateWorkspace.Create(rsapiClient, "Test-" + Guid.NewGuid().ToString(), ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME);
+			string workspaceName = "Test-" + Guid.NewGuid().ToString();
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_testHelper.GetServicesManager(), workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			// Delete just in case it already exists
 			Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName).Wait();
@@ -55,7 +55,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 		[TearDown]
 		public void TearDown()
 		{
-			DeleteWorkspace.Delete(_testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System), _workspaceId);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_testHelper.GetServicesManager(), _workspaceId);
 			Sut.DeleteApplicationFromLibraryIfItExistsAsync(_applicationName).Wait();
 
 			_fileStream.Close();
