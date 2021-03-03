@@ -11,11 +11,11 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 {
 	public class ClientHelper
 	{
-		public static int CreateClient(Services.ServiceProxy.ServiceFactory serviceFactory, string name)
+		public static int CreateClient(IServicesMgr servicesMgr, string name)
 		{
 			try
 			{
-				using (IClientManager proxy = serviceFactory.CreateProxy<IClientManager>())
+				using (IClientManager proxy = servicesMgr.CreateProxy<IClientManager>(ExecutionIdentity.CurrentUser))
 				{
 					List<ChoiceRef> choiceRefs = proxy.GetStatusChoicesForClientAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 					ChoiceRef statusRef = choiceRefs.Find(x => x.Name == "Active");
@@ -40,11 +40,11 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public static void DeleteClient(Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
+		public static void DeleteClient(IServicesMgr servicesMgr, int artifactId)
 		{
 			try
 			{
-				using (IClientManager proxy = serviceFactory.CreateProxy<IClientManager>())
+				using (IClientManager proxy = servicesMgr.CreateProxy<IClientManager>(ExecutionIdentity.CurrentUser))
 				{
 					proxy.DeleteSingleAsync(artifactId).ConfigureAwait(false).GetAwaiter().GetResult();
 				}

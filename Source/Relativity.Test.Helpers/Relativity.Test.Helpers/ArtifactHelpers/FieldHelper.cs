@@ -151,7 +151,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#endregion
 
-		public static int CreateFieldDate(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldDate(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -176,7 +176,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateDateFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -189,7 +189,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public static int CreateFieldUser(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldUser(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -212,7 +212,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateUserFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -225,7 +225,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 			}
 		}
 
-		public static int CreateFieldFixedLengthText(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldFixedLengthText(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -253,7 +253,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateFixedLengthFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -265,7 +265,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception("Error creating field.", ex);
 			}
 		}
-		public static int CreateFieldLongText(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldLongText(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -292,7 +292,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateLongTextFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -304,7 +304,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception("Error creating field.", ex);
 			}
 		}
-		public static int CreateFieldWholeNumber(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldWholeNumber(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -327,7 +327,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateWholeNumberFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -339,7 +339,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception("Error creating field.", ex);
 			}
 		}
-		public static int CreateFieldYesNo(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldYesNo(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -364,7 +364,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateYesNoFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -376,7 +376,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception("Error creating field.", ex);
 			}
 		}
-		public static int CreateFieldSingleChoice(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldSingleChoice(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -400,7 +400,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateSingleChoiceFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -412,7 +412,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception("Error creating field.", ex);
 			}
 		}
-		public static int CreateFieldMultipleChoice(Services.ServiceProxy.ServiceFactory serviceFactory, int workspaceID)
+		public static int CreateFieldMultipleChoice(IServicesMgr servicesMgr, int workspaceID)
 		{
 			try
 			{
@@ -436,7 +436,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 					Notes = "Created by Test Helpers"
 				};
 
-				using (IFieldManager fieldManager = serviceFactory.CreateProxy<IFieldManager>())
+				using (IFieldManager fieldManager = servicesMgr.CreateProxy<IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateMultipleChoiceFieldAsync(workspaceID, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}

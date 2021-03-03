@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Relativity.API;
-using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.IO;
@@ -29,7 +28,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 		private const ExecutionIdentity EXECUTION_IDENTITY = ExecutionIdentity.CurrentUser;
 		private IDBContext dbContext;
-		private IServicesMgr servicesManager;
+		private IServicesMgr _servicesMgr;
 		private IDBContext _eddsDbContext;
 		private Int32 _numberOfDocuments = 5;
 		private string _foldername = "Test Folder";
@@ -40,7 +39,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private int _longtextartid;
 		private int _yesnoartid;
 		private int _wholeNumberArtId;
-		private Services.ServiceProxy.ServiceFactory _serviceFactory;
 
 		#endregion
 
@@ -52,17 +50,14 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		{
 			//Setup for testing
 			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			servicesManager = helper.GetServicesManager();
+			_servicesMgr = helper.GetServicesManager();
 			_eddsDbContext = helper.GetDBContext(-1);
-
-			//use helper method to instantiate a new service factory
-			_serviceFactory = GetServiceFactory();
 
 			//Create new user 
 			_userArtifactId = Relativity.Test.Helpers.UserHelpers.UserHelper.Create(helper.GetServicesManager());
 
 			//Create new group
-			Relativity.Test.Helpers.GroupHelpers.GroupHelper.CreateGroup(_serviceFactory, _groupName);
+			Relativity.Test.Helpers.GroupHelpers.GroupHelper.CreateGroup(_servicesMgr, _groupName);
 
 
 			//Create workspace
@@ -84,13 +79,13 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
-			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldFixedLengthText(_serviceFactory, _workspaceId);
+			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldFixedLengthText(_servicesMgr, _workspaceId);
 
 			//Create Long Text Field
-			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldLongText(_serviceFactory, _workspaceId);
+			_longtextartid = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldLongText(_servicesMgr, _workspaceId);
 
 			//Create Whole number field
-			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldWholeNumber(_serviceFactory, _workspaceId);
+			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldWholeNumber(_servicesMgr, _workspaceId);
 
 			_workspaceId = 1017834;
 			var DtSearchAppArtifactId = 1038135;
@@ -107,15 +102,13 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureTeardown()
 		{
 			//Delete Workspace
-			WorkspaceHelpers.WorkspaceHelpers.Delete(servicesManager, _workspaceId);
+			WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesMgr, _workspaceId);
 
 			//Delete User
-			UserHelpers.UserHelper.Delete(servicesManager, _userArtifactId);
+			UserHelpers.UserHelper.Delete(_servicesMgr, _userArtifactId);
 
 			//Delete Group
-			GroupHelpers.GroupHelper.DeleteGroup(_serviceFactory, _groupArtifactId);
-
-			_serviceFactory = null;
+			GroupHelpers.GroupHelper.DeleteGroup(_servicesMgr, _groupArtifactId);
 		}
 
 
@@ -136,26 +129,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 		#endregion
 
-		//helper method to create a service factory
-		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
-		{
-			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
-			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
-
-			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
-				username: ConfigurationHelper.ADMIN_USERNAME,
-				password: ConfigurationHelper.DEFAULT_PASSWORD);
-
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
-				relativityServicesUri: relativityServicesUri,
-				relativityRestUri: relativityRestUri,
-				credentials: usernamePasswordCredentials);
-
-			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
-				settings: serviceFactorySettings);
-
-			return serviceFactory;
-		}
 	}
 
 }

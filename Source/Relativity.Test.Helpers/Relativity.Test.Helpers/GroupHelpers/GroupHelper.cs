@@ -46,13 +46,13 @@ namespace Relativity.Test.Helpers.GroupHelpers
 			}
 		}
 
-		public static int CreateGroup(Services.ServiceProxy.ServiceFactory serviceFactory, String name)
+		public static int CreateGroup(IServicesMgr servicesMgr, String name)
 		{
 			int groupArtifactId;
 			try
 			{
 				int clientId;
-				using (IObjectManager objectManager = serviceFactory.CreateProxy<IObjectManager>())
+				using (IObjectManager objectManager = servicesMgr.CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
 				{
 					QueryRequest clientQueryRequest = new QueryRequest
 					{
@@ -70,8 +70,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 					clientId = queryResult.Objects.First().ArtifactID;
 				}
 
-				using (Services.Interfaces.Group.IGroupManager groupManager =
-					serviceFactory.CreateProxy<Services.Interfaces.Group.IGroupManager>())
+				using (Services.Interfaces.Group.IGroupManager groupManager = servicesMgr.CreateProxy<Services.Interfaces.Group.IGroupManager>(ExecutionIdentity.CurrentUser))
 				{
 					Services.Interfaces.Group.Models.GroupRequest request = new Services.Interfaces.Group.Models.GroupRequest
 					{
@@ -97,11 +96,11 @@ namespace Relativity.Test.Helpers.GroupHelpers
 			}
 		}
 
-		public static bool DeleteGroup(Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
+		public static bool DeleteGroup(IServicesMgr servicesMgr, int artifactId)
 		{
 			try
 			{
-				using (Services.Interfaces.Group.IGroupManager groupManager = serviceFactory.CreateProxy<Services.Interfaces.Group.IGroupManager>())
+				using (Services.Interfaces.Group.IGroupManager groupManager = servicesMgr.CreateProxy<Services.Interfaces.Group.IGroupManager>(ExecutionIdentity.CurrentUser))
 				{
 					groupManager.DeleteAsync(artifactId).Wait();
 				}
