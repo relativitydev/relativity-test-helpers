@@ -1,5 +1,9 @@
-﻿using kCura.Relativity.Client;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using Relativity.Services;
+using Relativity.Services.Interfaces.UserInfo;
+using Relativity.Services.Interfaces.UserInfo.Models;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
 using Relativity.Services.Security;
 using Relativity.Services.Security.Models;
 using Relativity.Test.Helpers.Exceptions;
@@ -9,25 +13,28 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using DTOs = kCura.Relativity.Client.DTOs;
 
 namespace Relativity.Test.Helpers.Kepler
 {
 	public class OAuth2Helper : IOAuth2Helper, IDisposable
 	{
 		private readonly IOAuth2ClientManager _oAuth2ClientManager;
-		private readonly IRSAPIClient _rsapiClient;
+		private readonly IUserInfoManager _userManager;
+		private readonly IObjectManager _objectManager;
 
-		public OAuth2Helper(IOAuth2ClientManager oAuth2ClientManager, IRSAPIClient rsapiClient)
+
+		public OAuth2Helper(IOAuth2ClientManager oAuth2ClientManager, IUserInfoManager userManager, IObjectManager objectManager)
 		{
 			_oAuth2ClientManager = oAuth2ClientManager ?? throw new ArgumentNullException($"Parameter ({nameof(oAuth2ClientManager)}) cannot be null");
-			_rsapiClient = rsapiClient ?? throw new ArgumentNullException($"Parameter ({nameof(rsapiClient)}) cannot be null");
+			_userManager = userManager ?? throw new ArgumentNullException($"Parameter ({nameof(userManager)}) cannot be null");
+			_objectManager = objectManager ?? throw new ArgumentNullException($"Parameter ({nameof(objectManager)}) cannot be null");
 		}
 
 		public void Dispose()
 		{
-			_rsapiClient.Dispose();
 			_oAuth2ClientManager.Dispose();
+			_userManager.Dispose();
+			_objectManager.Dispose();
 		}
 
 		/// <summary>
@@ -40,7 +47,9 @@ namespace Relativity.Test.Helpers.Kepler
 		{
 			try
 			{
-				DTOs.User user = GetUser(username);
+				int userId = await GetUserId(username);
+				UserResponse user = await GetUserInfo(userId);
+
 				Services.Security.Models.OAuth2Client oAuth2Client;
 
 				List<Services.Security.Models.OAuth2Client> oAuth = await _oAuth2ClientManager.ReadAllAsync();
@@ -178,38 +187,56 @@ namespace Relativity.Test.Helpers.Kepler
 		}
 
 		/// <summary>
-		/// Retrieves User info by email
+		/// Get User Id for an email
 		/// </summary>
 		/// <param name="email"></param>
 		/// <returns></returns>
-		private DTOs.User GetUser(string email)
+		private async Task<int> GetUserId(string email)
 		{
 			try
 			{
-				_rsapiClient.APIOptions = new APIOptions { WorkspaceID = -1 };
-
-				DTOs.User user;
-
-				Condition userQueryCondition = new TextCondition(DTOs.UserFieldNames.EmailAddress, TextConditionEnum.EqualTo, email);
-
-				DTOs.Query<DTOs.User> userQuery = new DTOs.Query<DTOs.User>(DTOs.FieldValue.AllFields, userQueryCondition, new List<Sort>());
-
-				DTOs.QueryResultSet<DTOs.User> resultSet = _rsapiClient.Repositories.User.Query(userQuery);
-
-				if (resultSet.Success && resultSet.TotalCount > 0)
+				QueryRequest queryRequest = new QueryRequest()
 				{
-					user = resultSet.Results.First().Artifact;
-				}
-				else
-				{
-					throw new TestHelpersOAuth2Exception($"Error finding user {email}: {resultSet.Message}");
-				}
+					ObjectType = new ObjectTypeRef { ArtifactTypeID = Constants.ArtifactTypeIds.User },
+					Condition = new TextCondition("EmailAddress", TextConditionEnum.EqualTo, email).ToQueryString(),
+					Fields = new List<FieldRef>()
+					{
+							new FieldRef { Name = "Name" }
+					},
+				};
+				QueryResult result = await _objectManager.QueryAsync(-1, queryRequest, 1, 10);
 
-				return user;
+				return result.Objects.First().ArtifactID;
+
 			}
 			catch (Exception ex)
 			{
-				throw new TestHelpersOAuth2Exception("Exception occurred in when attempting to retrieve a user by email", ex);
+				string errorMessage = $"Could not find User in {nameof(GetUserId)} for {nameof(email)} of {email} - {ex.Message}";
+				Console.WriteLine(errorMessage);
+				throw new TestHelpersOAuth2Exception(errorMessage);
+			}
+		}
+
+		/// <summary>
+		/// Get the overall user info object based off the user id
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		private async Task<UserResponse> GetUserInfo(int userId)
+		{
+			try
+			{
+				UserResponse result;
+
+				result = await _userManager.ReadAsync(userId);
+
+				return result;
+			}
+			catch (Exception ex)
+			{
+				string errorMessage = $"Could not find User in {nameof(GetUserInfo)} for {nameof(userId)} of {userId} - {ex.Message}";
+				Console.WriteLine(errorMessage);
+				throw new TestHelpersOAuth2Exception(errorMessage);
 			}
 		}
 

@@ -1,5 +1,4 @@
-﻿using kCura.Relativity.Client;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using Relativity.Services.Interfaces.LibraryApplication;
@@ -31,7 +30,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		private const int WorkspaceApplicationId = 222;
 		private Mock<IApplicationInstallManager> _mockApplicationInstallManager;
 		private Mock<ILibraryApplicationManager> _mockLibraryApplicationManager;
-		private Mock<IRSAPIClient> _mockRsapiClient;
 		private Mock<HttpMessageHandler> _mockHttpMessageHandler;
 
 
@@ -55,7 +53,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		{
 			// Arrange
 			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
-			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
@@ -76,7 +73,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		{
 			// Arrange
 			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
-			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
@@ -100,7 +96,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		{
 			// Arrange
 			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
-			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 
@@ -122,7 +117,6 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		{
 			// Arrange
 			_mockApplicationInstallManager = MockApplicationInstallManagerHelper.GetMockApplicationInstallManager(WorkspaceApplicationId, isApplicationAlreadyInstalled);
-			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForInstall(isApplicationAlreadyInstalled, ApplicationName);
 			_mockLibraryApplicationManager = MockLibraryApplicationManagerHelper.GetMockLibraryApplicationManager(ApplicationName, ApplicationGuid, LibraryApplicationId, isApplicationAlreadyInstalled);
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForRelativityVersion(relativityVersion);
 

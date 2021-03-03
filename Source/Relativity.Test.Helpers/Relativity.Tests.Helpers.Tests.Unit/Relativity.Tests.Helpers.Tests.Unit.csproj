@@ -155,18 +155,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\ApplicationHelpersTest.cs" />
     <Compile Include="ArtifactHelpers\DocumentHelperTests.cs" />
     <Compile Include="ArtifactHelpers\FieldsHelperTests.cs" />
     <Compile Include="ArtifactHelpers\FoldersHelperTests.cs" />
     <Compile Include="Kepler\ApplicationInstallHelperUnitTests.cs" />
     <Compile Include="Kepler\OAuth2HelperUnitTests.cs" />
     <Compile Include="ImportAPI\ImportAPIHelperTest.cs" />
+    <Compile Include="MockHelpers\MockObjectManagerHelper.cs" />
+    <Compile Include="MockHelpers\MockUserManagerHelper.cs" />
     <Compile Include="MockHelpers\MockApplicationInstallManagerHelper.cs" />
     <Compile Include="MockHelpers\MockHttpMessageHandlerHelper.cs" />
     <Compile Include="MockHelpers\MockLibraryApplicationManagerHelper.cs" />
     <Compile Include="MockHelpers\MockOAuth2ClientManagerHelper.cs" />
-    <Compile Include="MockHelpers\MockRsapiClientHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetryHelper\RetryLogicHelperUnitTests.cs" />
   </ItemGroup>
@@ -186,7 +186,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LICENSE.txt" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="oi\unmanaged\oilink.exe" />
     <Content Include="oi\unmanaged\oilink.jar" />
     <Content Include="oi\unmanaged\sccca-R1.dll" />

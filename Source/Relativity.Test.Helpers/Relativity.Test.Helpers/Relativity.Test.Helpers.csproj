@@ -181,8 +181,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Application\ApplicationHelpers.cs" />
-    <Compile Include="Application\ApplicationInstallException.cs" />
     <Compile Include="ArtifactHelpers\ChoiceHelper.cs" />
     <Compile Include="ArtifactHelpers\ClientHelper.cs" />
     <Compile Include="ArtifactHelpers\Document.cs" />
