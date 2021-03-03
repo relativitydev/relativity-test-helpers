@@ -5,6 +5,7 @@ using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Relativity.Services.Interfaces.Field.Models;
@@ -32,6 +33,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private IServicesMgr _servicesMgr;
 		private int _groupId;
 		private Services.ServiceProxy.ServiceFactory _serviceFactory;
+		private IHelper _tesHelper;
 
 		#endregion
 
@@ -41,6 +43,14 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		[OneTimeSetUp]
 		public void Execute_TestFixtureSetup()
 		{
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+
+			_tesHelper = new TestHelper(configDictionary);
+
 			//Setup for testing
 			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			_servicesMgr = helper.GetServicesManager();
@@ -92,6 +102,8 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			GroupHelpers.GroupHelper.DeleteGroup(_serviceFactory, _groupId);
 
 			_serviceFactory = null;
+
+			_tesHelper = null;
 		}
 
 
