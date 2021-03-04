@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Test.Helpers.ArtifactHelpers;
-using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 

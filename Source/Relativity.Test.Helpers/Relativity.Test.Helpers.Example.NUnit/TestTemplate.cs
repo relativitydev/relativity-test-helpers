@@ -86,7 +86,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			_workspaceId = 1017834;
 			var DtSearchAppArtifactId = 1038135;
 
-			var guid = helper.GetGuid(_workspaceId, DtSearchAppArtifactId);
+			var guid = helper.GetGuid(_workspaceId, DtSearchAppArtifactId, Constants.ArtifactTypeIds.Search);
 		}
 
 		#endregion

@@ -1,4 +1,4 @@
-# Changelog for Relatiity Test Helpers
+# Changelog for Relativity Test Helpers
 
 - This file is used to list changes made in the relativity-test-helpers repo.
 - **Place Newer updates on the top**
@@ -9,6 +9,7 @@
 - REL-518429 - Removed RSAPI from User Helper classes and moved their main code into UserHelper.  Updated tests as well to account for this.
     - Converged all usage of ServiceFactory & IServicesMgr to IServicesMgr
     - Removed various usages of RSAPI across many projects
+    - Added overloaded function in TestHelpers for GetGuid to utilize ObjectManager to get Guids
 
 -------------------------
 

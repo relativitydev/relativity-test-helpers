@@ -13,13 +13,21 @@
 			public const int Choice = 7;
 			public const int Code = 7;
 			public const int Workspace = 8;
+			public const int Folder = 9;
 			public const int Document = 10;
 			public const int Field = 14;
+			public const int Search = 15;
 			public const int Layout = 16;
+			public const int Production = 17;
 			public const int Error = 18;
+			public const int Report = 19;
 			public const int Agent = 20;
+			public const int MarkupSet = 22;
 			public const int Tab = 23;
+			public const int BatchSet = 24;
 			public const int ObjectType = 25;
+			public const int SearchFolder = 26;
+			public const int Batch = 27;
 			public const int RelativityScript = 28;
 			public const int SearchIndex = 29;
 			public const int ResourceFile = 30;
@@ -32,6 +40,8 @@
 			public const int ApplicationInstall = 37;
 			public const int ApplicationInstallResult = 38;
 			public const int License = 39;
+			public const int InstallEventHandler = 40;
+			public const int MassOperation = 41;
 			public const int InstanceSetting = 42;
 			public const int Credential = 43;
 		}

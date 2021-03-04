@@ -1,20 +1,12 @@
-﻿using Newtonsoft.Json;
-using Relativity.API;
-using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
-using Relativity.Test.Helpers.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using kCura.Vendor.Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-using Relativity.Services.FieldManager;
-using Relativity.Services.Interfaces.Document;
+﻿using Relativity.API;
 using Relativity.Services.Objects;
 using Relativity.Services.Objects.DataContracts;
+using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
-using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
