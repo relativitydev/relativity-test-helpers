@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Relativity.API, Version=15.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Relativity.API.15.0.0\lib\net462\Relativity.API.dll</HintPath>
+      <HintPath>..\..\packages\Relativity.Api.15.0.0\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Kepler, Version=2.10.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Relativity.Kepler.2.10.2\lib\net462\Relativity.Kepler.dll</HintPath>
