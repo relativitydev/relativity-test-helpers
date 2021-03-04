@@ -40,11 +40,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			get { return int.Parse(_appSettings["WorkspaceID"]); }
 		}
 
-		public override string RsapiServerAddress
-		{
-			get { return _appSettings["RSAPIServerAddress"]; }
-		}
-
 		public override string RestServerAddress
 		{
 			get { return _appSettings["RESTServerAddress"]; }

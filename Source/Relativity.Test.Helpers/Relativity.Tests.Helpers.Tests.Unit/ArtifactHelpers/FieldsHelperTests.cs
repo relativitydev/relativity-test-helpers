@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Relativity.Test.Helpers;
-using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
-using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.ArtifactHelpers
 {

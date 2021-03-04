@@ -1,5 +1,4 @@
-﻿using kCura.Relativity.Client;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Test.Helpers.Kepler;
@@ -41,7 +40,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 
 			IApplicationInstallManager applicationInstallManager = _testHelper.GetServicesManager().CreateProxy<IApplicationInstallManager>(ExecutionIdentity.System);
 			ILibraryApplicationManager libraryApplicationManager = _testHelper.GetServicesManager().CreateProxy<ILibraryApplicationManager>(ExecutionIdentity.System);
-			IRSAPIClient rsapiClient = _testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System);
 
 			Sut = new ApplicationInstallHelper(applicationInstallManager, libraryApplicationManager, ConfigurationHelper.SERVER_BINDING_TYPE, ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS, ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 

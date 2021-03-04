@@ -5,10 +5,15 @@
 
 -------------------------
 
+## 2021-03-04
+- REL-518429 - Removed RSAPI from User Helper classes and moved their main code into UserHelper.  Updated tests as well to account for this.
+    - Converged all usage of ServiceFactory & IServicesMgr to IServicesMgr
+    - Removed various usages of RSAPI across many projects
+
+-------------------------
+
 ## 2021-03-03
 - REL-518432 - Removed RSAPI address from the Configuration Helper. Switch current uses to use Instance Address instead.
-- REL-518429 - Removed RSAPI from User Helper classes and moved their main code into UserHelper.  Updated tests as well to account for this.
-- Converged all usage of ServiceFactory & IServicesMgr to IServicesMgr
 
 -------------------------
 

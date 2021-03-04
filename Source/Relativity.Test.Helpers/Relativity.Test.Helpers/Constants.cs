@@ -13,6 +13,7 @@
 			public const int Choice = 7;
 			public const int Code = 7;
 			public const int Workspace = 8;
+			public const int Document = 10;
 			public const int Field = 14;
 			public const int Layout = 16;
 			public const int Error = 18;

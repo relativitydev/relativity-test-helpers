@@ -55,9 +55,6 @@
     <Reference Include="FreeImageNET, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.4.0\lib\net462\FreeImageNET.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.Client, Version=11.2.256.10, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.11.2.256.10\lib\net462\kCura.Relativity.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Moq, Version=4.7.142.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.7.142\lib\net45\Moq.dll</HintPath>
     </Reference>

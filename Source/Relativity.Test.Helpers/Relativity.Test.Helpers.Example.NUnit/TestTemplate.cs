@@ -13,8 +13,8 @@ namespace Relativity.Test.Helpers.Example.NUnit
 	/// 
 	/// Relativity Integration Test Helpers to assist you with writing good Integration Tests for your application. You can use this framework to test event handlers, agents and any workflow that combines agents and frameworks.
 	/// 
-	/// Before you get Started, fill out details for the following the app.config file
-	/// "WorkspaceID", "RSAPIServerAddress", "RESTServerAddress",	"AdminUsername","AdminPassword", "SQLServerAddress" ,"SQLUsername","SQLPassword" "TestWorkspaceName"
+	/// Before you get Started, fill out details for the following the app.config file or runsettings file
+	/// "WorkspaceID", "RelativityInstanceAddress", "RESTServerAddress",	"AdminUsername","AdminPassword", "SQLServerAddress" ,"SQLUsername","SQLPassword" "TestWorkspaceName"
 	/// 
 	/// </summary>
 

@@ -1,11 +1,13 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
+﻿using kCura.Relativity.Client.DTOs;
 using NUnit.Framework;
 using Relativity.API;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
@@ -60,11 +62,18 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 					Fields = new List<FieldValue> { new FieldValue("Control Number") }
 				};
 
-				using (IRSAPIClient rsapiClient = Sut.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				using (IObjectManager objectManager = Sut.GetServicesManager().CreateProxy<IObjectManager>(ExecutionIdentity.System))
 				{
-					rsapiClient.APIOptions.WorkspaceID = workspaceId;
-					QueryResultSet<Document> result = rsapiClient.Repositories.Document.Query(query, 0);
-					numberOfDocumentsCreated = result.TotalCount;
+					QueryRequest queryRequest = new QueryRequest()
+					{
+						ObjectType = new ObjectTypeRef { ArtifactTypeID = Constants.ArtifactTypeIds.Document },
+						Fields = new List<FieldRef>()
+						{
+							new FieldRef { Name = "Name" }
+						},
+					};
+					QueryResult result = objectManager.QueryAsync(workspaceId, queryRequest, 1, 1000).ConfigureAwait(false).GetAwaiter().GetResult();
+					numberOfDocumentsCreated = result.Objects.Count;
 				}
 
 				Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(Sut.GetServicesManager(), workspaceId);
