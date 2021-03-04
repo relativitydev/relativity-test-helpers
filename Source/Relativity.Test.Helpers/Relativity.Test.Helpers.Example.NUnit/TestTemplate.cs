@@ -21,7 +21,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 	/// 
 	/// </summary>
 
-	[TestFixture, global::NUnit.Framework.Description("Fixture description here")]
+	[TestFixture, Description("Fixture description here")]
 	public class TestTemplate
 	{
 
@@ -126,7 +126,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 		#region region Golden Flow
 
-		[Test, global::NUnit.Framework.Description("Test description here")]
+		[Test, Description("Test description here")]
 		public void Integration_Test_Golden_Flow_Valid()
 		{
 			//Arrange
