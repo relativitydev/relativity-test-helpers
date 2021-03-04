@@ -26,21 +26,22 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#region Public Methods
 
-		public static string GetFolderName(int folderArtifactId, IDBContext workspaceDbContext)
+		public static string GetFolderName(IServicesMgr svcMgr, int folderArtifactId, int workspaceId)
 		{
-			var keplerHelper = new KeplerHelper();
-
-			if (keplerHelper.ForceDbContext()) return GetFolderNameWithDbContext(folderArtifactId, workspaceDbContext);
-
-			if (_keplerCompatible == null)
+			Query query = new Services.Query();
+			query.Condition = $"'ArtifactID' == {folderArtifactId}";
+			using (IFolderManager folderManager =
+				svcMgr.GetProxy<IFolderManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				FolderResultSet result = folderManager.QueryAsync(workspaceId, query, 100).ConfigureAwait(false).GetAwaiter().GetResult();
+				if (!result.Success)
+				{
+					throw new Exception("Error Querying for Folder");
+				}
+
+				string folderName = result.Results.First().Artifact.Name;
+				return folderName;
 			}
-
-			if (!_keplerCompatible.Value) return GetFolderNameWithDbContext(folderArtifactId, workspaceDbContext);
-
-			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
-			return GetFolderName(folderArtifactId, workspaceId, keplerHelper);
 		}
 
 		public static int GetRootFolderArtifactID(int workspaceID, IServicesMgr svgMgr, string userName, string password)
@@ -100,45 +101,5 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		#endregion
 
-
-		#region DbContext Methods
-		private static String GetFolderNameWithDbContext(Int32 folderArtifactID, IDBContext workspaceDbContext)
-		{
-			string sql = String.Format("select Name from eddsdbo.folder where ArtifactID = {0}", folderArtifactID);
-
-			string folderName = workspaceDbContext.ExecuteSqlStatementAsScalar(sql).ToString();
-
-			return folderName;
-		}
-		#endregion
-
-		#region Kepler Methods
-		public static string GetFolderName(int folderArtifactId, int workspaceId, KeplerHelper keplerHelper)
-		{
-			try
-			{
-				keplerHelper.UploadKeplerFiles();
-
-				const string routeName = Constants.Kepler.RouteNames.GetFolderNameAsync;
-
-				GetFolderNameRequestModel requestModel = new GetFolderNameRequestModel
-				{
-					FolderArtifactId = folderArtifactId,
-					WorkspaceId = workspaceId
-				};
-
-				var httpRequestHelper = new HttpRequestHelper();
-				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
-				GetFolderNameResponseModel responseModel = JsonConvert.DeserializeObject<GetFolderNameResponseModel>(responseString);
-
-				return responseModel.FolderName;
-			}
-			catch (Exception exception)
-			{
-				throw new TestHelpersException($"Error Getting Folder Name [{nameof(folderArtifactId)}:{folderArtifactId}]", exception);
-			}
-		}
-
-		#endregion
 	}
 }
