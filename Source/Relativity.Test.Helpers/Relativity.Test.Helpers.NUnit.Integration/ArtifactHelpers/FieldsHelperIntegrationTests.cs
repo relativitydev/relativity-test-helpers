@@ -11,286 +11,244 @@ using FieldType = Relativity.Services.Interfaces.Field.Models.FieldType;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
-    [TestFixture]
-    public class FieldsHelperIntegrationTests
-    {
-        private IHelper _testHelper;
-        private IServicesMgr _servicesMgr;
-        private IDBContext _dbContext;
+	[TestFixture]
+	public class FieldsHelperIntegrationTests
+	{
+		private IHelper _testHelper;
+		private IServicesMgr _servicesMgr;
 
-        private int _workspaceId;
-        private readonly string _workspaceName = $"IntTest_{Guid.NewGuid()}";
+		private int _workspaceId;
+		private readonly string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 
-        private const string _testFieldName = "IntegrationTestFieldName";
-        private int _testFieldId;
-        private int _testFieldCount = 1;
+		private const string _testFieldName = "IntegrationTestFieldName";
+		private int _testFieldId;
+		private int _testFieldCount = 1;
 
-        private KeplerHelper _keplerHelper;
-        private bool useDbContext;
+		[OneTimeSetUp]
+		public void SetUp()
+		{
+			//ARRANGE
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			_testHelper = new TestHelper(configDictionary);
+			_servicesMgr = _testHelper.GetServicesManager();
 
-        [OneTimeSetUp]
-        public void SetUp()
-        {
-            //ARRANGE
-            Dictionary<string, string> configDictionary = new Dictionary<string, string>();
-            foreach (string testParameterName in TestContext.Parameters.Names)
-            {
-                configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
-            }
-            _testHelper = new TestHelper(configDictionary);
-            _servicesMgr = _testHelper.GetServicesManager();
+			//Create workspace
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesMgr, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
-            //Create workspace
-            _workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesMgr, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
+			//Query for field ID to be used in test
+			_testFieldId = CreateTestField(_servicesMgr, _testFieldName, _workspaceId);
+		}
 
-            //Query for field ID to be used in test
-            _testFieldId = CreateTestField(_servicesMgr, _testFieldName, _workspaceId);
+		[OneTimeTearDown]
+		public void Teardown()
+		{
+			//delete test field
+			DeleteTestField(_servicesMgr, _testFieldId, _workspaceId);
 
-            _keplerHelper = new KeplerHelper();
-            bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-            useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
-            if (useDbContext)
-            {
-                _dbContext = _testHelper.GetDBContext(_workspaceId);
-            }
-        }
+			//Delete workspace
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesMgr, _workspaceId);
 
-        [OneTimeTearDown]
-        public void Teardown()
-        {
-            //delete test field
-            DeleteTestField(_servicesMgr, _testFieldId, _workspaceId);
+			_servicesMgr = null;
+			_testHelper = null;
+		}
 
-            //Delete workspace
-            Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesMgr, _workspaceId);
+		[Test]
+		public void GetFieldArtifactIdTest()
+		{
+			//ACT
+			int fieldArtifactId;
+			fieldArtifactId = FieldHelper.GetFieldArtifactID(_servicesMgr, _testFieldName, _workspaceId);
 
-            _servicesMgr = null;
-            _dbContext = null;
-            _testHelper = null;
-        }
+			//ASSERT
+			Assert.AreEqual(fieldArtifactId, _testFieldId);
+		}
 
-        [Test]
-        public void GetFieldArtifactIdTest()
-        {
-            //ACT
-            int fieldArtifactId;
-            if (useDbContext)
-            {
-                fieldArtifactId = FieldHelper.GetFieldArtifactID(_testFieldName, _dbContext);
-            }
-            else
-            {
-                fieldArtifactId = FieldHelper.GetFieldArtifactID(_testFieldName, _workspaceId, _keplerHelper);
-            }
+		[Test]
+		public void GetFieldArtifactIdTest_Invalid()
+		{
+			//ACT
+			var invalidFieldName = "";
 
-            //ASSERT
-            Assert.AreEqual(fieldArtifactId, _testFieldId);
-        }
+			//ASSERT
+			Assert.Throws<ArgumentNullException>(() => FieldHelper.GetFieldArtifactID(_servicesMgr, invalidFieldName, _workspaceId));
+		}
 
-        [Test]
-        public void GetFieldArtifactIdTest_Invalid()
-        {
-            //ACT
-            var invalidFieldName = "";
+		[Test]
+		public void GetFieldCountTest()
+		{
+			//ACT
+			int fieldCount;
+			fieldCount = FieldHelper.GetFieldCount(_servicesMgr, _testFieldId, _workspaceId);
 
-            //ASSERT
-            if (useDbContext)
-            {
-                Assert.Throws<ArgumentNullException>(() => FieldHelper.GetFieldArtifactID(invalidFieldName, _dbContext));
-            }
-            else
-            {
-                int fieldArtifactId = FieldHelper.GetFieldArtifactID(invalidFieldName, _workspaceId, _keplerHelper);
-                Assert.AreEqual(0, fieldArtifactId);
-            }
-        }
+			//ASSERT
+			Assert.AreEqual(fieldCount, _testFieldCount);
+		}
 
-        [Test]
-        public void GetFieldCountTest()
-        {
-            //ACT
-            int fieldCount;
-            if (useDbContext)
-            {
-                fieldCount = FieldHelper.GetFieldCount(_dbContext, _testFieldId);
-            }
-            else
-            {
-                fieldCount = FieldHelper.GetFieldCount(_testFieldId, _workspaceId, _keplerHelper);
-            }
+		[Test]
+		public void GetFieldCountTest_Invalid()
+		{
+			//ACT
+			var invalidfieldArtifactId = -1;
 
-            //ASSERT
-            Assert.AreEqual(fieldCount, _testFieldCount);
-        }
+			//ASSERT
+			Assert.Throws<ArgumentOutOfRangeException>(() => FieldHelper.GetFieldCount(_servicesMgr, invalidfieldArtifactId, _workspaceId));
+		}
 
-        [Test]
-        public void GetFieldCountTest_Invalid()
-        {
-            //ACT
-            var invalidfieldArtifactId = -1;
+		[Test]
+		public void CreateFieldDateTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldDate(_servicesMgr, _workspaceId);
 
-            //ASSERT
-            if (useDbContext)
-            {
-                Assert.Throws<ArgumentOutOfRangeException>(() => FieldHelper.GetFieldCount(_dbContext, invalidfieldArtifactId));
-            }
-            else
-            {
-                int fieldCount = FieldHelper.GetFieldCount(invalidfieldArtifactId, _workspaceId, _keplerHelper);
-                Assert.AreEqual(0, fieldCount);
-            }
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.Date);
+		}
 
-        [Test]
-        public void CreateFieldDateTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldDate(_servicesMgr, _workspaceId);
+		[Test]
+		public void CreateFieldUserTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldUser(_servicesMgr, _workspaceId);
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.Date);
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.User);
+		}
 
-        [Test]
-        public void CreateFieldUserTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldUser(_servicesMgr, _workspaceId);
+		[Test]
+		public void CreateFieldFixedLengthTextTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldFixedLengthText(_servicesMgr, _workspaceId);
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.User);
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.FixedLength);
+		}
 
-        [Test]
-        public void CreateFieldFixedLengthTextTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldFixedLengthText(_servicesMgr, _workspaceId);
+		[Test]
+		public void CreateFieldLongTextTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldLongText(_servicesMgr, _workspaceId);
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.FixedLength);
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.LongText);
 
-        [Test]
-        public void CreateFieldLongTextTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldLongText(_servicesMgr, _workspaceId);
+		}
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.LongText);
+		[Test]
+		public void CreateFieldWholeNumberTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldWholeNumber(_servicesMgr, _workspaceId);
 
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.WholeNumber);
+		}
 
-        [Test]
-        public void CreateFieldWholeNumberTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldWholeNumber(_servicesMgr, _workspaceId);
+		[Test]
+		public void CreateFieldYesNoTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldYesNo(_servicesMgr, _workspaceId);
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.WholeNumber);
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.YesNo);
+		}
 
-        [Test]
-        public void CreateFieldYesNoTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldYesNo(_servicesMgr, _workspaceId);
+		[Test]
+		public void CreateFieldSingleChoiceTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldSingleChoice(_servicesMgr, _workspaceId);
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.YesNo);
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.SingleChoice);
+		}
 
-        [Test]
-        public void CreateFieldSingleChoiceTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldSingleChoice(_servicesMgr, _workspaceId);
+		[Test]
+		public void CreateFieldMultipleChoiceTest()
+		{
+			//Act
+			var fieldId = FieldHelper.CreateFieldMultipleChoice(_servicesMgr, _workspaceId);
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.SingleChoice);
-        }
+			//Assert
+			var createdFieldType = ReadField(fieldId, _workspaceId);
+			Assert.IsTrue(createdFieldType == FieldType.MultipleChoice);
+		}
 
-        [Test]
-        public void CreateFieldMultipleChoiceTest()
-        {
-            //Act
-            var fieldId = FieldHelper.CreateFieldMultipleChoice(_servicesMgr, _workspaceId);
+		private FieldType ReadField(int fieldId, int workspaceId)
+		{
+			using (var fieldManager = _servicesMgr.GetProxy<Services.Interfaces.Field.IFieldManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
+			{
+				var response = fieldManager.ReadAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
+				var fieldType = response.FieldType;
+				return fieldType;
+			}
+		}
 
-            //Assert
-            var createdFieldType = ReadField(fieldId, _workspaceId);
-            Assert.IsTrue(createdFieldType == FieldType.MultipleChoice);
-        }
+		//helper methods
 
-        private FieldType ReadField(int fieldId, int workspaceId)
-        {
-            using (var fieldManager = _servicesMgr.GetProxy<Services.Interfaces.Field.IFieldManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
-            {
-                var response = fieldManager.ReadAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
-                var fieldType = response.FieldType;
-                return fieldType;
-            }
-        }
 
-        //helper methods
+		public int CreateTestField(IServicesMgr servicesMgr, string fieldName, int workspaceId)
+		{
+			try
+			{
+				int fieldId;
+				var fieldRequest = new WholeNumberFieldRequest()
+				{
+					Name = fieldName,
+					ObjectType = new ObjectTypeIdentifier { ArtifactTypeID = 10 }, //document artifact type ID
+					IsRequired = false,
+					OpenToAssociations = false,
+					IsLinked = false,
+					FilterType = FilterType.None,
+					AllowSortTally = true,
+					Width = null,
+					AllowGroupBy = false,
+					AllowPivot = false,
+					Wrapping = true,
+					RelativityApplications = new List<ObjectIdentifier>(),
+					Keywords = "test helpers",
+					Notes = "Created for FieldsHelper Integration Tests"
+				};
 
-        public int CreateTestField(IServicesMgr servicesMgr, string fieldName, int workspaceId)
-        {
-            try
-            {
-                int fieldId;
-                var fieldRequest = new WholeNumberFieldRequest()
-                {
-                    Name = fieldName,
-                    ObjectType = new ObjectTypeIdentifier { ArtifactTypeID = 10 }, //document artifact type ID
-                    IsRequired = false,
-                    OpenToAssociations = false,
-                    IsLinked = false,
-                    FilterType = FilterType.None,
-                    AllowSortTally = true,
-                    Width = null,
-                    AllowGroupBy = false,
-                    AllowPivot = false,
-                    Wrapping = true,
-                    RelativityApplications = new List<ObjectIdentifier>(),
-                    Keywords = "test helpers",
-                    Notes = "Created for FieldsHelper Integration Tests"
-                };
+				using (Services.Interfaces.Field.IFieldManager fieldManager = servicesMgr.CreateProxy<Services.Interfaces.Field.IFieldManager>(ExecutionIdentity.CurrentUser))
+				{
+					fieldId = fieldManager.CreateWholeNumberFieldAsync(workspaceId, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
 
-                using (Services.Interfaces.Field.IFieldManager fieldManager = servicesMgr.CreateProxy<Services.Interfaces.Field.IFieldManager>(ExecutionIdentity.CurrentUser))
-                {
-                    fieldId = fieldManager.CreateWholeNumberFieldAsync(workspaceId, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
-                }
+				return fieldId;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Error creating test field.", ex);
+			}
+		}
 
-                return fieldId;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error creating test field.", ex);
-            }
-        }
-
-        public void DeleteTestField(IServicesMgr servicesMgr, int fieldId, int workspaceId)
-        {
-            try
-            {
-                using (Services.Interfaces.Field.IFieldManager fieldManager = servicesMgr.CreateProxy<Services.Interfaces.Field.IFieldManager>(ExecutionIdentity.CurrentUser))
-                {
-                    fieldManager.DeleteAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error deleting test field.", ex);
-            }
-        }
-    }
+		public void DeleteTestField(IServicesMgr servicesMgr, int fieldId, int workspaceId)
+		{
+			try
+			{
+				using (Services.Interfaces.Field.IFieldManager fieldManager = servicesMgr.CreateProxy<Services.Interfaces.Field.IFieldManager>(ExecutionIdentity.CurrentUser))
+				{
+					fieldManager.DeleteAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Error deleting test field.", ex);
+			}
+		}
+	}
 }

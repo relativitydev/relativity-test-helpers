@@ -18,7 +18,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 	/// 
 	/// </summary>
 
-	[TestFixture, global::NUnit.Framework.Description("Fixture description here")]
+	[TestFixture, Description("Fixture description here")]
 	public class TestTemplate
 	{
 
@@ -27,9 +27,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private Int32 _rootFolderArtifactID;
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 		private const ExecutionIdentity EXECUTION_IDENTITY = ExecutionIdentity.CurrentUser;
-		private IDBContext dbContext;
 		private IServicesMgr _servicesMgr;
-		private IDBContext _eddsDbContext;
 		private Int32 _numberOfDocuments = 5;
 		private string _foldername = "Test Folder";
 		private string _groupName = "Test Group";
@@ -51,7 +49,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Setup for testing
 			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			_servicesMgr = helper.GetServicesManager();
-			_eddsDbContext = helper.GetDBContext(-1);
 
 			//Create new user 
 			_userArtifactId = Relativity.Test.Helpers.UserHelpers.UserHelper.Create(helper.GetServicesManager());
@@ -62,7 +59,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 			//Create workspace
 			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesMgr, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
-			dbContext = helper.GetDBContext(_workspaceId);
 
 			var executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var nativeFilePath = "";
@@ -75,7 +71,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
-			var folderName = Relativity.Test.Helpers.ArtifactHelpers.FoldersHelper.GetFolderName(_rootFolderArtifactID, dbContext);
+			var folderName = Relativity.Test.Helpers.ArtifactHelpers.FoldersHelper.GetFolderName(_servicesMgr, _rootFolderArtifactID, _workspaceId);
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
 
 			//Create Fixed Length field
@@ -116,7 +112,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 		#region region Golden Flow
 
-		[Test, global::NUnit.Framework.Description("Test description here")]
+		[Test, Description("Test description here")]
 		public void Integration_Test_Golden_Flow_Valid()
 		{
 			//Arrange

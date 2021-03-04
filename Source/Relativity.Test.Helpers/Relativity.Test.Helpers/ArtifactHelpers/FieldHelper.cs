@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using kCura.Vendor.Castle.Core.Internal;
 using Newtonsoft.Json;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
@@ -11,6 +12,11 @@ using Relativity.Services.Interfaces.Field;
 using Relativity.Services.Interfaces.Field.Models;
 using Relativity.Services.Interfaces.Shared.Models;
 using Relativity.API;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
+using Relativity.Test.Helpers.ServiceFactory.Extentions;
+using Relativity.Test.Helpers.SharedTestHelpers;
+using FieldType = Relativity.Services.Interfaces.Field.Models.FieldType;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers
 {
@@ -19,137 +25,75 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// </summary>
 	public class FieldHelper : IFieldsHelper
 	{
-		private static bool? _keplerCompatible;
 
 		#region Public Methods
 
-		public static int GetFieldArtifactID(String fieldname, IDBContext workspaceDbContext)
+		public static int GetFieldArtifactID(IServicesMgr svcMgr, string fieldName, int workspaceId)
 		{
-			if (fieldname.IsNullOrEmpty())
+			if (fieldName.IsNullOrEmpty())
 			{
-				throw new ArgumentNullException(nameof(fieldname), "Field name cannot be null or empty.");
+				throw new ArgumentNullException(nameof(fieldName), "Field name cannot be null or empty.");
 			}
 
-			var keplerHelper = new KeplerHelper();
-
-			if (keplerHelper.ForceDbContext()) return GetFieldArtifactIDWithDbContext(fieldname, workspaceDbContext);
-
-			if (_keplerCompatible == null)
+			using (IObjectManager objectManager =
+				svcMgr.GetProxy<IObjectManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				QueryRequest queryRequest = new QueryRequest()
+				{
+					ObjectType = new ObjectTypeRef()
+					{
+						ArtifactTypeID = 14
+					},
+					Fields = new List<FieldRef>()
+					{
+						new FieldRef {Name = "*"}
+					},
+					Condition = $"'Name' == '{fieldName}'"
+				};
+
+				QueryResult queryResult = objectManager.QueryAsync(workspaceId, queryRequest, 0, 100).ConfigureAwait(false).GetAwaiter().GetResult();
+				if (queryResult.TotalCount == 0)
+				{
+					throw new Exception($"Query for Fields with name {fieldName} returned no results");
+				}
+
+				int fieldArtifactId = queryResult.Objects.First().ArtifactID;
+				return fieldArtifactId;
 			}
-
-			if (!_keplerCompatible.Value) return GetFieldArtifactIDWithDbContext(fieldname, workspaceDbContext);
-
-			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
-			return GetFieldArtifactID(fieldname, workspaceId, keplerHelper);
 		}
 
-		public static int GetFieldCount(IDBContext workspaceDbContext, int fieldArtifactId)
+		public static int GetFieldCount(IServicesMgr svcMgr, int fieldArtifactId, int workspaceId)
 		{
 			if (fieldArtifactId <= 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(fieldArtifactId), "Invalid Field Artifact Id");
 			}
 
-			var keplerHelper = new KeplerHelper();
-
-			if (keplerHelper.ForceDbContext()) return GetFieldCountWithDbContext(workspaceDbContext, fieldArtifactId);
-
-			if (_keplerCompatible == null)
+			using (IObjectManager objectManager =
+				svcMgr.GetProxy<IObjectManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-			}
-
-			if (!_keplerCompatible.Value) return GetFieldCountWithDbContext(workspaceDbContext, fieldArtifactId);
-
-			var workspaceId = keplerHelper.GetWorkspaceIdFromDbContext(workspaceDbContext);
-			return GetFieldCount(fieldArtifactId, workspaceId, keplerHelper);
-		}
-
-		#endregion
-
-		#region DbContext Methods
-
-		private static int GetFieldArtifactIDWithDbContext(String fieldname, IDBContext workspaceDbContext)
-		{
-			string sqlquery = @"SELECT [ArtifactID] FROM [EDDSDBO].[Field] Where[DisplayName] like @fieldname";
-			var sqlParams = new List<SqlParameter>
-			{
-				new SqlParameter("@fieldname", SqlDbType.NVarChar) {Value = fieldname}
-			};
-			int artifactTypeId = workspaceDbContext.ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
-			return artifactTypeId;
-		}
-
-		public static int GetFieldCountWithDbContext(IDBContext workspaceDbContext, int fieldArtifactId)
-		{
-			string sqlquery = String.Format(@"select count(*) from [EDDSDBO].[ExtendedField] where ArtifactID = @fieldArtifactId");
-			var sqlParams = new List<SqlParameter>
-			{
-				new SqlParameter("@fieldArtifactId", SqlDbType.NVarChar) {Value = fieldArtifactId}
-			};
-			int fieldCount = workspaceDbContext.ExecuteSqlStatementAsScalar<int>(sqlquery, sqlParams);
-			return fieldCount;
-		}
-
-		#endregion
-
-		#region Kepler Methods
-
-		public static int GetFieldArtifactID(string fieldname, int workspaceId, KeplerHelper keplerHelper)
-		{
-			try
-			{
-				keplerHelper.UploadKeplerFiles();
-
-				const string routeName = Constants.Kepler.RouteNames.GetFieldArtifactIdAsync;
-
-				FieldArtifactIdBaseRequestModel requestModel = new FieldArtifactIdBaseRequestModel
+				QueryRequest queryRequest = new QueryRequest()
 				{
-					FieldName = fieldname,
-					WorkspaceId = workspaceId
+					ObjectType = new ObjectTypeRef()
+					{
+						ArtifactTypeID = 14
+					},
+					Fields = new List<FieldRef>()
+					{
+						new FieldRef {Name = "*"}
+					},
+					Condition = $"'Artifact ID' == {fieldArtifactId}"
 				};
 
-				var httpRequestHelper = new HttpRequestHelper();
-				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
-				FieldArtifactIdResponseModel responseModel = JsonConvert.DeserializeObject<FieldArtifactIdResponseModel>(responseString);
-
-				return responseModel.ArtifactId;
-			}
-			catch (Exception exception)
-			{
-				throw new TestHelpersException($"Error Getting Field ArtifactID [{nameof(fieldname)}:{fieldname}]", exception);
-			}
-		}
-
-		public static int GetFieldCount(int artifactId, int workspaceId, KeplerHelper keplerHelper)
-		{
-			try
-			{
-				keplerHelper.UploadKeplerFiles();
-
-				const string routeName = Constants.Kepler.RouteNames.GetFieldCountAsync;
-
-				FieldCountBaseRequestModel requestModel = new FieldCountBaseRequestModel
+				QueryResult queryResult = objectManager.QueryAsync(workspaceId, queryRequest, 0, 100).ConfigureAwait(false).GetAwaiter().GetResult();
+				if (queryResult.TotalCount == 0)
 				{
-					FieldArtifactId = artifactId,
-					WorkspaceId = workspaceId
-				};
+					throw new Exception($"Query for Fields with artifact id {fieldArtifactId} returned no results");
+				}
 
-				var httpRequestHelper = new HttpRequestHelper();
-				string responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
-				FieldCountResponseModel responseModel = JsonConvert.DeserializeObject<FieldCountResponseModel>(responseString);
-
-				return responseModel.Count;
-			}
-			catch (Exception exception)
-			{
-				throw new TestHelpersException($"Error Getting Field Count [{nameof(artifactId)}:{artifactId}]", exception);
+				return queryResult.TotalCount;
 			}
 		}
-
-		#endregion
 
 		public static int CreateFieldDate(IServicesMgr servicesMgr, int workspaceID)
 		{
@@ -448,5 +392,8 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 				throw new Exception("Error creating field.", ex);
 			}
 		}
+
+		#endregion
+
 	}
 }
