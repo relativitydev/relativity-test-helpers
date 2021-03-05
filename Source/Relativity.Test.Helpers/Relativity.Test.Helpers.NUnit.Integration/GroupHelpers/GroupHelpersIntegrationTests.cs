@@ -19,10 +19,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 	public class GroupHelpersIntegrationTests
 	{
 		private IHelper testHelper;
-		private IServicesMgr servicesMgr;
+		private IServicesMgr _servicesMgr;
 		private string groupName = "Test Helpers Integration Test Group";
-
-		private Services.ServiceProxy.ServiceFactory serviceFactory;
 
 		[SetUp]
 		public void SetUp()
@@ -33,8 +31,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
 			}
 			testHelper = new TestHelper(configDictionary);
-			servicesMgr = testHelper.GetServicesManager();
-			serviceFactory = GetServiceFactory();
+			_servicesMgr = testHelper.GetServicesManager();
 			CleanUpTestGroups();
 		}
 
@@ -42,16 +39,15 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 		public void TearDown()
 		{
 			testHelper = null;
-			servicesMgr = null;
-			serviceFactory = null;
+			_servicesMgr = null;
 		}
 
 		[Test]
 		public void CreateGroupAndDeleteGroupTest()
 		{
 			// Act
-			int groupArtifactId = Relativity.Test.Helpers.GroupHelpers.GroupHelper.CreateGroup(serviceFactory, groupName);
-			bool deleteGroupResult = Relativity.Test.Helpers.GroupHelpers.GroupHelper.DeleteGroup(serviceFactory, groupArtifactId);
+			int groupArtifactId = Relativity.Test.Helpers.GroupHelpers.GroupHelper.CreateGroup(_servicesMgr, groupName);
+			bool deleteGroupResult = Relativity.Test.Helpers.GroupHelpers.GroupHelper.DeleteGroup(_servicesMgr, groupArtifactId);
 
 			// Assert
 			Assert.IsTrue(groupArtifactId > 0);
@@ -62,7 +58,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 		{
 			try
 			{
-				using (IObjectManager objectManager = serviceFactory.CreateProxy<IObjectManager>())
+				using (IObjectManager objectManager = _servicesMgr.CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
 				{
 					QueryRequest clientQueryRequest = new QueryRequest
 					{
@@ -77,7 +73,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 					{
 						foreach (var obj in queryResult.Objects)
 						{
-							using (IGroupManager groupManager = serviceFactory.CreateProxy<IGroupManager>())
+							using (IGroupManager groupManager = _servicesMgr.CreateProxy<IGroupManager>(ExecutionIdentity.CurrentUser))
 							{
 								groupManager.DeleteAsync(obj.ArtifactID).Wait();
 							}
@@ -89,26 +85,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 			{
 				throw new Exception("Error Cleaning Up Test Groups", ex);
 			}
-		}
-
-		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
-		{
-			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS}/Relativity.Services");
-			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
-
-			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
-				username: ConfigurationHelper.ADMIN_USERNAME,
-				password: ConfigurationHelper.DEFAULT_PASSWORD);
-
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
-				relativityServicesUri: relativityServicesUri,
-				relativityRestUri: relativityRestUri,
-				credentials: usernamePasswordCredentials);
-
-			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
-				settings: serviceFactorySettings);
-
-			return serviceFactory;
 		}
 	}
 }

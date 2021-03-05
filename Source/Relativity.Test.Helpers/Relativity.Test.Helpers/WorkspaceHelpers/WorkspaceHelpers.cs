@@ -81,7 +81,7 @@ namespace Relativity.Test.Helpers.WorkspaceHelpers
 			}
 			catch (Exception ex)
 			{
-				string errorMessage = $"Could not find workspace id in {nameof(GetWorkspaceIdByNameAsync)} for {nameof(workspaceName)} of {workspaceName} - {ex.Message}";
+				string errorMessage = $"Could not find Workspace in {nameof(GetWorkspaceIdByNameAsync)} for {nameof(workspaceName)} of {workspaceName} - {ex.Message}";
 				Console.WriteLine(errorMessage);
 				throw new TestHelpersException(errorMessage);
 			}

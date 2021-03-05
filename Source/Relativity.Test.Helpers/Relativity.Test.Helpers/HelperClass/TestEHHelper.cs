@@ -1,9 +1,7 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
-using Relativity.API;
+﻿using Relativity.API;
 using Relativity.Test.Helpers.Authentication;
+using Relativity.Test.Helpers.UserHelpers;
 using System;
-using System.Linq;
 
 namespace Relativity.Test.Helpers.HelperClasses
 {
@@ -48,22 +46,7 @@ namespace Relativity.Test.Helpers.HelperClasses
 			{
 				try
 				{
-					using (IRSAPIClient rsapiClient = this.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
-					{
-						rsapiClient.APIOptions.WorkspaceID = -1;
-						Query<kCura.Relativity.Client.DTOs.User> userQuery = new Query<kCura.Relativity.Client.DTOs.User>()
-						{
-							Condition = new TextCondition()
-							{
-								Field = UserFieldNames.EmailAddress,
-								Operator = TextConditionEnum.EqualTo,
-								Value = SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME
-							},
-							Fields = FieldValue.NoFields
-						};
-						QueryResultSet<kCura.Relativity.Client.DTOs.User> result = rsapiClient.Repositories.User.Query(userQuery);
-						UserId = result.Results.First().Artifact.ArtifactID;
-					}
+					UserId = UserHelper.GetUserId(_helper.GetServicesManager(), SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
 				catch (Exception ex)
 				{

@@ -1,9 +1,6 @@
-﻿using kCura.Relativity.Client;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Test.Helpers.Exceptions;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
-using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +9,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 	[TestFixture]
 	public class GetWorkspaceHelperTests
 	{
-		private IRSAPIClient _client;
 		private int _workspaceId;
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 		private IServicesMgr _servicesManager;
@@ -29,7 +25,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 			}
 			_testHelper = new TestHelper(configDictionary);
 			_servicesManager = _testHelper.GetServicesManager();
-			_client = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
 			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 

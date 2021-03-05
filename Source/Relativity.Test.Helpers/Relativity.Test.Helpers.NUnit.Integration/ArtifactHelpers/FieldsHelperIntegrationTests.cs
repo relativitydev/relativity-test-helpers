@@ -2,7 +2,6 @@
 using Relativity.API;
 using Relativity.Services.Interfaces.Field.Models;
 using Relativity.Services.Interfaces.Shared.Models;
-using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
@@ -16,7 +15,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 	public class FieldsHelperIntegrationTests
 	{
 		private IHelper _testHelper;
-		private IServicesMgr _servicesManager;
+		private IServicesMgr _servicesMgr;
 
 		private int _workspaceId;
 		private readonly string _workspaceName = $"IntTest_{Guid.NewGuid()}";
@@ -24,8 +23,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		private const string _testFieldName = "IntegrationTestFieldName";
 		private int _testFieldId;
 		private int _testFieldCount = 1;
-
-		private Services.ServiceProxy.ServiceFactory _serviceFactory;
 
 		[OneTimeSetUp]
 		public void SetUp()
@@ -37,29 +34,26 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
 			}
 			_testHelper = new TestHelper(configDictionary);
-			_servicesManager = _testHelper.GetServicesManager();
-
-			_serviceFactory = GetServiceFactory();
+			_servicesMgr = _testHelper.GetServicesManager();
 
 			//Create workspace
-			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesMgr, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			//Query for field ID to be used in test
-			_testFieldId = CreateTestField(_serviceFactory, _testFieldName, _workspaceId);
+			_testFieldId = CreateTestField(_servicesMgr, _testFieldName, _workspaceId);
 		}
 
 		[OneTimeTearDown]
 		public void Teardown()
 		{
 			//delete test field
-			DeleteTestField(_serviceFactory, _testFieldId, _workspaceId);
+			DeleteTestField(_servicesMgr, _testFieldId, _workspaceId);
 
 			//Delete workspace
-			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceId);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesMgr, _workspaceId);
 
-			_servicesManager = null;
+			_servicesMgr = null;
 			_testHelper = null;
-			_serviceFactory = null;
 		}
 
 		[Test]
@@ -67,7 +61,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		{
 			//ACT
 			int fieldArtifactId;
-			fieldArtifactId = FieldHelper.GetFieldArtifactID(_servicesManager, _testFieldName, _workspaceId);
+			fieldArtifactId = FieldHelper.GetFieldArtifactID(_servicesMgr, _testFieldName, _workspaceId);
 
 			//ASSERT
 			Assert.AreEqual(fieldArtifactId, _testFieldId);
@@ -80,7 +74,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidFieldName = "";
 
 			//ASSERT
-			Assert.Throws<ArgumentNullException>(() => FieldHelper.GetFieldArtifactID(_servicesManager, invalidFieldName, _workspaceId));
+			Assert.Throws<ArgumentNullException>(() => FieldHelper.GetFieldArtifactID(_servicesMgr, invalidFieldName, _workspaceId));
 		}
 
 		[Test]
@@ -88,7 +82,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		{
 			//ACT
 			int fieldCount;
-			fieldCount = FieldHelper.GetFieldCount(_servicesManager, _testFieldId, _workspaceId);
+			fieldCount = FieldHelper.GetFieldCount(_servicesMgr, _testFieldId, _workspaceId);
 
 			//ASSERT
 			Assert.AreEqual(fieldCount, _testFieldCount);
@@ -101,14 +95,14 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			var invalidfieldArtifactId = -1;
 
 			//ASSERT
-			Assert.Throws<ArgumentOutOfRangeException>(() => FieldHelper.GetFieldCount(_servicesManager, invalidfieldArtifactId, _workspaceId));
+			Assert.Throws<ArgumentOutOfRangeException>(() => FieldHelper.GetFieldCount(_servicesMgr, invalidfieldArtifactId, _workspaceId));
 		}
 
 		[Test]
 		public void CreateFieldDateTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldDate(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldDate(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -119,7 +113,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFieldUserTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldUser(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldUser(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -130,7 +124,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFieldFixedLengthTextTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldFixedLengthText(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldFixedLengthText(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -141,7 +135,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFieldLongTextTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldLongText(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldLongText(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -153,7 +147,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFieldWholeNumberTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldWholeNumber(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldWholeNumber(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -164,7 +158,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFieldYesNoTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldYesNo(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldYesNo(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -175,7 +169,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFieldSingleChoiceTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldSingleChoice(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldSingleChoice(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -186,7 +180,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		public void CreateFieldMultipleChoiceTest()
 		{
 			//Act
-			var fieldId = FieldHelper.CreateFieldMultipleChoice(_serviceFactory, _workspaceId);
+			var fieldId = FieldHelper.CreateFieldMultipleChoice(_servicesMgr, _workspaceId);
 
 			//Assert
 			var createdFieldType = ReadField(fieldId, _workspaceId);
@@ -195,7 +189,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 		private FieldType ReadField(int fieldId, int workspaceId)
 		{
-			using (var fieldManager = _servicesManager.GetProxy<Services.Interfaces.Field.IFieldManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
+			using (var fieldManager = _servicesMgr.GetProxy<Services.Interfaces.Field.IFieldManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
 			{
 				var response = fieldManager.ReadAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
 				var fieldType = response.FieldType;
@@ -205,27 +199,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 		//helper methods
 
-		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
-		{
-			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS}/Relativity.Services");
-			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
 
-			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
-				username: ConfigurationHelper.ADMIN_USERNAME,
-				password: ConfigurationHelper.DEFAULT_PASSWORD);
-
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
-				relativityServicesUri: relativityServicesUri,
-				relativityRestUri: relativityRestUri,
-				credentials: usernamePasswordCredentials);
-
-			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
-				settings: serviceFactorySettings);
-
-			return serviceFactory;
-		}
-
-		public int CreateTestField(Services.ServiceProxy.ServiceFactory serviceFactory, string fieldName, int workspaceId)
+		public int CreateTestField(IServicesMgr servicesMgr, string fieldName, int workspaceId)
 		{
 			try
 			{
@@ -248,7 +223,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 					Notes = "Created for FieldsHelper Integration Tests"
 				};
 
-				using (Services.Interfaces.Field.IFieldManager fieldManager = serviceFactory.CreateProxy<Services.Interfaces.Field.IFieldManager>())
+				using (Services.Interfaces.Field.IFieldManager fieldManager = servicesMgr.CreateProxy<Services.Interfaces.Field.IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldId = fieldManager.CreateWholeNumberFieldAsync(workspaceId, fieldRequest).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
@@ -261,11 +236,11 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			}
 		}
 
-		public void DeleteTestField(Services.ServiceProxy.ServiceFactory serviceFactory, int fieldId, int workspaceId)
+		public void DeleteTestField(IServicesMgr servicesMgr, int fieldId, int workspaceId)
 		{
 			try
 			{
-				using (Services.Interfaces.Field.IFieldManager fieldManager = serviceFactory.CreateProxy<Services.Interfaces.Field.IFieldManager>())
+				using (Services.Interfaces.Field.IFieldManager fieldManager = servicesMgr.CreateProxy<Services.Interfaces.Field.IFieldManager>(ExecutionIdentity.CurrentUser))
 				{
 					fieldManager.DeleteAsync(workspaceId, fieldId).ConfigureAwait(false).GetAwaiter().GetResult();
 				}

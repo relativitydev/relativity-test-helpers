@@ -1,9 +1,13 @@
-﻿using Relativity.Services.Group;
+using Relativity.API;
+using Relativity.Services;
+using Relativity.Services.Group;
+using Relativity.Services.Interfaces.Group;
 using Relativity.Services.Interfaces.Shared;
 using Relativity.Services.Interfaces.Shared.Models;
 using Relativity.Services.Objects;
 using Relativity.Services.Objects.DataContracts;
 using Relativity.Services.Permission;
+using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +18,41 @@ namespace Relativity.Test.Helpers.GroupHelpers
 {
 	public class GroupHelper
 	{
-		public static int CreateGroup(Services.ServiceProxy.ServiceFactory serviceFactory, String name)
+		public static async Task<int> GetGroupId(IServicesMgr servicesMgr, string groupName)
+		{
+			try
+			{
+				using (IObjectManager objectManager = servicesMgr.CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
+				{
+					QueryRequest queryRequest = new QueryRequest()
+					{
+						ObjectType = new ObjectTypeRef { ArtifactTypeID = Constants.ArtifactTypeIds.Group },
+						Condition = new TextCondition("Name", TextConditionEnum.EqualTo, groupName).ToQueryString(),
+						Fields = new List<FieldRef>()
+						{
+								new FieldRef { Name = "Name" }
+						},
+					};
+					QueryResult result = await objectManager.QueryAsync(-1, queryRequest, 1, 10);
+
+					return result.Objects.First().ArtifactID;
+				}
+			}
+			catch (Exception ex)
+			{
+				string errorMessage = $"Could not find Group in {nameof(GetGroupId)} for {nameof(groupName)} of {groupName} - {ex.Message}";
+				Console.WriteLine(errorMessage);
+				throw new TestHelpersException(errorMessage);
+			}
+		}
+
+		public static int CreateGroup(IServicesMgr servicesMgr, String name)
 		{
 			int groupArtifactId;
 			try
 			{
 				int clientId;
-				using (IObjectManager objectManager = serviceFactory.CreateProxy<IObjectManager>())
+				using (IObjectManager objectManager = servicesMgr.CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
 				{
 					QueryRequest clientQueryRequest = new QueryRequest
 					{
@@ -38,8 +70,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 					clientId = queryResult.Objects.First().ArtifactID;
 				}
 
-				using (Services.Interfaces.Group.IGroupManager groupManager =
-					serviceFactory.CreateProxy<Services.Interfaces.Group.IGroupManager>())
+				using (Services.Interfaces.Group.IGroupManager groupManager = servicesMgr.CreateProxy<Services.Interfaces.Group.IGroupManager>(ExecutionIdentity.CurrentUser))
 				{
 					Services.Interfaces.Group.Models.GroupRequest request = new Services.Interfaces.Group.Models.GroupRequest
 					{
@@ -53,7 +84,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 						}
 					};
 					Services.Interfaces.Group.Models.GroupResponse response =
-						groupManager.CreateAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
+							groupManager.CreateAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
 					groupArtifactId = response.ArtifactID;
 				}
 
@@ -65,11 +96,11 @@ namespace Relativity.Test.Helpers.GroupHelpers
 			}
 		}
 
-		public static bool DeleteGroup(Services.ServiceProxy.ServiceFactory serviceFactory, int artifactId)
+		public static bool DeleteGroup(IServicesMgr servicesMgr, int artifactId)
 		{
 			try
 			{
-				using (Services.Interfaces.Group.IGroupManager groupManager = serviceFactory.CreateProxy<Services.Interfaces.Group.IGroupManager>())
+				using (Services.Interfaces.Group.IGroupManager groupManager = servicesMgr.CreateProxy<Services.Interfaces.Group.IGroupManager>(ExecutionIdentity.CurrentUser))
 				{
 					groupManager.DeleteAsync(artifactId).Wait();
 				}
@@ -83,7 +114,7 @@ namespace Relativity.Test.Helpers.GroupHelpers
 			}
 		}
 
-		public static bool AddGroupToWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
+		public static bool AddGroupToWor1space(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
 		{
 			bool success = false;
 
@@ -171,6 +202,44 @@ namespace Relativity.Test.Helpers.GroupHelpers
 				tasks.Add(SecureItemFromGroupAsync(mgr, workspaceId, groupName, artifactId));
 			}
 			Task.WaitAll(tasks.ToArray());
+		}
+
+		public static void AddUserToGroup(IServicesMgr servicesMgr, int groupId, int userId)
+		{
+			using (IGroupManager groupManager = servicesMgr.CreateProxy<IGroupManager>(ExecutionIdentity.CurrentUser))
+			{
+				groupManager.AddMembersAsync(groupId, new ObjectIdentifier() { ArtifactID = userId });
+			}
+		}
+
+		public static async Task<int> GetEligibleGroupId(IServicesMgr servicesMgr, string groupName, int userId)
+		{
+			try
+			{
+				int groupId;
+
+				using (IGroupManager groupManager = servicesMgr.CreateProxy<IGroupManager>(ExecutionIdentity.CurrentUser))
+				{
+					QueryRequest request = new QueryRequest
+					{
+						Fields = new List<FieldRef> { new FieldRef { Name = "Name" } },
+						Condition = new TextCondition("Name", TextConditionEnum.EqualTo, groupName).ToQueryString(),
+					};
+					QueryResultSlim result = await groupManager.QueryEligibleGroupsToAddUsersToAsync(request, 1, 10, new List<ObjectIdentifier>() { new ObjectIdentifier() { ArtifactID = userId } });
+
+					groupId = result.Objects.First().ArtifactID;
+				}
+
+				return groupId;
+			}
+			catch (Exception ex)
+			{
+				string errorMessage = $"Could not find Group in {nameof(GetEligibleGroupId)} for {nameof(groupName)} of {groupName} for {nameof(userId)} of {userId} - {ex.Message}";
+				Console.WriteLine(errorMessage);
+				throw new TestHelpersException(errorMessage);
+			}
+
+
 		}
 	}
 }

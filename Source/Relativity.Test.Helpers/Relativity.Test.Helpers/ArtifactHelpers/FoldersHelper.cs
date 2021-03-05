@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Relativity.API;
-using Relativity.Services;
+﻿using Relativity.Services;
 using Relativity.Services.Folder;
 using Relativity.Test.Helpers.ArtifactHelpers.Interfaces;
 using Relativity.Test.Helpers.Exceptions;
@@ -8,7 +6,6 @@ using Relativity.Test.Helpers.ServiceFactory.Extentions;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Linq;
-using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
 using IServicesMgr = Relativity.API.IServicesMgr;
 
 namespace Relativity.Test.Helpers.ArtifactHelpers

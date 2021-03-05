@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using kCura.Relativity.Client;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
+using Relativity.Services.Interfaces.UserInfo;
+using Relativity.Services.Objects;
 using Relativity.Services.Security;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Test.Helpers.SharedTestHelpers;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -30,9 +31,10 @@ namespace Relativity.Test.Helpers.NUnit.Integration.Kepler
 			_testHelper = new TestHelper(configDictionary);
 
 			IOAuth2ClientManager oAuth2ClientManager = _testHelper.GetServicesManager().CreateProxy<IOAuth2ClientManager>(ExecutionIdentity.System);
-			IRSAPIClient rsapiClient = _testHelper.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System);
+			IUserInfoManager userManager = _testHelper.GetServicesManager().CreateProxy<IUserInfoManager>(ExecutionIdentity.System);
+			IObjectManager objectManager = _testHelper.GetServicesManager().CreateProxy<IObjectManager>(ExecutionIdentity.System);
 
-			Sut = new OAuth2Helper(oAuth2ClientManager, rsapiClient);
+			Sut = new OAuth2Helper(oAuth2ClientManager, userManager, objectManager);
 		}
 
 		[OneTimeTearDown]
