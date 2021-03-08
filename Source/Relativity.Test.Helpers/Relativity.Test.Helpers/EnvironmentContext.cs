@@ -47,7 +47,7 @@
                 SqlUserName = SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME,
                 SqlPassword = SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD,
                 ServerBindingType = SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE,
-                ServerAddress = SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS
+                ServerAddress = SharedTestHelpers.ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS
             };
         }
     }

@@ -43,7 +43,6 @@ steps:
       -SQLUserName $(sqlUserName)
       -SQLPassword $(sqlPassword)
       -SQLServerAddress $(sqlServerAddress)
-      -RSAPIServerAddress $(rsapiServerAddress)
       -RESTServerAddress $(restServerAddress)
       -ServerBindingType $(serverBindingType)
       -RelativityInstanceAddress $(relativityInstanceAddress)
