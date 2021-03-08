@@ -10,7 +10,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 	public class TestHelperRunSettingsIntegrationTests
 	{
 		private IHelper SuT;
-		private KeplerHelper _keplerHelper;
 		private bool useDbContext;
 
 		[OneTimeSetUp]
@@ -23,10 +22,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			}
 
 			SuT = new TestHelper(configDictionary);
-			_keplerHelper = new KeplerHelper();
 
-			bool isKeplerCompatible = _keplerHelper.IsVersionKeplerCompatibleAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-			useDbContext = !isKeplerCompatible || ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
+			useDbContext = ConfigurationHelper.FORCE_DBCONTEXT.Trim().ToLower().Equals("true");
 		}
 
 		[OneTimeTearDown]

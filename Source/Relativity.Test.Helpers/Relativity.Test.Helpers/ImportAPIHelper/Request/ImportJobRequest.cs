@@ -1,5 +1,4 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.DataReaderClient;
+﻿using kCura.Relativity.DataReaderClient;
 using System;
 using System.Text;
 using static Relativity.Test.Helpers.ImportAPIHelper.Constants;
@@ -50,7 +49,7 @@ namespace Relativity.Test.Helpers.ImportAPIHelper.Request
         /// Constructor with workspace id
         /// </summary>
         /// <param name="workspaceID">target workspace</param>
-        public ImportJobRequest(int workspaceID) : this(workspaceID, (int)ArtifactType.Document)
+        public ImportJobRequest(int workspaceID) : this(workspaceID, (int)Helpers.Constants.ArtifactTypeIds.Document)
         {
         }
 

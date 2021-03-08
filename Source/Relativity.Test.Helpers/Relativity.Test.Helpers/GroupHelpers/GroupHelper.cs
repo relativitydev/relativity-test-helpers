@@ -114,12 +114,12 @@ namespace Relativity.Test.Helpers.GroupHelpers
 			}
 		}
 
-		public static bool AddGroupToWor1space(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
+		public static bool AddGroupToWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, string groupName)
 		{
 			bool success = false;
 
 			GroupSelector groupSelector = permissionManager.GetWorkspaceGroupSelectorAsync(eddsWorkspaceArtifactID).ConfigureAwait(false).GetAwaiter().GetResult();
-			GroupRef groupRef = groupSelector.DisabledGroups.FirstOrDefault(x => x.Name == group.Name);
+			GroupRef groupRef = groupSelector.DisabledGroups.FirstOrDefault(x => x.Name == groupName);
 			if (groupRef != null)
 			{
 				GroupSelector modifyGroupSelector = new GroupSelector() { LastModified = groupSelector.LastModified };
@@ -133,12 +133,12 @@ namespace Relativity.Test.Helpers.GroupHelpers
 			return success;
 		}
 
-		public static bool RemoveGroupFromWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, kCura.Relativity.Client.DTOs.Group group)
+		public static bool RemoveGroupFromWorkspace(IPermissionManager permissionManager, Int32 eddsWorkspaceArtifactID, string groupName)
 		{
 			bool success = false;
 
 			GroupSelector groupSelector = permissionManager.GetWorkspaceGroupSelectorAsync(eddsWorkspaceArtifactID).ConfigureAwait(false).GetAwaiter().GetResult();
-			GroupRef groupRef = groupSelector.EnabledGroups.FirstOrDefault(x => x.Name == group.Name);
+			GroupRef groupRef = groupSelector.EnabledGroups.FirstOrDefault(x => x.Name == groupName);
 			if (groupRef != null)
 			{
 				GroupSelector modifyGroupSelector = new GroupSelector() { LastModified = groupSelector.LastModified };
