@@ -71,9 +71,6 @@
     <Reference Include="FreeImageNET, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.12.21\lib\net462\FreeImageNET.dll</HintPath>
     </Reference>
-    <Reference Include="kCura.Relativity.Client, Version=11.2.256.10, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.11.2.256.10\lib\net462\kCura.Relativity.Client.dll</HintPath>
-    </Reference>
     <Reference Include="MailKit, Version=2.2.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
       <HintPath>..\packages\MailKit.2.2.0\lib\net45\MailKit.dll</HintPath>
     </Reference>
@@ -198,11 +195,9 @@
     <Compile Include="Exceptions\TestHelpersException.cs" />
     <Compile Include="Exceptions\TestHelpersApplicationInstallException.cs" />
     <Compile Include="Exceptions\TestHelpersOAuth2Exception.cs" />
-    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="GroupHelpers\GroupHelper.cs" />
     <Compile Include="HttpRequestHelper.cs" />
     <Compile Include="IHttpRequestHelper.cs" />
-    <Compile Include="KeplerHelper.cs" />
     <Compile Include="Kepler\ApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IOAuth2Helper.cs" />

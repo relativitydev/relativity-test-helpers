@@ -1,5 +1,4 @@
-﻿using kCura.Relativity.Client.DTOs;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
 using Relativity.Services.Objects;
 using Relativity.Services.Objects.DataContracts;
@@ -56,11 +55,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 				workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(Sut.GetServicesManager(), sampleWorkspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 				Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(workspaceId, numberOfDocumentsToCreate, folderName, nativeFilePath);
-
-				Query<Document> query = new Query<Document>
-				{
-					Fields = new List<FieldValue> { new FieldValue("Control Number") }
-				};
 
 				using (IObjectManager objectManager = Sut.GetServicesManager().CreateProxy<IObjectManager>(ExecutionIdentity.System))
 				{

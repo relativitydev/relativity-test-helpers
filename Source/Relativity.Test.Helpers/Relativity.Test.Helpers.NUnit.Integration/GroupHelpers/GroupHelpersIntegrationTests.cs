@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using kCura.Relativity.Client.DTOs;
 using NUnit.Framework;
 using Relativity.API;
 using Relativity.Services.Interfaces.Group;
@@ -11,7 +10,6 @@ using Relativity.Services.Objects;
 using Relativity.Services.Objects.DataContracts;
 using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.SharedTestHelpers;
-using QueryResult = kCura.Relativity.Client.QueryResult;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.GroupHelpers
 {
