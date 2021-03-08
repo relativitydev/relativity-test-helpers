@@ -11,7 +11,7 @@ namespace Relativity.Test.Helpers.Authentication
 	/// 
 	/// Authentication Providers will help you add an Authentication Provider to a user in your instance of Relativity. This is extremely beneficial when you are trying to write permission tests around your application.
 	/// 
-	/// Caveat with this helper is that when the RSAPI creates a user, Password Authentication provider automatically gets added to the user. If that is something you dont want, you have to remove the provider type from the user using
+	/// Caveat with this helper is that when creating a user, Password Authentication provider automatically gets added to the user. If that is something you dont want, you have to remove the provider type from the user using
 	/// the RemoveProviderPasswordfromUser(...) method and then add the desired Provider type.
 	/// 
 	/// </summary>

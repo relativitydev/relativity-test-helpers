@@ -5,6 +5,11 @@
 
 -------------------------
 
+## 2021-03-08
+- REL-518415 - Removed Kepler Helper, RSAPI Package, and any remaining uses of RSAPI.
+
+-------------------------
+
 ## 2021-03-04
 - REL-518429 - Removed RSAPI from User Helper classes and moved their main code into UserHelper.  Updated tests as well to account for this.
     - Converged all usage of ServiceFactory & IServicesMgr to IServicesMgr
