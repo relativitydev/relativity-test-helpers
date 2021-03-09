@@ -15,41 +15,43 @@ With the deprecation of RSAPI, TestHelpers was significantly updated to account 
 Context |  v7 | v8 |
 |:-----|:--------|:------|
 | All | IRSAPIClient | IServicesMgr |
-| All | SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS | SharedTestHelpers.ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS |
+| All | SharedTestHelpers.ConfigurationHelper.FORCE_DBCONTEXT | Removed |
+| All | SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS | Removed, use RELATIVITY_INSTANCE_ADDRESS or REST_SERVER_ADDRESS |
 | Application | Application.ApplicationHelpers.ImportApplication | Kepler.ApplicationInstallHelper.InstallApplicationAsync |
 | Client | ArtifactHelpers.Client.Create_Client | ArtifactHelpers.ClientHelper.CreateClient |
 | Client | ArtifactHelpers.Client.Delete_Client | ArtifactHelpers.ClientHelper.DeleteClient |
 | Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnName | Removed |
-| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldName | ArtifactHelpers.DocumentHelper.GetDocumentIdentifierFieldName |
 | Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnNameWithDbContext | Removed |
+| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldName | ArtifactHelpers.DocumentHelper.GetDocumentIdentifierFieldName |
 | Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldNameWithDbContext | Removed |
-| Field | ArtifactHelpers.Fields.GetFieldArtifactID | ArtifactHelpers.FieldHelper.GetFieldArtifactID |
-| Field | ArtifactHelpers.Fields.GetFieldCount | ArtifactHelpers.FieldHelper.GetFieldCount |
-| Field | ArtifactHelpers.Fields.GetFieldArtifactIDWithDbContext | Removed |
-| Field | ArtifactHelpers.Fields.GetFieldCountWithDbContext | Removed |
 | Field | ArtifactHelpers.Fields.CreateField | Removed |
 | Field | ArtifactHelpers.Fields.CreateField_Date | ArtifactHelpers.FieldHelper.CreateFieldDate |
-| Field | ArtifactHelpers.Fields.CreateField_User | ArtifactHelpers.FieldHelper.CreateFieldUser |
 | Field | ArtifactHelpers.Fields.CreateField_FixedLengthText | ArtifactHelpers.FieldHelper.CreateFieldFixedLengthText |
 | Field | ArtifactHelpers.Fields.CreateField_LongText | ArtifactHelpers.FieldHelper.CreateFieldLongText |
+| Field | ArtifactHelpers.Fields.CreateField_MultipleChoice | ArtifactHelpers.FieldHelper.CreateFieldMultipleChoice |
+| Field | ArtifactHelpers.Fields.CreateField_SingleChoice | ArtifactHelpers.FieldHelper.CreateFieldSingleChoice |
+| Field | ArtifactHelpers.Fields.CreateField_User | ArtifactHelpers.FieldHelper.CreateFieldUser |
 | Field | ArtifactHelpers.Fields.CreateField_WholeNumber | ArtifactHelpers.FieldHelper.CreateFieldWholeNumber |
 | Field | ArtifactHelpers.Fields.CreateField_YesNO | ArtifactHelpers.FieldHelper.CreateFieldYesNo |
-| Field | ArtifactHelpers.Fields.CreateField_SingleChoice | ArtifactHelpers.FieldHelper.CreateFieldSingleChoice |
-| Field | ArtifactHelpers.Fields.CreateField_MultipleChoice | ArtifactHelpers.FieldHelper.CreateFieldMultipleChoice |
+| Field | ArtifactHelpers.Fields.GetFieldArtifactID | ArtifactHelpers.FieldHelper.GetFieldArtifactID |
+| Field | ArtifactHelpers.Fields.GetFieldArtifactIDWithDbContext | Removed |
+| Field | ArtifactHelpers.Fields.GetFieldCount | ArtifactHelpers.FieldHelper.GetFieldCount |
+| Field | ArtifactHelpers.Fields.GetFieldCountWithDbContext | Removed |
+| Folder | ArtifactHelpers.Folder.CreateFolder | ArtifactHelpers.FoldersHelper.CreateFolder |
 | Folder | ArtifactHelpers.Folder.GetFolderName | ArtifactHelpers.FoldersHelper.GetFolderName |
 | Folder | ArtifactHelpers.Folder.GetRootFolderArtifactID | ArtifactHelpers.FoldersHelper.GetRootFolderArtifactID |
-| Folder | ArtifactHelpers.Folder.CreateFolder | ArtifactHelpers.FoldersHelper.CreateFolder |
 | Group | GroupHelpers.CreateGroup.Create_Group | GroupHelpers.GroupHelper.CreateGroup |
 | Group | GroupHelpers.DeleteGroup.Delete_Group | GroupHelpers.GroupHelper.DeleteGroup |
 | KeplerHelper | Any Usage | Removed |
 | User | UserHelpers.CreateUser.CreateNewUser | UserHelpers.UserHelper.Create |
 | User | UserHelpers.CreateUser.FindChoiceArtifactId | ArtifactHelpers.ChoiceHelper.GetChoiceId |
-| User | UserHelpers.CreateUser.FindGroupArtifactId | GroupHelpers.GroupHelper.GetGroupId |
 | User | UserHelpers.CreateUser.FindClientArtifactId | ArtifactHelpers.ClientHelper.GetClientId |
+| User | UserHelpers.CreateUser.FindGroupArtifactId | GroupHelpers.GroupHelper.GetGroupId |
 | User | UserHelpers.DeleteUser.Delete_User | UserHelpers.UserHelper.Delete |
-| Workspace | WorkspaceHelpers.DeleteWorkspace.Delete | WorkspaceHelpers.WorkspaceHelpers.Delete |
 | Workspace | WorkspaceHelpers.CreateWorkspace.Create | WorkspaceHelpers.WorkspaceHelpers.Create |
 | Workspace | WorkspaceHelpers.DeleteWorkspace.Delete | WorkspaceHelpers.WorkspaceHelpers.Delete |
+| Workspace | WorkspaceHelpers.DeleteWorkspace.Delete | WorkspaceHelpers.WorkspaceHelpers.Delete |
+
 
 <br>
 

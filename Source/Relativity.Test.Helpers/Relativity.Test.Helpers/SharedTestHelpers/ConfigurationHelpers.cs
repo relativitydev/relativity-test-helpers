@@ -122,10 +122,5 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			get { return _settings.AgentServerAddress; }
 		}
 
-		public static string FORCE_DBCONTEXT
-		{
-			get { return _settings.ForceDbContext; }
-		}
-
 	}
 }

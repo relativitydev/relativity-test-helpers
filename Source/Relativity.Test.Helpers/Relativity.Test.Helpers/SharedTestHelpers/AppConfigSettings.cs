@@ -130,9 +130,5 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			get { return _appSettings["AgentServerAddress"] ?? "."; }
 		}
 
-		public override string ForceDbContext
-		{
-			get { return _appSettings["ForceDbContext"]; }
-		}
 	}
 }
