@@ -16,7 +16,6 @@
 		<Parameter name="RESTServerAddress" value="172.99.99.99" />
 		<Parameter name="ServerBindingType" value="http" />
 		<Parameter name="RelativityInstanceAddress" value="172.99.99.99" />
-		<Parameter name="ForceDbContext" value="false"/>
 		<Parameter name="GmailMailTestEmailAddress" value="someEmail@gmail.com"/> <!--Used for GmailMail Tests-->
 		<Parameter name="GmailMailTestEmailPassword" value="somePassword"/> <!--Used for GmailMail Tests-->
 		<Parameter name="MailTrapTestApiKey" value="someKey"/> <!--Used for MailTrap Tests--> 
