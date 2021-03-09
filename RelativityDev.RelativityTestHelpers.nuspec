@@ -15,8 +15,8 @@
     <tags>relativity-test-helpers relativity test helpers relativity test helpers test helpers integration tests relativity integration tests </tags>
 	<dependencies>
       <group targetFramework=".NETFramework4.6.2">
-        <dependency id="Relativity.DataExchange.Client.SDK" version="1.4.0" />
-        <dependency id="Relativity.ObjectManager" version="10.3.170.1" />
+        <dependency id="Relativity.DataExchange.Client.SDK" version="1.12.21" />
+        <dependency id="Relativity.ObjectManager" version="12.0.78.6" />
         <dependency id="Newtonsoft.Json" version="12.0.2" />
         <dependency id="MailKit" version="2.2.0" />
         <dependency id="MimeKit" version="2.2.0" />
@@ -25,9 +25,6 @@
   </metadata>
   <files>
     <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\**\Relativity.Test.Helpers.dll" target="lib\net462\" />
-    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\**\TestHelpersKepler.Interfaces.dll" target="lib\net462\" />
-    <file src="Source\Relativity.Test.Helpers\TestHelpersKepler\TestHelpersKepler.Services\bin\**\TestHelpersKepler.Services.dll" target="lib\net462\" />
-    <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\**\TestHelpers_Kepler_App.rap" target="build\" />
 	<file src="RelativityDev.RelativityTestHelpers.targets" target="build\" />
   </files>
 </package>
