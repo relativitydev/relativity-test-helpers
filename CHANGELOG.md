@@ -5,6 +5,11 @@
 
 -------------------------
 
+## 2021-03-09
+- REL-518415 - New version 8.1.0.1 created.
+
+-------------------------
+
 ## 2021-03-08
 - REL-518415 - Removed Kepler Helper, RSAPI Package, and any remaining uses of RSAPI.
 - REL-518437 - Updated README, renamed Document to DocumentHelper, cleaned up Test Example project, removed ForceDbContext, removed KeplerHelper Kepler projects
