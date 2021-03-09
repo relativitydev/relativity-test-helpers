@@ -7,7 +7,7 @@
 
 ## 2021-03-08
 - REL-518415 - Removed Kepler Helper, RSAPI Package, and any remaining uses of RSAPI.
-- REL-518437 - Updated README, renamed Document to DocumentHelper, cleaned up Test Example project, removed ForceDbContext
+- REL-518437 - Updated README, renamed Document to DocumentHelper, cleaned up Test Example project, removed ForceDbContext, removed KeplerHelper Kepler projects
 
 -------------------------
 
