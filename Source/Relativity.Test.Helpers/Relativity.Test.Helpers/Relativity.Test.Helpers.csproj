@@ -186,7 +186,7 @@
   <ItemGroup>
     <Compile Include="ArtifactHelpers\ChoiceHelper.cs" />
     <Compile Include="ArtifactHelpers\ClientHelper.cs" />
-    <Compile Include="ArtifactHelpers\Document.cs" />
+    <Compile Include="ArtifactHelpers\DocumentHelper.cs" />
     <Compile Include="ArtifactHelpers\FieldHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IDocumentHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFieldsHelper.cs" />

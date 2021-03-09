@@ -9,6 +9,8 @@ This is also available as a [nuget package](https://www.nuget.org/packages/Relat
 # Version 8.0 Updates
 With the deprecation of RSAPI, TestHelpers was significantly updated to account for this.  These updates, however, did bring about many breaking changes.
 
+**Note: Previous packages of TestHelpers will still be available, but previous major releases will not be updated with RSAPI removal**
+
 ## Breaking Changes
 Context |  v7 | v8 |
 |:-----|:--------|:------|
@@ -17,12 +19,10 @@ Context |  v7 | v8 |
 | Application | Application.ApplicationHelpers.ImportApplication | Kepler.ApplicationInstallHelper.InstallApplicationAsync |
 | Client | ArtifactHelpers.Client.Create_Client | ArtifactHelpers.ClientHelper.CreateClient |
 | Client | ArtifactHelpers.Client.Delete_Client | ArtifactHelpers.ClientHelper.DeleteClient |
-| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnName | ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnName |
-| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldName | Removed |
+| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnName | Removed |
+| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldName | ArtifactHelpers.DocumentHelper.GetDocumentIdentifierFieldName |
 | Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnNameWithDbContext | Removed |
 | Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldNameWithDbContext | Removed |
-| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldColumnName | Removed |
-| Document | ArtifactHelpers.Document.GetDocumentIdentifierFieldName | Removed |
 | Field | ArtifactHelpers.Fields.GetFieldArtifactID | ArtifactHelpers.FieldHelper.GetFieldArtifactID |
 | Field | ArtifactHelpers.Fields.GetFieldCount | ArtifactHelpers.FieldHelper.GetFieldCount |
 | Field | ArtifactHelpers.Fields.GetFieldArtifactIDWithDbContext | Removed |
@@ -51,7 +51,7 @@ Context |  v7 | v8 |
 | Workspace | WorkspaceHelpers.CreateWorkspace.Create | WorkspaceHelpers.WorkspaceHelpers.Create |
 | Workspace | WorkspaceHelpers.DeleteWorkspace.Delete | WorkspaceHelpers.WorkspaceHelpers.Delete |
 
-**Note: Previous packages of TestHelpers will still be available, but will not be updated with RSAPI deprecation**
+<br>
 
 # New Runsettings option within TestHelpers
 As of update 7.1.0.X of Test Helpers, you can optionally utilize Runsettings instead of app.config for your testing.  Both can still be used, but just not within the same Test Fixture, as the code does a hard swap of the value collection after the TestHelpers constructor.

@@ -48,7 +48,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 
 			// Act
 			string fieldName = "";
-			fieldName = Document.GetDocumentIdentifierFieldName(_servicesManager, _workspaceId, fieldArtifactTypeId);
+			fieldName = DocumentHelper.GetDocumentIdentifierFieldName(_servicesManager, _workspaceId, fieldArtifactTypeId);
 
 			// Assert
 			Assert.AreEqual(controlNumber, fieldName);
@@ -63,7 +63,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			// Act / Assert
 			string fieldName = "";
 			Assert.Throws<Exception>(() =>
-				Document.GetDocumentIdentifierFieldName(_servicesManager, _workspaceId, fieldArtifactTypeId));
+				DocumentHelper.GetDocumentIdentifierFieldName(_servicesManager, _workspaceId, fieldArtifactTypeId));
 		}
 	}
 }

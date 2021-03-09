@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using IServicesMgr = Relativity.API.IServicesMgr;
@@ -24,7 +24,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 
 		#region Variables
 		private int _workspaceId;
-		private Int32 _rootFolderArtifactID;
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 		private const ExecutionIdentity EXECUTION_IDENTITY = ExecutionIdentity.CurrentUser;
 		private IServicesMgr _servicesMgr;
@@ -35,7 +34,6 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		private int _groupArtifactId;
 		private int _fixedLengthArtId;
 		private int _longtextartid;
-		private int _yesnoartid;
 		private int _wholeNumberArtId;
 
 		#endregion
@@ -47,7 +45,12 @@ namespace Relativity.Test.Helpers.Example.NUnit
 		public void Execute_TestFixtureSetup()
 		{
 			//Setup for testing
-			var helper = new TestHelper(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+			Dictionary<string, string> configDictionary = new Dictionary<string, string>();
+			foreach (string testParameterName in TestContext.Parameters.Names)
+			{
+				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
+			}
+			var helper = new TestHelper(configDictionary);
 			_servicesMgr = helper.GetServicesManager();
 
 			//Create new user 
@@ -71,8 +74,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Documents with a given folder artifact id
-			var folderName = Relativity.Test.Helpers.ArtifactHelpers.FoldersHelper.GetFolderName(_servicesMgr, _rootFolderArtifactID, _workspaceId);
-			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, folderName, nativeFilePath);
+			Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(_workspaceId, _numberOfDocuments, _foldername, nativeFilePath);
 
 			//Create Fixed Length field
 			_fixedLengthArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldFixedLengthText(_servicesMgr, _workspaceId);
@@ -83,10 +85,7 @@ namespace Relativity.Test.Helpers.Example.NUnit
 			//Create Whole number field
 			_wholeNumberArtId = Relativity.Test.Helpers.ArtifactHelpers.FieldHelper.CreateFieldWholeNumber(_servicesMgr, _workspaceId);
 
-			_workspaceId = 1017834;
-			var DtSearchAppArtifactId = 1038135;
-
-			var guid = helper.GetGuid(_workspaceId, DtSearchAppArtifactId, Constants.ArtifactTypeIds.Search);
+			Guid workspaceGuid = helper.GetGuid(-1, _workspaceId, Constants.ArtifactTypeIds.Workspace);
 		}
 
 		#endregion
