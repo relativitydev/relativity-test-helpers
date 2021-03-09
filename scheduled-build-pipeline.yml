@@ -53,7 +53,6 @@ steps:
       -RESTServerAddress $(restServerAddress)
       -ServerBindingType $(serverBindingType)
       -RelativityInstanceAddress $(relativityInstanceAddress)
-      -ForceDbContext $(forceDbContext)
       -GmailMailTestEmailAddress $(gmailMailTestEmailAddress)
       -GmailMailTestEmailPassword $(gmailMailTestEmailPassword)
       -MailTrapTestApiKey $(mailTrapTestApiKey)

@@ -1,5 +1,0 @@
-This software may only be used by persons authorized to use the e-discovery software know as Relativity ("Relativity") under a valid license agreement with Relativity ODA LLC. If you are not authorized to use Relativity, you may not use this software and any use by you is strictly prohibited.Â 
-
-By using this software, you hereby acknowledge that you or your employer has a valid license to use Relativity, and you hereby agree that you will not reverse engineer, decompile, disassemble, translate, or reconstruct, this software or any portion thereof, or make any attempt to: (i) discover the source code of, or create Derivative Works from, this software or any portion or aspect thereof; (ii) copy this software or any portion or aspect thereof, including any ideas, features, functions or graphics; or (iii) permit any person or other party to engage in any of the foregoing activities. 
-
-Please contact legal@relativity.com for more information about obtaining a license to use Relativity.

@@ -16,7 +16,7 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 	/// 
 	/// </summary>
 
-	public class Document : IDocumentHelper
+	public class DocumentHelper : IDocumentHelper
 	{
 		#region Public Methods
 

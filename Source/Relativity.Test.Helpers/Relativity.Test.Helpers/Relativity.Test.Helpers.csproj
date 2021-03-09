@@ -186,7 +186,7 @@
   <ItemGroup>
     <Compile Include="ArtifactHelpers\ChoiceHelper.cs" />
     <Compile Include="ArtifactHelpers\ClientHelper.cs" />
-    <Compile Include="ArtifactHelpers\Document.cs" />
+    <Compile Include="ArtifactHelpers\DocumentHelper.cs" />
     <Compile Include="ArtifactHelpers\FieldHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IDocumentHelper.cs" />
     <Compile Include="ArtifactHelpers\Interfaces\IFieldsHelper.cs" />
@@ -196,8 +196,6 @@
     <Compile Include="Exceptions\TestHelpersApplicationInstallException.cs" />
     <Compile Include="Exceptions\TestHelpersOAuth2Exception.cs" />
     <Compile Include="GroupHelpers\GroupHelper.cs" />
-    <Compile Include="HttpRequestHelper.cs" />
-    <Compile Include="IHttpRequestHelper.cs" />
     <Compile Include="Kepler\ApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IApplicationInstallHelper.cs" />
     <Compile Include="Kepler\IOAuth2Helper.cs" />
@@ -282,16 +280,6 @@
     <None Include="TestHelpers_Kepler_App.rap">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Interfaces\TestHelpersKepler.Interfaces.csproj">
-      <Project>{0976BDEB-2534-490E-9EC0-7CAD0411E1BC}</Project>
-      <Name>TestHelpersKepler.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestHelpersKepler\TestHelpersKepler.Services\TestHelpersKepler.Services.csproj">
-      <Project>{ef257f9d-9598-4cb1-8a7b-571364408c7a}</Project>
-      <Name>TestHelpersKepler.Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
