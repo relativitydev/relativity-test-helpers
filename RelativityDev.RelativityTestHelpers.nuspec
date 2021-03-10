@@ -15,6 +15,7 @@
     <tags>relativity-test-helpers relativity test helpers relativity test helpers test helpers integration tests relativity integration tests </tags>
 	<dependencies>
       <group targetFramework=".NETFramework4.6.2">
+        <dependency id="Relativity.API" version="15.0.0" />
         <dependency id="Relativity.DataExchange.Client.SDK" version="1.12.21" />
         <dependency id="Relativity.ObjectManager" version="12.0.78.6" />
         <dependency id="Newtonsoft.Json" version="12.0.2" />
