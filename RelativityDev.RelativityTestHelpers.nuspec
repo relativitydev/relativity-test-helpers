@@ -25,6 +25,5 @@
   </metadata>
   <files>
     <file src="Source\Relativity.Test.Helpers\Relativity.Test.Helpers\bin\**\Relativity.Test.Helpers.dll" target="lib\net462\" />
-	<file src="RelativityDev.RelativityTestHelpers.targets" target="build\" />
   </files>
 </package>
