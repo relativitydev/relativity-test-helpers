@@ -277,9 +277,6 @@
     </None>
     <None Include="oi\unmanaged\cmmap000.bin" />
     <None Include="packages.config" />
-    <None Include="TestHelpers_Kepler_App.rap">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

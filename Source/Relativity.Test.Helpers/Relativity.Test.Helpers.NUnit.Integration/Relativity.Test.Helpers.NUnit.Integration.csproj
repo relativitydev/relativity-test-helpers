@@ -194,9 +194,6 @@
     <None Include="test.runsettings">
       <SubType>Designer</SubType>
     </None>
-    <None Include="TestHelpers_Kepler_App.rap">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Relativity.Test.Helpers\Relativity.Test.Helpers.csproj">
