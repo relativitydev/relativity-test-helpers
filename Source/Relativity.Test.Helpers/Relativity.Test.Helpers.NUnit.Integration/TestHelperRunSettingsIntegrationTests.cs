@@ -31,21 +31,6 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 		}
 
 		[Test]
-		public void GetDBContextTest()
-		{
-			// Arrange
-			IDBContext context;
-
-			// Act
-			context = SuT.GetDBContext(-1);
-			context.GetConnection(true);
-			context.ReleaseConnection();
-
-			// Assert
-			Assert.IsTrue(context.Database.Equals(TestConstants.Database.EddsDatabaseName, StringComparison.OrdinalIgnoreCase));
-		}
-
-		[Test]
 		public void GetLoggerFactoryTest()
 		{
 			// Arrange

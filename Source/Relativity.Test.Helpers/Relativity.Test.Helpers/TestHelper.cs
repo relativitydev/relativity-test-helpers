@@ -60,23 +60,7 @@ namespace Relativity.Test.Helpers
 
 		public IDBContext GetDBContext(int caseID)
 		{
-			//You can create a new DBcontext using kCura.Data.RowDataGeteway until Relativity versions lower than 9.6.85.9
-			//kCura.Data.RowDataGateway.Context context = new kCura.Data.RowDataGateway.Context(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, string.Format("EDDS{0}", caseID == -1 ? "" : caseID.ToString()), SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
-			//return new DBContext(context);
-
-			//You can create a new DBcontext using DBContextHelper for Relativity versions equal to or greater than 9.6.85.9
-			DbContext context;
-
-			if (_alternateConfig != null)
-			{
-				context = new DbContext(this._alternateConfig.SqlServerAddress, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", this._alternateConfig.SqlUserName, this._alternateConfig.SqlPassword);
-			}
-			else
-			{
-				context = new DbContext(SharedTestHelpers.ConfigurationHelper.SQL_SERVER_ADDRESS, $"EDDS{(caseID == -1 ? "" : caseID.ToString())}", SharedTestHelpers.ConfigurationHelper.SQL_USER_NAME, SharedTestHelpers.ConfigurationHelper.SQL_PASSWORD);
-			}
-
-			return context;
+			throw new NotImplementedException("DbContext is not the recommended process to get sql access. Instead build a custom kepler service for any sql needs.");
 		}
 
 		/// <summary>
