@@ -74,7 +74,6 @@
 			public class KeplerTestRap
 			{
 				public const string KEPLER_TEST_APP_GUID = "151e017c-fcaa-49e6-ae20-3c2b5e721711";
-				public const string KEPLER_TEST_APP_NAME = "TestHelpers_Kepler_App";
 			}
 
 			public const string SERVICES_DLL_NAME = "TestHelpersKepler.Services.dll";
