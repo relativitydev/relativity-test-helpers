@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -31,16 +30,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			}
 		}
 
-		public AppConfigSettings(TestContext testContext)
-		{
-			_appSettings = new NameValueCollection();
-
-			foreach (string testParameterName in TestContext.Parameters.Names)
-			{
-				_appSettings.Add(testParameterName, TestContext.Parameters[testParameterName]);
-			}
-		}
-
 		public override string TestDataLocation
 		{
 			get { return _appSettings["TestDataLocation"]; }
@@ -49,11 +38,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 		public override int WorkspaceId
 		{
 			get { return int.Parse(_appSettings["WorkspaceID"]); }
-		}
-
-		public override string RsapiServerAddress
-		{
-			get { return _appSettings["RSAPIServerAddress"]; }
 		}
 
 		public override string RestServerAddress
@@ -146,9 +130,5 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			get { return _appSettings["AgentServerAddress"] ?? "."; }
 		}
 
-		public override string ForceDbContext
-		{
-			get { return _appSettings["ForceDbContext"]; }
-		}
 	}
 }

@@ -1,16 +1,12 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Relativity.API;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
-using NUnit.Framework;
-using Relativity.API;
-using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.WorkspaceHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration
 {
@@ -56,23 +52,25 @@ namespace Relativity.Test.Helpers.NUnit.Integration
 			// Act
 			try
 			{
-				workspaceId = CreateWorkspace.CreateWorkspaceAsync(sampleWorkspaceName, ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, Sut.GetServicesManager(), ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD).Result;
+				workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(Sut.GetServicesManager(), sampleWorkspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
 				Relativity.Test.Helpers.ImportAPIHelper.ImportAPIHelper.CreateDocumentswithFolderName(workspaceId, numberOfDocumentsToCreate, folderName, nativeFilePath);
 
-				Query<Document> query = new Query<Document>
+				using (IObjectManager objectManager = Sut.GetServicesManager().CreateProxy<IObjectManager>(ExecutionIdentity.System))
 				{
-					Fields = new List<FieldValue> { new FieldValue("Control Number") }
-				};
-
-				using (IRSAPIClient rsapiClient = Sut.GetServicesManager().CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
-				{
-					rsapiClient.APIOptions.WorkspaceID = workspaceId;
-					QueryResultSet<Document> result = rsapiClient.Repositories.Document.Query(query, 0);
-					numberOfDocumentsCreated = result.TotalCount;
+					QueryRequest queryRequest = new QueryRequest()
+					{
+						ObjectType = new ObjectTypeRef { ArtifactTypeID = Constants.ArtifactTypeIds.Document },
+						Fields = new List<FieldRef>()
+						{
+							new FieldRef { Name = "Name" }
+						},
+					};
+					QueryResult result = objectManager.QueryAsync(workspaceId, queryRequest, 1, 1000).ConfigureAwait(false).GetAwaiter().GetResult();
+					numberOfDocumentsCreated = result.Objects.Count;
 				}
 
-				DeleteWorkspace.DeleteTestWorkspace(workspaceId, Sut.GetServicesManager(), ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
+				Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(Sut.GetServicesManager(), workspaceId);
 			}
 			catch (Exception ex)
 			{

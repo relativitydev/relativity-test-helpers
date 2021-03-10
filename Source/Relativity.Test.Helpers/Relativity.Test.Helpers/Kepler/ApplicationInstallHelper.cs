@@ -1,9 +1,6 @@
-﻿using kCura.Relativity.Client;
-using kCura.Relativity.Client.DTOs;
-using Relativity.Kepler.Transport;
+﻿using Relativity.Kepler.Transport;
 using Relativity.Services.Interfaces.LibraryApplication;
 using Relativity.Services.Interfaces.LibraryApplication.Models;
-using Relativity.Test.Helpers.Application;
 using Relativity.Test.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -13,7 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Relativity.Test.Helpers.Kepler
@@ -28,7 +24,6 @@ namespace Relativity.Test.Helpers.Kepler
 
 		private readonly IApplicationInstallManager _applicationInstallManager;
 		private readonly ILibraryApplicationManager _libraryApplicationManager;
-		private readonly IRSAPIClient _rsapiClient;
 		private readonly string _protocol;
 		private readonly string _serverAddress;
 		private readonly string _username;
@@ -39,7 +34,6 @@ namespace Relativity.Test.Helpers.Kepler
 		/// <summary>
 		/// The ApplicationInstallHelper takes in the 3 proxies as required and will use them depending on if your Relativity Instance is 10.3.170.1 or greater.
 		/// </summary>
-		/// <param name="rsapiClient"></param>
 		/// <param name="applicationInstallManager"></param>
 		/// <param name="libraryApplicationManager"></param>
 		/// <param name="protocol"></param>
@@ -47,9 +41,9 @@ namespace Relativity.Test.Helpers.Kepler
 		/// <param name="username"></param>
 		/// <param name="password"></param>
 		/// <param name="httpMessageHandler"></param>
-		public ApplicationInstallHelper(IRSAPIClient rsapiClient, IApplicationInstallManager applicationInstallManager, ILibraryApplicationManager libraryApplicationManager, string protocol, string serverAddress, string username, string password, HttpMessageHandler httpMessageHandler = null)
+
+		public ApplicationInstallHelper(IApplicationInstallManager applicationInstallManager, ILibraryApplicationManager libraryApplicationManager, string protocol, string serverAddress, string username, string password, HttpMessageHandler httpMessageHandler = null)
 		{
-			_rsapiClient = rsapiClient ?? throw new ArgumentNullException($"Parameter ({nameof(rsapiClient)}) cannot be null");
 			_applicationInstallManager = applicationInstallManager ?? throw new ArgumentNullException($"Parameter ({nameof(applicationInstallManager)}) cannot be null");
 			_libraryApplicationManager = libraryApplicationManager ?? throw new ArgumentNullException($"Parameter ({nameof(libraryApplicationManager)}) cannot be null");
 			_protocol = protocol ?? throw new ArgumentNullException($"Parameter ({nameof(_protocol)}) cannot be null");
@@ -75,7 +69,6 @@ namespace Relativity.Test.Helpers.Kepler
 
 		public void Dispose()
 		{
-			_rsapiClient.Dispose();
 			_applicationInstallManager.Dispose();
 			_libraryApplicationManager.Dispose();
 		}
@@ -94,67 +87,53 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				List<int> workspaces = new List<int> { workspaceId };
 				int workspaceApplicationInstallId;
+				int libraryApplicationInstallId;
+				InstallStatusCode status;
 
-				if (await IsVersionKeplerCompatibleAsync())
+				InstallApplicationRequest request = new InstallApplicationRequest
 				{
-					InstallApplicationRequest request = new InstallApplicationRequest
-					{
-						WorkspaceIDs = workspaces,
-						UnlockApplications = unlockApps
-					};
+					WorkspaceIDs = workspaces,
+					UnlockApplications = unlockApps
+				};
 
-					int libraryApplicationInstallId;
-					InstallStatusCode status;
 
-					if (!await DoesLibraryApplicationExistAsync(applicationName))
-					{
-						libraryApplicationInstallId = await CreateLibraryApplicationAsync(fileStream);
+				if (!await DoesLibraryApplicationExistAsync(applicationName))
+				{
+					libraryApplicationInstallId = await CreateLibraryApplicationAsync(fileStream);
 
-						// The following function will poll for the installation status until the installation reaches a terminal state.
-						status = PollForTerminalStatusAsync(async () => await _libraryApplicationManager.GetLibraryInstallStatusAsync(AdminWorkspaceId, libraryApplicationInstallId)).Result;
-						Console.WriteLine($@"Library Installation has terminated with the following status: {status}.");
-					}
-					else
-					{
-						libraryApplicationInstallId = await GetLibraryApplicationIdAsync(applicationName);
-					}
-
-					if (workspaceId != -1)
-					{
-						InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(AdminWorkspaceId, libraryApplicationInstallId, request);
-
-						if (response.Results.Count == workspaces.Count)
-						{
-							string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId}.");
-							Console.WriteLine(info);
-						}
-						else
-						{
-							string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId} " +
-							                            $"since one or more workspaces already have the same version of this application installed.");
-							Console.WriteLine(info);
-						}
-
-						workspaceApplicationInstallId = response.Results.First().ApplicationInstallID;
-
-						status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, libraryApplicationInstallId, workspaceApplicationInstallId)).Result;
-						Console.WriteLine($@"Workspace Installation has terminated with the following status: {status}.");
-					}
-					else
-					{
-						workspaceApplicationInstallId = libraryApplicationInstallId;
-					}
+					// The following function will poll for the installation status until the installation reaches a terminal state.
+					status = PollForTerminalStatusAsync(async () => await _libraryApplicationManager.GetLibraryInstallStatusAsync(AdminWorkspaceId, libraryApplicationInstallId)).ConfigureAwait(false).GetAwaiter().GetResult();
+					Console.WriteLine($@"Library Installation has terminated with the following status: {status}.");
 				}
 				else
 				{
-					if (!await DoesWorkspaceApplicationExistAsync(applicationName, workspaceId, 0))
+					libraryApplicationInstallId = await GetLibraryApplicationIdAsync(applicationName);
+				}
+
+				if (workspaceId != -1)
+				{
+					InstallApplicationResponse response = await _applicationInstallManager.InstallApplicationAsync(AdminWorkspaceId, libraryApplicationInstallId, request);
+
+					if (response.Results.Count == workspaces.Count)
 					{
-						workspaceApplicationInstallId = await ImportApplication(workspaceId, false, fileStream, applicationName);
+						string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId}.");
+						Console.WriteLine(info);
 					}
 					else
 					{
-						workspaceApplicationInstallId = await ImportApplication(workspaceId, true, fileStream, applicationName);
+						string info = string.Format($"Queuing {response.Results.Count} installation(s) for the Library Application with ArtifactID {libraryApplicationInstallId} " +
+																				$"since one or more workspaces already have the same version of this application installed.");
+						Console.WriteLine(info);
 					}
+
+					workspaceApplicationInstallId = response.Results.First().ApplicationInstallID;
+
+					status = PollForTerminalStatusAsync(async () => await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, libraryApplicationInstallId, workspaceApplicationInstallId)).ConfigureAwait(false).GetAwaiter().GetResult();
+					Console.WriteLine($@"Workspace Installation has terminated with the following status: {status}.");
+				}
+				else
+				{
+					workspaceApplicationInstallId = libraryApplicationInstallId;
 				}
 
 				return workspaceApplicationInstallId;
@@ -178,44 +157,11 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				if (await DoesLibraryApplicationExistAsync(applicationName))
 				{
-					if (await IsVersionKeplerCompatibleAsync())
-					{
-						int applicationId = await GetLibraryApplicationIdAsync(applicationName);
+					int applicationId = await GetLibraryApplicationIdAsync(applicationName);
 
-						await _libraryApplicationManager.DeleteAsync(AdminWorkspaceId, applicationId);
-						string info = string.Format($"Library Application with ArtifactID ({applicationId}) and applicationName ({applicationName}) is being deleted.");
-						Console.WriteLine(info);
-					}
-					else
-					{
-						_rsapiClient.APIOptions.WorkspaceID = AdminWorkspaceId;
-
-						Query<RDO> query = new Query<RDO>();
-						query.ArtifactTypeID = LibraryApplicationTypeId;
-						query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.ArtifactQueryFieldNames.ArtifactID));
-						query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name));
-
-						query.Condition = new kCura.Relativity.Client.TextCondition(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name, kCura.Relativity.Client.TextConditionEnum.EqualTo, applicationName);
-
-						QueryResultSet<RDO> allApps = _rsapiClient.Repositories.RDO.Query(query);
-
-						if (allApps.Success && allApps.TotalCount == 1)
-						{
-							Result<RDO> appRdo = allApps.Results.First();
-
-							WriteResultSet<RDO> deleteResult = _rsapiClient.Repositories.RDO.Delete(appRdo.Artifact.ArtifactID);
-							if (deleteResult.Success)
-							{
-								string info = string.Format($"Library Application with Application Name ({applicationName}) is being deleted.");
-								Console.WriteLine(info);
-							}
-							else
-							{
-								string info = string.Format($"Library Application with Application Name ({applicationName}) failed to delete.");
-								Console.WriteLine(info);
-							}
-						}
-					}
+					await _libraryApplicationManager.DeleteAsync(AdminWorkspaceId, applicationId);
+					string info = string.Format($"Library Application with ArtifactID ({applicationId}) and applicationName ({applicationName}) is being deleted.");
+					Console.WriteLine(info);
 				}
 				else
 				{
@@ -242,29 +188,9 @@ namespace Relativity.Test.Helpers.Kepler
 			{
 				bool result;
 
-				if (await IsVersionKeplerCompatibleAsync())
-				{
-					List<LibraryApplicationResponse> allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
-					result = allApps.Exists(x => x.Name.Equals(applicationName));
-				}
-				else
-				{
-					_rsapiClient.APIOptions.WorkspaceID = AdminWorkspaceId;
+				List<LibraryApplicationResponse> allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
+				result = allApps.Exists(x => x.Name.Equals(applicationName));
 
-					Query<RDO> query = new Query<RDO>();
-					query.ArtifactTypeID = LibraryApplicationTypeId;
-
-					query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.ArtifactQueryFieldNames.ArtifactID));
-					query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name));
-					query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Version));
-					query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.UserFriendlyURL));
-
-					query.Condition = new kCura.Relativity.Client.TextCondition(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name, kCura.Relativity.Client.TextConditionEnum.EqualTo, applicationName);
-
-					QueryResultSet<RDO> allApps = _rsapiClient.Repositories.RDO.Query(query, 10);
-
-					result = allApps.Success && allApps.TotalCount > 0;
-				}
 
 				return result;
 			}
@@ -291,39 +217,20 @@ namespace Relativity.Test.Helpers.Kepler
 
 				if (workspaceId != AdminWorkspaceId)
 				{
-					if (await IsVersionKeplerCompatibleAsync())
+					List<LibraryApplicationResponse> allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
+
+					if (allApps.Exists(x => x.Name.Equals(applicationName)))
 					{
-						List<LibraryApplicationResponse> allApps = await _libraryApplicationManager.ReadAllAsync(AdminWorkspaceId);
+						LibraryApplicationResponse app = allApps.Find(x => x.Name.Equals(applicationName));
 
-						if (allApps.Exists(x => x.Name.Equals(applicationName)))
-						{
-							LibraryApplicationResponse app = allApps.Find(x => x.Name.Equals(applicationName));
-
-							GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.ArtifactID, workspaceApplicationInstallId);
-							result = appStatus.InstallStatus.Code == InstallStatusCode.Completed;
-						}
-						else
-						{
-							result = false;
-						}
+						GetInstallStatusResponse appStatus = await _applicationInstallManager.GetStatusAsync(AdminWorkspaceId, app.ArtifactID, workspaceApplicationInstallId);
+						result = appStatus.InstallStatus.Code == InstallStatusCode.Completed;
 					}
 					else
 					{
-						_rsapiClient.APIOptions.WorkspaceID = workspaceId;
-
-						Query<kCura.Relativity.Client.DTOs.RDO> query = new Query<kCura.Relativity.Client.DTOs.RDO>();
-
-						query.ArtifactTypeID = WorkspaceApplicationTypeId;
-
-						query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.ArtifactQueryFieldNames.ArtifactID));
-						query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name));
-
-						query.Condition = new kCura.Relativity.Client.TextCondition(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name, kCura.Relativity.Client.TextConditionEnum.EqualTo, applicationName);
-
-						QueryResultSet<kCura.Relativity.Client.DTOs.RDO> allApps = _rsapiClient.Repositories.RDO.Query(query, 10);
-
-						result = allApps.Success && allApps.TotalCount > 0;
+						result = false;
 					}
+
 				}
 				else
 				{
@@ -519,96 +426,6 @@ namespace Relativity.Test.Helpers.Kepler
 			}
 		}
 
-		/// <summary>
-		/// This is the old way of installing an application (IRsapi)
-		/// </summary>
-		/// <param name="workspaceId"></param>
-		/// <param name="forceFlag"></param>
-		/// <param name="fileStream"></param>
-		/// <param name="applicationName"></param>
-		/// <param name="appArtifactId"></param>
-		/// <returns></returns>
-		private async Task<int> ImportApplication(int workspaceId, bool forceFlag, FileStream fileStream, string applicationName, int appArtifactId = -1)
-		{
-			try
-			{
-				int artifactId = 0;
-
-				Console.WriteLine("Starting Import Application.....");
-				_rsapiClient.APIOptions.WorkspaceID = workspaceId;
-
-				// Set the forceFlag to true. The forceFlag unlocks any applications in the workspace 
-				// that conflict with the application that you are loading. The applications must be unlocked 
-				// for the install operation to succeed.
-
-				AppInstallRequest appInstallRequest = new AppInstallRequest
-				{
-					FullFilePath = fileStream.Name,
-					ForceFlag = forceFlag
-				};
-				appInstallRequest.AppsToOverride.Add(appArtifactId);
-
-				ProcessOperationResult por = _rsapiClient.InstallApplication(_rsapiClient.APIOptions, appInstallRequest);
-
-				if (por.Success)
-				{
-					ProcessInformation state;
-					do
-					{
-						Thread.Sleep(10);
-						state = _rsapiClient.GetProcessState(_rsapiClient.APIOptions, por.ProcessID);
-
-					} while (state.State == ProcessStateValue.Running);
-
-					if (state.State == ProcessStateValue.CompletedWithError)
-					{
-						throw new ApplicationInstallException(state.Message ?? state.Status ?? "The install completed an unknown error");
-					}
-					else if (state.State == ProcessStateValue.HandledException || state.State == ProcessStateValue.UnhandledException)
-					{
-						throw new ApplicationInstallException(state.Message ?? state.Status ?? "The install failed with a unknown error");
-					}
-				}
-				else
-				{
-					throw new ApplicationInstallException($"There was an error installing the application {por.Message}");
-				}
-
-				Console.WriteLine("Querying for Application artifact id....");
-
-				_rsapiClient.APIOptions.WorkspaceID = workspaceId;
-				Query<kCura.Relativity.Client.DTOs.RDO> query = new Query<kCura.Relativity.Client.DTOs.RDO>();
-
-				query.ArtifactTypeID = WorkspaceApplicationTypeId;
-
-				query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.ArtifactQueryFieldNames.ArtifactID));
-				query.Fields.Add(new kCura.Relativity.Client.DTOs.FieldValue(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name));
-
-				query.Condition = new kCura.Relativity.Client.TextCondition(kCura.Relativity.Client.DTOs.RelativityApplicationFieldNames.Name, kCura.Relativity.Client.TextConditionEnum.EqualTo, applicationName);
-
-				QueryResultSet<kCura.Relativity.Client.DTOs.RDO> queryResultSet = _rsapiClient.Repositories.RDO.Query(query, 10);
-
-				if (queryResultSet != null)
-				{
-					Result<kCura.Relativity.Client.DTOs.RDO> result = queryResultSet.Results.FirstOrDefault();
-					if (result == null || result.Artifact == null)
-					{
-						throw new ApplicationInstallException($"Could not find application with name {applicationName}.");
-					}
-					artifactId = result.Artifact.ArtifactID;
-					Console.WriteLine("Application artifactId is " + artifactId);
-				}
-
-				Console.WriteLine("Exiting Import Application method.....");
-				return await Task.FromResult(artifactId);
-			}
-			catch (Exception ex)
-			{
-				string exception = $"An error occurred in ({nameof(ImportApplication)}) | workspaceId: ({workspaceId}) | forceFlag: ({forceFlag}) | fileStream: ({fileStream.Name}) | applicationName: ({applicationName}) | appArtifactId: ({appArtifactId}) : {ex.Message}";
-				Console.WriteLine(exception);
-				throw new TestHelpersApplicationInstallException(exception, ex);
-			}
-		}
 		#endregion
 	}
 }

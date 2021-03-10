@@ -1,6 +1,7 @@
-﻿using kCura.Relativity.Client;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
+using Relativity.Services.Interfaces.UserInfo;
+using Relativity.Services.Objects;
 using Relativity.Services.Security;
 using Relativity.Test.Helpers.Kepler;
 using Relativity.Tests.Helpers.Tests.Unit.MockHelpers;
@@ -13,7 +14,9 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 	public class OAuth2HelperUnitTests
 	{
 		private Mock<IOAuth2ClientManager> _mockOAuth2ClientManager;
-		private Mock<IRSAPIClient> _mockRsapiClient;
+		private Mock<IUserInfoManager> _mockUserManager;
+		private Mock<IObjectManager> _mockObjectManager;
+
 		private Mock<HttpMessageHandler> _mockHttpMessageHandler;
 		private IOAuth2Helper Sut;
 
@@ -34,10 +37,11 @@ namespace Relativity.Tests.Helpers.Tests.Unit.Kepler
 		{
 			_jsonBearer = _jsonBearer.Replace("@bearerToken", BearerToken);
 			_mockOAuth2ClientManager = MockOAuth2ClientManagerHelper.GetMockOAuth2ClientManager(OAuth2Id, OAuth2Name, OAuth2Secret, ContextUser);
-			_mockRsapiClient = MockRsapiClientHelper.GetMockRsapiClientForUser();
+			_mockUserManager = MockUserManagerHelper.GetMockUserManagerForOAuth();
+			_mockObjectManager = MockObjectManagerHelper.GetMockObjectManagerForOAuth();
 			_mockHttpMessageHandler = MockHttpMessageHandlerHelper.GetMockHttpMessageHandlerForBearerToken(_jsonBearer);
 
-			Sut = new OAuth2Helper(_mockOAuth2ClientManager.Object, _mockRsapiClient.Object);
+			Sut = new OAuth2Helper(_mockOAuth2ClientManager.Object, _mockUserManager.Object, _mockObjectManager.Object);
 		}
 
 		[OneTimeTearDown]

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using Relativity.DataExchange.Service;
 
 namespace Relativity.Test.Helpers.ImportAPIHelper
 {

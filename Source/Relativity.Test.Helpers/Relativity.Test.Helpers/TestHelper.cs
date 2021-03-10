@@ -1,24 +1,15 @@
-﻿using NUnit.Framework;
+﻿using DbContextHelper;
 using Relativity.API;
+using Relativity.Services;
+using Relativity.Services.Objects;
+using Relativity.Services.Objects.DataContracts;
+using Relativity.Test.Helpers.Exceptions;
 using Relativity.Test.Helpers.Logging;
 using Relativity.Test.Helpers.ServiceFactory;
 using Relativity.Test.Helpers.SharedTestHelpers;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Text;
-using kCura.Relativity.Client;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Relativity.Services.ServiceProxy;
-using Relativity.Test.Helpers.Exceptions;
-using TestHelpersKepler.Interfaces.TestHelpersModule.v1.Models;
-using TestHelpersKepler.Services;
-using DbContextHelper;
+using System.Linq;
 
 
 namespace Relativity.Test.Helpers
@@ -28,7 +19,6 @@ namespace Relativity.Test.Helpers
 		private readonly string _username;
 		private readonly string _password;
 		private readonly AppConfigSettings _alternateConfig;
-		private bool? _keplerCompatible;
 
 		private readonly List<string> _keplerFileNames = new List<string>()
 		{
@@ -40,7 +30,6 @@ namespace Relativity.Test.Helpers
 		{
 			_username = username;
 			_password = password;
-			_keplerCompatible = null;
 		}
 
 		public TestHelper(string configSectionName)
@@ -48,7 +37,6 @@ namespace Relativity.Test.Helpers
 			_alternateConfig = new AppConfigSettings(configSectionName);
 			_username = _alternateConfig.AdminUserName;
 			_password = _alternateConfig.AdminPassword;
-			_keplerCompatible = null;
 		}
 
 		public TestHelper(Dictionary<string, string> configDictionary)
@@ -56,15 +44,6 @@ namespace Relativity.Test.Helpers
 			ConfigurationHelper.SetupConfiguration(configDictionary);
 			_username = ConfigurationHelper.ADMIN_USERNAME;
 			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			_keplerCompatible = null;
-		}
-
-		public TestHelper(TestContext testContext)
-		{
-			ConfigurationHelper.SetupConfiguration(testContext);
-			_username = ConfigurationHelper.ADMIN_USERNAME;
-			_password = ConfigurationHelper.DEFAULT_PASSWORD;
-			_keplerCompatible = null;
 		}
 
 		public static IHelper ForUser(string username, string password)
@@ -100,47 +79,51 @@ namespace Relativity.Test.Helpers
 			return context;
 		}
 
+		/// <summary>
+		/// Gets the guid of any artifact of any object type in a workspace, but using this overloaded version will default to Workspace object type
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <param name="artifactID"></param>
+		/// <returns></returns>
 		public Guid GetGuid(int workspaceID, int artifactID)
 		{
-			var keplerHelper = new KeplerHelper();
+			return GetGuid(workspaceID, artifactID, Constants.ArtifactTypeIds.Workspace);
+		}
 
-			if (keplerHelper.ForceDbContext()) return GetGuidFromDbContext(workspaceID, artifactID);
-			
-			if (_keplerCompatible == null)
+		/// <summary>
+		/// Gets the guid of any artifact of any object type in a workspace
+		/// </summary>
+		/// <param name="workspaceID"></param>
+		/// <param name="artifactID"></param>
+		/// <param name="artifactTypeID"></param>
+		/// <returns></returns>
+		public Guid GetGuid(int workspaceID, int artifactID, int artifactTypeID)
+		{
+			try
 			{
-				_keplerCompatible = keplerHelper.IsVersionKeplerCompatibleAsync().Result;
+				using (IObjectManager objectManager = this.GetServicesManager().CreateProxy<IObjectManager>(ExecutionIdentity.CurrentUser))
+				{
+					QueryRequest queryRequest = new QueryRequest()
+					{
+						ObjectType = new ObjectTypeRef { ArtifactTypeID = artifactTypeID },
+						Condition = new WholeNumberCondition("ArtifactId", NumericConditionEnum.EqualTo, artifactID).ToQueryString(),
+						Fields = new List<FieldRef>()
+						{
+							new FieldRef { Name = "Guids" }
+						},
+					};
+					QueryResult result = objectManager.QueryAsync(workspaceID, queryRequest, 1, 10).ConfigureAwait(false).GetAwaiter().GetResult();
+
+					Guid workspaceGuid = result.Objects.First().Guids.First();
+					return workspaceGuid;
+				}
 			}
-
-			if (!_keplerCompatible.Value) return GetGuidFromDbContext(workspaceID, artifactID);
-
-			keplerHelper.UploadKeplerFiles();
-			return GetGuidFromKeplerService(workspaceID, artifactID);
-
-		}
-
-		private Guid GetGuidFromDbContext(int workspaceId, int artifactId)
-		{
-			var sql = "select ArtifactGuid from eddsdbo.ArtifactGuid where artifactId = @artifactId";
-			var context = GetDBContext(workspaceId);
-			var result = context.ExecuteSqlStatementAsScalar<Guid>(sql, new SqlParameter("artifactId", artifactId));
-			return result;
-		}
-
-		private Guid GetGuidFromKeplerService(int workspaceId, int artifactId)
-		{
-			const string routeName = Constants.Kepler.RouteNames.GetGuidAsync;
-
-			var requestModel = new GetGuidRequestModel
+			catch (Exception ex)
 			{
-				ArtifactId = artifactId,
-				WorkspaceId = workspaceId
-			};
-
-			IHttpRequestHelper httpRequestHelper = new HttpRequestHelper();
-			var responseString = httpRequestHelper.SendPostRequest(requestModel, routeName);
-			GetGuidResponseModel responseModel = JsonConvert.DeserializeObject<GetGuidResponseModel>(responseString);
-
-			return responseModel.Guid;
+				string errorMessage = $"Could not find Guid in {nameof(GetGuid)} in the workspace {nameof(workspaceID)}: {workspaceID} for {nameof(artifactID)}: {artifactID} - {ex.Message}";
+				Console.WriteLine(errorMessage);
+				throw new TestHelpersException(errorMessage);
+			}
 		}
 
 		public ISecretStore GetSecretStore()

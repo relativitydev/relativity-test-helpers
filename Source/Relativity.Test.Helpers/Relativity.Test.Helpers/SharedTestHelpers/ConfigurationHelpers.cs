@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.SharedTestHelpers
 {
@@ -27,11 +26,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 			_settings = new AppConfigSettings(configDictionary);
 		}
 
-		public static void SetupConfiguration(TestContext testContext)
-		{
-			_settings = new AppConfigSettings(testContext);
-		}
-
 		public static string TEST_DATA_LOCATION
 		{
 			get { return _settings.TestDataLocation; }
@@ -40,11 +34,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 		public static int WORKSPACEID
 		{
 			get { return _settings.WorkspaceId; }
-		}
-
-		public static string RSAPI_SERVER_ADDRESS
-		{
-			get { return _settings.RsapiServerAddress; }
 		}
 
 		public static string REST_SERVER_ADDRESS
@@ -131,11 +120,6 @@ namespace Relativity.Test.Helpers.SharedTestHelpers
 		public static string AGENT_SERVER_ADDRESS
 		{
 			get { return _settings.AgentServerAddress; }
-		}
-
-		public static string FORCE_DBCONTEXT
-		{
-			get { return _settings.ForceDbContext; }
 		}
 
 	}

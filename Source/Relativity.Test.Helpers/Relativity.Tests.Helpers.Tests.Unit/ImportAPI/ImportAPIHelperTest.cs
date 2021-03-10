@@ -9,66 +9,66 @@ using Relativity.Test.Helpers.ImportAPIHelper.Request;
 
 namespace Relativity.Tests.Helpers.Tests.Unit.ImportAPI
 {
-    [TestFixture]
-    public class ImportAPIHelperTest
-    {
-        const int TEST_IDENTIFIER_FIELD_ID = 1015425;
-        const string TEST_IDENTIFIER_FIELD_NAME = "Sample";
-        IImportAPI iapi;
+	[TestFixture]
+	public class ImportAPIHelperTest
+	{
+		const int TEST_IDENTIFIER_FIELD_ID = 1015425;
+		const string TEST_IDENTIFIER_FIELD_NAME = "Sample";
+		IImportAPI iapi;
 
-        [SetUp]
-        public void Setup()
-        {
-            var iapiMocked = new Mock<IImportAPI>();
-            var identifierField = Mock.Of<Field>();
-            var fieldType = typeof(Field);
-            fieldType.GetProperty("FieldCategory").SetValue(identifierField, FieldCategoryEnum.Identifier);
-            fieldType.GetProperty("ArtifactID").SetValue(identifierField, TEST_IDENTIFIER_FIELD_ID);
-            fieldType.GetProperty("Name").SetValue(identifierField, TEST_IDENTIFIER_FIELD_NAME);
-
-
-            iapiMocked.Setup(p => p.GetWorkspaceFields(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(new[]
-                {
-                    identifierField
-                });
-            iapiMocked.Setup(p => p.NewNativeDocumentImportJob())
-                .Returns(Mock.Of<ImportBulkArtifactJob>());
-            iapiMocked.Setup(p => p.NewObjectImportJob(It.IsAny<int>()))
-                .Returns(Mock.Of<ImportBulkArtifactJob>());
-
-            iapi = iapiMocked.Object;
-        }
-
-        [Test]
-        public void GetImportJobTest()
-        {
-            //arrange
-            var workspaceID = 1050630;
-            var jobRequest = new ImportJobRequest(1050630);
-
-            //act
-            var importJob = ImportAPIHelper.GetImportJob(jobRequest, iapi);
-
-            //assert
-            Assert.AreEqual(workspaceID, importJob.Settings.CaseArtifactId);
-            Assert.AreEqual(TEST_IDENTIFIER_FIELD_ID, importJob.Settings.IdentityFieldId);
-            Assert.AreEqual(TEST_IDENTIFIER_FIELD_NAME, importJob.Settings.SelectedIdentifierFieldName);
-        }
+		[SetUp]
+		public void Setup()
+		{
+			var iapiMocked = new Mock<IImportAPI>();
+			var identifierField = Mock.Of<Field>();
+			var fieldType = typeof(Field);
+			fieldType.GetProperty("FieldCategory").SetValue(identifierField, FieldCategoryEnum.Identifier);
+			fieldType.GetProperty("ArtifactID").SetValue(identifierField, TEST_IDENTIFIER_FIELD_ID);
+			fieldType.GetProperty("Name").SetValue(identifierField, TEST_IDENTIFIER_FIELD_NAME);
 
 
-        [Test]
-        public void GetDataTableTest()
-        {
-            //arrange
-            var jobRequest = new ImportJobRequest(1050630);
-            var importJob = ImportAPIHelper.GetImportJob(jobRequest, iapi);
+			iapiMocked.Setup(p => p.GetWorkspaceFields(It.IsAny<int>(), It.IsAny<int>()))
+					.Returns(new[]
+					{
+										identifierField
+					});
+			iapiMocked.Setup(p => p.NewNativeDocumentImportJob())
+					.Returns(Mock.Of<ImportBulkArtifactJob>());
+			iapiMocked.Setup(p => p.NewObjectImportJob(It.IsAny<int>()))
+					.Returns(Mock.Of<ImportBulkArtifactJob>());
 
-            //act
-            var dataTable = importJob.GetDocumentDataTableFromFolder(".");
+			iapi = iapiMocked.Object;
+		}
 
-            //assert
-            Assert.Greater(dataTable.Rows.Count, 0);
-        }
-    }
+		[Test]
+		public void GetImportJobTest()
+		{
+			//arrange
+			var workspaceID = 1050630;
+			var jobRequest = new ImportJobRequest(1050630);
+
+			//act
+			var importJob = ImportAPIHelper.GetImportJob(jobRequest, iapi);
+
+			//assert
+			Assert.AreEqual(workspaceID, importJob.Settings.CaseArtifactId);
+			Assert.AreEqual(TEST_IDENTIFIER_FIELD_ID, importJob.Settings.IdentityFieldId);
+			Assert.AreEqual(TEST_IDENTIFIER_FIELD_NAME, importJob.Settings.SelectedIdentifierFieldName);
+		}
+
+
+		[Test]
+		public void GetDataTableTest()
+		{
+			//arrange
+			var jobRequest = new ImportJobRequest(1050630);
+			var importJob = ImportAPIHelper.GetImportJob(jobRequest, iapi);
+
+			//act
+			var dataTable = importJob.GetDocumentDataTableFromFolder(System.AppDomain.CurrentDomain.BaseDirectory);
+
+			//assert
+			Assert.Greater(dataTable.Rows.Count, 0);
+		}
+	}
 }

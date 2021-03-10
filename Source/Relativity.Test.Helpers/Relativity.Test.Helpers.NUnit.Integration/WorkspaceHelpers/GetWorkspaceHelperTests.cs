@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
-using Relativity.Test.Helpers.ArtifactHelpers;
 using Relativity.Test.Helpers.Exceptions;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
-using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.WorkspaceHelpers;
+using System;
+using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 {
 	[TestFixture]
 	public class GetWorkspaceHelperTests
 	{
-		private IRSAPIClient _client;
 		private int _workspaceId;
 		private string _workspaceName = $"IntTest_{Guid.NewGuid()}";
 		private IServicesMgr _servicesManager;
@@ -34,17 +25,13 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 			}
 			_testHelper = new TestHelper(configDictionary);
 			_servicesManager = _testHelper.GetServicesManager();
-			_client = _testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			_workspaceId = CreateWorkspace.CreateWorkspaceAsync(_workspaceName,
-				SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME, _servicesManager,
-				SharedTestHelpers.ConfigurationHelper.ADMIN_USERNAME, SharedTestHelpers.ConfigurationHelper.DEFAULT_PASSWORD).Result;
+			_workspaceId = Helpers.WorkspaceHelpers.WorkspaceHelpers.CreateAsync(_servicesManager, _workspaceName, SharedTestHelpers.ConfigurationHelper.TEST_WORKSPACE_TEMPLATE_NAME).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
 		[OneTimeTearDown]
 		public void Teardown()
 		{
-			DeleteWorkspace.DeleteTestWorkspace(_workspaceId, _servicesManager, ConfigurationHelper.ADMIN_USERNAME,
-				ConfigurationHelper.DEFAULT_PASSWORD);
+			Helpers.WorkspaceHelpers.WorkspaceHelpers.Delete(_servicesManager, _workspaceId);
 			_testHelper = null;
 			_servicesManager = null;
 		}
@@ -52,7 +39,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 		[Test]
 		public void GetWorkspaceTest()
 		{
-			var workspaceName = Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_client, _workspaceId);
+			var workspaceName = Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_servicesManager, _workspaceId);
 
 			Assert.AreEqual(_workspaceName, workspaceName);
 		}
@@ -60,7 +47,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.WorkspaceHelpers
 		[Test]
 		public void GetWorkspaceTest_Failure()
 		{
-			Assert.Throws<APIException>(() => Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_client, 0));
+			Assert.Throws<TestHelpersException>(() => Helpers.WorkspaceHelpers.WorkspaceHelpers.GetWorkspaceName(_servicesManager, 0));
 		}
 	}
 }

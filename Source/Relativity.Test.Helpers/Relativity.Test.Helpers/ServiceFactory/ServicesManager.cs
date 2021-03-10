@@ -80,7 +80,7 @@ namespace Relativity.Test.Helpers.ServiceFactory
 			}
 			else
 			{
-				servicesUri = new Uri($"{SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE}://{SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS}/relativity.services");
+				servicesUri = new Uri($"{SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE}://{SharedTestHelpers.ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS}/relativity.services");
 			}
 			return servicesUri;
 		}
@@ -93,13 +93,13 @@ namespace Relativity.Test.Helpers.ServiceFactory
 			// Get Services URL
 			if (this._alternateConfig != null)
 			{
-				string relativityInstance = (string.IsNullOrEmpty(this._alternateConfig.RsapiServerAddress) ? this._alternateConfig.RelativityInstanceAddress : this._alternateConfig.RsapiServerAddress);
+				string relativityInstance = this._alternateConfig.RelativityInstanceAddress;
 				string serviceEndpoint = $"{this._alternateConfig.ServerBindingType}://{relativityInstance}/relativity.services";
 				servicesUri = new Uri(serviceEndpoint);
 			}
 			else
 			{
-				servicesUri = new Uri($"{SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE}://{SharedTestHelpers.ConfigurationHelper.RSAPI_SERVER_ADDRESS}/relativity.services");
+				servicesUri = new Uri($"{SharedTestHelpers.ConfigurationHelper.SERVER_BINDING_TYPE}://{SharedTestHelpers.ConfigurationHelper.RELATIVITY_INSTANCE_ADDRESS}/relativity.services");
 			}
 			return servicesUri;
 		}

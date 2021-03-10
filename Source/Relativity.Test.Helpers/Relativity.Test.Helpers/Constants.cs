@@ -1,13 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Relativity.Test.Helpers
+﻿namespace Relativity.Test.Helpers
 {
 	public class Constants
 	{
+		public class ArtifactTypeIds
+		{
+			public const int System = 1;
+			public const int User = 2;
+			public const int Group = 3;
+			public const int View = 4;
+			public const int Client = 5;
+			public const int Matter = 6;
+			public const int Choice = 7;
+			public const int Code = 7;
+			public const int Workspace = 8;
+			public const int Folder = 9;
+			public const int Document = 10;
+			public const int Field = 14;
+			public const int Search = 15;
+			public const int Layout = 16;
+			public const int Production = 17;
+			public const int Error = 18;
+			public const int Report = 19;
+			public const int Agent = 20;
+			public const int MarkupSet = 22;
+			public const int Tab = 23;
+			public const int BatchSet = 24;
+			public const int ObjectType = 25;
+			public const int SearchFolder = 26;
+			public const int Batch = 27;
+			public const int RelativityScript = 28;
+			public const int SearchIndex = 29;
+			public const int ResourceFile = 30;
+			public const int ResourcePool = 31;
+			public const int ResourceServer = 32;
+			public const int ObjectRule = 33;
+			public const int LibraryApplication = 34;
+			public const int AgentType = 35;
+			public const int CaseApplication = 36;
+			public const int ApplicationInstall = 37;
+			public const int ApplicationInstallResult = 38;
+			public const int License = 39;
+			public const int InstallEventHandler = 40;
+			public const int MassOperation = 41;
+			public const int InstanceSetting = 42;
+			public const int Credential = 43;
+		}
+
+		public class TestHelperTemporaryValues
+		{
+			public class UserHelperTemporaryValues
+			{
+				public const string FirstName = "Temp User";
+				public const string Client = "Relativity Template";
+				public const string UserType = "Internal";
+				public const string EmailPrefix = "tempuser.";
+				public const string EmailSuffix = "@test.com";
+				public const string AuthProviderType = "Password";
+			}
+		}
+
 		public class Kepler
 		{
 			public class RouteNames
@@ -23,7 +74,6 @@ namespace Relativity.Test.Helpers
 			public class KeplerTestRap
 			{
 				public const string KEPLER_TEST_APP_GUID = "151e017c-fcaa-49e6-ae20-3c2b5e721711";
-				public const string KEPLER_TEST_APP_NAME = "TestHelpers_Kepler_App";
 			}
 
 			public const string SERVICES_DLL_NAME = "TestHelpersKepler.Services.dll";

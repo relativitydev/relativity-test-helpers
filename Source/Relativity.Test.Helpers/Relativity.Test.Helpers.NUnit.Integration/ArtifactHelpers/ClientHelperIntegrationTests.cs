@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kCura.Relativity.Client;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Relativity.API;
-using Relativity.Services.ServiceProxy;
 using Relativity.Test.Helpers.ArtifactHelpers;
-using Relativity.Test.Helpers.ServiceFactory.Extentions;
-using Relativity.Test.Helpers.SharedTestHelpers;
-using Relativity.Test.Helpers.WorkspaceHelpers;
+using System;
+using System.Collections.Generic;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 {
 	[TestFixture]
 	public class ClientHelperIntegrationTests
 	{
-		private IHelper testHelper;
-		private IServicesMgr _servicesManager;
-		private Services.ServiceProxy.ServiceFactory _serviceFactory;
-		private IRSAPIClient _client;
+		private IHelper _testHelper;
+		private IServicesMgr _servicesMgr;
 		private int _clientArtifactId;
 		const string _clientName = "TestClientName";
 
@@ -33,9 +23,8 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 			{
 				configDictionary.Add(testParameterName, TestContext.Parameters[testParameterName]);
 			}
-			testHelper = new TestHelper(configDictionary);
-			_client = testHelper.GetServicesManager().GetProxy<IRSAPIClient>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD);
-			_serviceFactory = GetServiceFactory();
+			_testHelper = new TestHelper(configDictionary);
+			_servicesMgr = _testHelper.GetServicesManager();
 		}
 
 		[TearDown]
@@ -43,19 +32,18 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		{
 			if (_clientArtifactId != 0)
 			{
-				Client.Delete_Client(_serviceFactory, _clientArtifactId);
+				ClientHelper.DeleteClient(_servicesMgr, _clientArtifactId);
 			}
 
 			_clientArtifactId = 0;
-			testHelper = null;
-			_servicesManager = null;
-			_client = null;
+			_testHelper = null;
+			_servicesMgr = null;
 		}
 
 		[Test]
 		public void CreateClientTest()
 		{
-			_clientArtifactId = Client.Create_Client(_client, _serviceFactory, _clientName);
+			_clientArtifactId = ClientHelper.CreateClient(_servicesMgr, _clientName);
 
 			Assert.Greater(_clientArtifactId, 0);
 		}
@@ -63,28 +51,7 @@ namespace Relativity.Test.Helpers.NUnit.Integration.ArtifactHelpers
 		[Test]
 		public void CreateClientTest_Failure()
 		{
-			Assert.Throws<AggregateException>(() => Client.Create_Client(_client, _serviceFactory, null));
-		}
-
-		//helper method
-		private Services.ServiceProxy.ServiceFactory GetServiceFactory()
-		{
-			var relativityServicesUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.RSAPI_SERVER_ADDRESS}/Relativity.Services");
-			var relativityRestUri = new Uri($"{ConfigurationHelper.SERVER_BINDING_TYPE}://{ConfigurationHelper.REST_SERVER_ADDRESS.ToLower().Replace("-services", "")}/Relativity.Rest/Api");
-
-			Relativity.Services.ServiceProxy.UsernamePasswordCredentials usernamePasswordCredentials = new Relativity.Services.ServiceProxy.UsernamePasswordCredentials(
-				username: ConfigurationHelper.ADMIN_USERNAME,
-				password: ConfigurationHelper.DEFAULT_PASSWORD);
-
-			ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(
-				relativityServicesUri: relativityServicesUri,
-				relativityRestUri: relativityRestUri,
-				credentials: usernamePasswordCredentials);
-
-			var serviceFactory = new Services.ServiceProxy.ServiceFactory(
-				settings: serviceFactorySettings);
-
-			return serviceFactory;
+			Assert.Throws<Exception>(() => ClientHelper.CreateClient(_servicesMgr, null));
 		}
 	}
 }
