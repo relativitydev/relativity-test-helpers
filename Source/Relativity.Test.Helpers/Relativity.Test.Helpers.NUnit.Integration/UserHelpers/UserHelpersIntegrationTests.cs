@@ -8,6 +8,7 @@ using Relativity.Test.Helpers.GroupHelpers;
 using Relativity.Test.Helpers.UserHelpers;
 using System;
 using System.Collections.Generic;
+using Relativity.Test.Helpers.SharedTestHelpers;
 
 namespace Relativity.Test.Helpers.NUnit.Integration.UserHelpers
 {
@@ -86,23 +87,24 @@ namespace Relativity.Test.Helpers.NUnit.Integration.UserHelpers
         {
             // Arrange
             // Act
-            int userId = UserHelper.GetUserId(_servicesMgr, "relativity.admin@relativity.com").ConfigureAwait(false).GetAwaiter().GetResult();
+            int userId = UserHelper.GetUserId(_servicesMgr, ConfigurationHelper.ADMIN_USERNAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
-            // Assert
-            Assert.IsTrue(userId > 0);
+
+      // Assert
+      Assert.IsTrue(userId > 0);
         }
 
         [Test]
         public void GetUserInfo()
         {
             // Arrange
-            int userId = UserHelper.GetUserId(_servicesMgr, "relativity.admin@relativity.com").ConfigureAwait(false).GetAwaiter().GetResult();
+            int userId = UserHelper.GetUserId(_servicesMgr, ConfigurationHelper.ADMIN_USERNAME).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Act
             UserResponse result = UserHelper.GetUserInfo(_servicesMgr, userId).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
-            Assert.IsTrue(result.EmailAddress.Equals("relativity.admin@relativity.com", StringComparison.CurrentCultureIgnoreCase));
+            Assert.IsTrue(result.EmailAddress.Equals(ConfigurationHelper.ADMIN_USERNAME, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public void CleanUpTempUsers()
