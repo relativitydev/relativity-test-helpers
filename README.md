@@ -6,7 +6,7 @@ TestHelpers v8 release is only compatible with Ninebark (12.0) and above.  Any p
 This is also available as a [nuget package](https://www.nuget.org/packages/RelativityDev.RelativityTestHelpers/).
 
 
-# Version 8.0 Updates
+# Version 8.1 Updates
 With the deprecation of RSAPI, TestHelpers was significantly updated to account for this.  These updates, however, did bring about many breaking changes.
 
 **Note: Previous packages of TestHelpers will still be available, but previous major releases will not be updated with RSAPI removal**
@@ -43,6 +43,7 @@ Context |  v7 | v8 |
 | Group | GroupHelpers.CreateGroup.Create_Group | GroupHelpers.GroupHelper.CreateGroup |
 | Group | GroupHelpers.DeleteGroup.Delete_Group | GroupHelpers.GroupHelper.DeleteGroup |
 | KeplerHelper | Any Usage | Removed |
+| TestHelper | GetDbContent | No longer implemented |
 | User | UserHelpers.CreateUser.CreateNewUser | UserHelpers.UserHelper.Create |
 | User | UserHelpers.CreateUser.FindChoiceArtifactId | ArtifactHelpers.ChoiceHelper.GetChoiceId |
 | User | UserHelpers.CreateUser.FindClientArtifactId | ArtifactHelpers.ClientHelper.GetClientId |
