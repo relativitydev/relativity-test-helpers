@@ -5,6 +5,13 @@
 
 -------------------------
 
+## 2021-03-17
+
+- REL-535838 - Updating README breaking changes for v8 to be more clear
+
+
+-------------------------
+
 ## 2021-03-10
 
 - REL-518415 - New version 8.1.1.1 created - Relativity.API added as a dependency, GetDbContext() set to throw NotImplementedException().
