@@ -1,7 +1,12 @@
 ﻿# relativity-integration-test-helpers
-Open Source Community: Integration testing is a software testing methodology used to test individual software components or units of code to verify their interaction. These components are tested as a single group or organized in an iterative manner. That said, we have created Relativity Integration Test Helpers to assist you with writing good Integration Tests for your Relativity application. You can use this framework to test event handlers, agents or any workflow that combines agents and Eventhandlers. We will continue adding more helpers but in the mean time you should be able to create workspaces, create dbcontext, proxy and create documents with this framework.
+## Overview
+Open Source Community: Integration testing is a software testing methodology used to test individual software components or units of code to verify their interaction. These components are tested as a single group or organized in an iterative manner.
+Relativity Integration Test Helpers was created to assist with writing best practice Integration Tests for Relativity applications. The framework can be used to test event handlers, agents or any workflow that combines agents and event handlers.
 
-TestHelpers v8 release is only compatible with Ninebark (12.0) and above.  Any previous version of TestHelpers will only be compatible with Relativity until Prairie Smoke, which will remove RSAPI.
+The framework will currently enable you to to proxy and create documents, create workspaces and create dbcontext with more functionality to be added in the future.
+
+## Compatibility
+TestHelpers v8 release is only compatible with Ninebark (12.0) and above. Any previous version of TestHelpers will only be compatible with Relativity until Prairie Smoke {INSERT VERSION NUMBER), which will remove RSAPI.
 
 This is also available as a [nuget package](https://www.nuget.org/packages/RelativityDev.RelativityTestHelpers/).
 
@@ -115,8 +120,11 @@ public class TestHelperRunSettingsIntegrationTests
 # Utilizing MailHelper for tests
 ## Gmail
 With gmail, you will need to allow IMAP on your account.  It is recommended to make an alternate fake account just for testing.  With that, you will just need to use your gmail and gmail password in the GmailMailHelper constructor.
+
 ## MailTrap
-[MailTrap Site]([https://mailtrap.io/inboxes](https://mailtrap.io/inboxes))
-You will need at least a free account with MailTrap to utilize these helpers.  The free account grants you a username, password, and Api Key.  The API Key is used to access your inbox which MailTrapMailHelper takes in from its constructor.
+[MailTrap Site](https://mailtrap.io/inboxes)
+
+You will need at least a free MailTraip account to utilize these helpers. The free account grants you a username, password, and Api Key. The API Key is used to access your inbox which MailTrapMailHelper takes in from its constructor.
+
 ## Licensing
 [MailKit NuGet](https://github.com/jstedfast/MailKit)

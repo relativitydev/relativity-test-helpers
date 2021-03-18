@@ -5,9 +5,9 @@
 
 -------------------------
 
-## 2021-03-17
+## 2021-03-18
 
-- REL-535838 - Updating README breaking changes for v8 to be more clear
+- REL-535838 - Updating README for clearer breaking changes for v8.
 
 
 -------------------------
