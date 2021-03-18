@@ -3,7 +3,7 @@
 Open Source Community: Integration testing is a software testing methodology used to test individual software components or units of code to verify their interaction. These components are tested as a single group or organized in an iterative manner.
 Relativity Integration Test Helpers was created to assist with writing best practice Integration Tests for Relativity applications. The framework can be used to test event handlers, agents or any workflow that combines agents and event handlers.
 
-The framework will currently enable you to to proxy and create documents, create workspaces and create dbcontext with more functionality to be added in the future.
+The framework will currently enable you to proxy and create documents, create workspaces and create dbcontext with more functionality to be added in the future.
 
 ## Compatibility
 TestHelpers v8 release is only compatible with Ninebark (12.0) and above. Any previous version of TestHelpers will only be compatible with Relativity until Prairie Smoke (12.2), which will remove RSAPI.
