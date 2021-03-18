@@ -124,7 +124,7 @@ With gmail, you will need to allow IMAP on your account.  It is recommended to m
 ## MailTrap
 [MailTrap Site](https://mailtrap.io/inboxes)
 
-You will need at least a free MailTraip account to utilize these helpers. The free account grants you a username, password, and Api Key. The API Key is used to access your inbox which MailTrapMailHelper takes in from its constructor.
+You will need at least a free MailTrap account to utilize these helpers. The free account grants you a username, password, and Api Key. The API Key is used to access your inbox which MailTrapMailHelper takes in from its constructor.
 
 ## Licensing
 [MailKit NuGet](https://github.com/jstedfast/MailKit)
