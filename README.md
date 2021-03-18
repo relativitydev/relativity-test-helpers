@@ -6,7 +6,7 @@ Relativity Integration Test Helpers was created to assist with writing best prac
 The framework will currently enable you to to proxy and create documents, create workspaces and create dbcontext with more functionality to be added in the future.
 
 ## Compatibility
-TestHelpers v8 release is only compatible with Ninebark (12.0) and above. Any previous version of TestHelpers will only be compatible with Relativity until Prairie Smoke {INSERT VERSION NUMBER), which will remove RSAPI.
+TestHelpers v8 release is only compatible with Ninebark (12.0) and above. Any previous version of TestHelpers will only be compatible with Relativity until Prairie Smoke (12.2), which will remove RSAPI.
 
 This is also available as a [nuget package](https://www.nuget.org/packages/RelativityDev.RelativityTestHelpers/).
 
