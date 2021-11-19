@@ -5,6 +5,12 @@
 
 -------------------------
 
+## 2021-11-18
+
+- REL-593280 - Relativity.DataExchange.Client.SDK updated to v1.15.27
+
+-------------------------
+
 ## 2021-03-18
 
 - REL-535838 - Updating README for clearer breaking changes for v8.

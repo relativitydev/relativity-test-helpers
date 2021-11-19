@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RelativityDev.RelativityTestHelpers</id>
-    <version>7.4.2.1</version>
+    <version>8.1.2.0</version>
     <authors>RelativityDev</authors>
     <owners>RelativityDev</owners>
     <licenseUrl>https://github.com/relativitydev/relativity-test-helpers/blob/master/LICENSE</licenseUrl>
@@ -16,8 +16,8 @@
 	<dependencies>
       <group targetFramework=".NETFramework4.6.2">
         <dependency id="Relativity.API" version="15.0.0" />
-        <dependency id="Relativity.DataExchange.Client.SDK" version="1.12.21" />
-        <dependency id="Relativity.ObjectManager" version="12.0.78.6" />
+        <dependency id="Relativity.DataExchange.Client.SDK" version="1.15.27" />
+        <dependency id="Relativity.ObjectManager" version="12.1.171.20" />
         <dependency id="Newtonsoft.Json" version="12.0.2" />
         <dependency id="MailKit" version="2.2.0" />
         <dependency id="MimeKit" version="2.2.0" />
