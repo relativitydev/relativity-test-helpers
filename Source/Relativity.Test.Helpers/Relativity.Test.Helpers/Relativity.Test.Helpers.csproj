@@ -66,7 +66,7 @@
       <HintPath>..\packages\RelativityDev.DbContextHelper.5.0.0.1\lib\net462\DbContextHelper.dll</HintPath>
     </Reference>
     <Reference Include="FaspManager, Version=3.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\FaspManager.dll</HintPath>
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\FaspManager.dll</HintPath>
     </Reference>
     <Reference Include="MailKit, Version=2.2.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
       <HintPath>..\packages\MailKit.2.2.0\lib\net45\MailKit.dll</HintPath>
@@ -87,14 +87,14 @@
     <Reference Include="Relativity.API, Version=15.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Api.15.0.0\lib\net462\Relativity.API.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.DataExchange.Client.SDK, Version=1.15.27.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.15.27\lib\net462\Relativity.DataExchange.Client.SDK.dll</HintPath>
+    <Reference Include="Relativity.DataExchange.Client.SDK, Version=1.15.29.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.DataExchange.Client.SDK.1.15.29\lib\net462\Relativity.DataExchange.Client.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.DataTransfer.Legacy.SDK, Version=0.1.28.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\Relativity.DataTransfer.Legacy.SDK.dll</HintPath>
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\Relativity.DataTransfer.Legacy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.DataTransfer.Nodes, Version=12.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\Relativity.DataTransfer.Nodes.dll</HintPath>
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\Relativity.DataTransfer.Nodes.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Kepler, Version=2.14.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.ObjectManager.12.1.171.20\lib\net462\Relativity.Kepler.dll</HintPath>
@@ -132,8 +132,8 @@
     <Reference Include="Relativity.Telemetry.APM, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.APM.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Telemetry.DataContracts.Shared, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.DataContracts.Shared.dll</HintPath>
+    <Reference Include="Relativity.Telemetry.DataContracts.Shared, Version=3003.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Telemetry.DataContracts.Shared.3003.1.0\lib\net462\Relativity.Telemetry.DataContracts.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Telemetry.MetricsCollection, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.MetricsCollection.dll</HintPath>
@@ -141,23 +141,23 @@
     <Reference Include="Relativity.Telemetry.MetricsCollection.Interface, Version=9.4.164.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Telemetry.Client.9.4.164\lib\net462\Relativity.Telemetry.MetricsCollection.Interface.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Telemetry.Services.Interface, Version=3000.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Telemetry.Services.Interface.3000.0.1\lib\net462\Relativity.Telemetry.Services.Interface.dll</HintPath>
+    <Reference Include="Relativity.Telemetry.Services.Interface, Version=3003.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Telemetry.Services.Interface.3003.0.1\lib\net462\Relativity.Telemetry.Services.Interface.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Transfer.Client, Version=7.4.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\Relativity.Transfer.Client.dll</HintPath>
+    <Reference Include="Relativity.Transfer.Client, Version=7.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\Relativity.Transfer.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Transfer.Client.Aspera, Version=7.4.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\Relativity.Transfer.Client.Aspera.dll</HintPath>
+    <Reference Include="Relativity.Transfer.Client.Aspera, Version=7.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\Relativity.Transfer.Client.Aspera.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Transfer.Client.Core, Version=7.4.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\Relativity.Transfer.Client.Core.dll</HintPath>
+    <Reference Include="Relativity.Transfer.Client.Core, Version=7.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\Relativity.Transfer.Client.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Transfer.Client.FileShare, Version=7.4.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\Relativity.Transfer.Client.FileShare.dll</HintPath>
+    <Reference Include="Relativity.Transfer.Client.FileShare, Version=7.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\Relativity.Transfer.Client.FileShare.dll</HintPath>
     </Reference>
-    <Reference Include="Relativity.Transfer.Client.Http, Version=7.4.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Transfer.Client.7.4.5\lib\net462\Relativity.Transfer.Client.Http.dll</HintPath>
+    <Reference Include="Relativity.Transfer.Client.Http, Version=7.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Relativity.Transfer.Client.7.4.6\lib\net462\Relativity.Transfer.Client.Http.dll</HintPath>
     </Reference>
     <Reference Include="Renci.SshNet, Version=2016.0.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.0.0\lib\net40\Renci.SshNet.dll</HintPath>
@@ -307,9 +307,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Relativity.OutsideIn.2021.8.0\build\Relativity.OutsideIn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Relativity.OutsideIn.2021.8.0\build\Relativity.OutsideIn.targets'))" />
-    <Error Condition="!Exists('..\packages\Relativity.DataExchange.Client.SDK.1.15.27\build\Relativity.DataExchange.Client.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Relativity.DataExchange.Client.SDK.1.15.27\build\Relativity.DataExchange.Client.SDK.targets'))" />
+    <Error Condition="!Exists('..\packages\Relativity.DataExchange.Client.SDK.1.15.29\build\Relativity.DataExchange.Client.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Relativity.DataExchange.Client.SDK.1.15.29\build\Relativity.DataExchange.Client.SDK.targets'))" />
   </Target>
-  <Import Project="..\packages\Relativity.DataExchange.Client.SDK.1.15.27\build\Relativity.DataExchange.Client.SDK.targets" Condition="Exists('..\packages\Relativity.DataExchange.Client.SDK.1.15.27\build\Relativity.DataExchange.Client.SDK.targets')" />
+  <Import Project="..\packages\Relativity.DataExchange.Client.SDK.1.15.29\build\Relativity.DataExchange.Client.SDK.targets" Condition="Exists('..\packages\Relativity.DataExchange.Client.SDK.1.15.29\build\Relativity.DataExchange.Client.SDK.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
