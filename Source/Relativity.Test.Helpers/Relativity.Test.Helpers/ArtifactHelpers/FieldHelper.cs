@@ -25,10 +25,10 @@ namespace Relativity.Test.Helpers.ArtifactHelpers
 
 		public static int GetFieldArtifactID(IServicesMgr svcMgr, string fieldName, int workspaceId)
 		{
-			if (fieldName.IsNullOrEmpty())
-			{
-				throw new ArgumentNullException(nameof(fieldName), "Field name cannot be null or empty.");
-			}
+			//if (fieldName.IsNullOrEmpty())
+			//{
+			//	throw new ArgumentNullException(nameof(fieldName), "Field name cannot be null or empty.");
+			//}
 
 			using (IObjectManager objectManager =
 				svcMgr.GetProxy<IObjectManager>(ConfigurationHelper.ADMIN_USERNAME, ConfigurationHelper.DEFAULT_PASSWORD))
