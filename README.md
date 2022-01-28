@@ -10,6 +10,8 @@ TestHelpers v8 release is only compatible with Ninebark (12.0) and above. Any pr
 
 This is also available as a [nuget package](https://www.nuget.org/packages/RelativityDev.RelativityTestHelpers/).
 
+# Version 9.1 Updates
+With the upgrade of Relativity.DataExchange.Client.SDK/1.15.30+ and Relativity.Transfer.Client/7.4.7+ these updates may bring about breaking changes. This release was tested against Tiger Lily EAU.
 
 # Version 8.1 Updates
 With the deprecation of RSAPI, TestHelpers was significantly updated to account for this.  These updates, however, did bring about many breaking changes.
